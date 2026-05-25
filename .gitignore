@@ -1,0 +1,19 @@
+# Ignore the massive data folder
+data/
+
+# Ignore C++ build artifacts
+*/build/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+
+# Ignore Python environments and cache
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# Ignore stray video files if they accidentally save outside data/
+*.avi
+*.mp4
