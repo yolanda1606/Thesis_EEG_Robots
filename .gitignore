@@ -17,3 +17,4 @@ __pycache__/
 # Ignore stray video files if they accidentally save outside data/
 *.avi
 *.mp4
+eeg_emotion_experiment/stimuli/
