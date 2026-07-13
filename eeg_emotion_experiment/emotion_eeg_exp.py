@@ -82,7 +82,7 @@ if not os.path.exists(target_dir):
 filename = f"emotion_ratings_{time_stamp}"
 log_file_path = os.path.join(target_dir, filename)
 
-print(f"\n✅ PsychoPy will save ratings to: {target_dir}\n")
+print(f"\n PsychoPy will save ratings to: {target_dir}\n")
 
 # --- Setup PsychoPy Window ---
 win = visual.Window(
@@ -99,7 +99,7 @@ practice_intro_text = visual.TextStim(win=win,
          "Here is how each trial works:\n"
          "1. Focus on the cross (+) in the center of the screen.\n"
          "2. Look at the image that appears.\n"
-         "3. Rate how POSITIVE or NEGATIVE the image made you feel.\n"
+         "3. Rate how PLEASANT or UNPLEASANT the image made you feel.\n"
          "4. Rate how INTENSE the image made you feel.\n\n"
          "Use the LEFT/RIGHT arrows to move the slider, and SPACE to confirm.\n\n"
          "Press SPACE to begin the practice.", 
@@ -110,7 +110,7 @@ end_exp_text = visual.TextStim(win=win, text="Thank you! Press ESC to exit.", he
 fixation = visual.TextStim(win=win, text='+', height=0.1, color='white')
 image_stim = visual.ImageStim(win=win, name='image_stim', image='sin', pos=(0, 0), size=(0.7, 0.7))
 
-valence_instr = visual.TextStim(win=win, text="VALENCE: How positive or negative did the image make you feel?",
+valence_instr = visual.TextStim(win=win, text="VALENCE: How pleasant or unpleasant did the image make you feel?",
                                 pos=(0, 0.4), height=0.04, color='white')
 arousal_instr = visual.TextStim(win=win, text="AROUSAL: How intense or calm did the image make you feel?",
                                 pos=(0, 0.4), height=0.04, color='white')
@@ -118,7 +118,7 @@ arousal_instr = visual.TextStim(win=win, text="AROUSAL: How intense or calm did 
 # VALENCE Rating Slider
 valence_rating = visual.Slider(win=win, name='valence_rating',
     size=(0.9, 0.05), pos=(0, -0.3),
-    labels=("Very Negative (1)", "", "", "", "", "", "Very Positive (7)"), 
+    labels=("Very Unpleasant (1)", "", "", "", "", "", "Very Pleasant (7)"), 
     ticks=(1, 2, 3, 4, 5, 6, 7), 
     granularity=1, 
     style=('rating', 'triangleMarker'), 
@@ -172,11 +172,18 @@ def get_rating_response(rating_stim, instruction_stim, trigger_value):
             
         win.flip()
         
+    # --- UPDATED FALLBACK LOGIC ---
     if not confirmed:
-        final_rating = None
-        rating_rt = RATING_DURATION_MAX
+        # If they didn't press space, use the current rating_val instead of None
+        final_rating = rating_val 
+        rating_rt = RATING_DURATION_MAX # This already forces RT to 5.0 seconds
     else:
         final_rating = rating_val
+        
+    rating_stim.setAutoDraw(False)
+    instruction_stim.setAutoDraw(False)
+    
+    return final_rating, rating_rt
         
     rating_stim.setAutoDraw(False)
     instruction_stim.setAutoDraw(False)

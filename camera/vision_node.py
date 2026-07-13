@@ -85,7 +85,8 @@ def face_detector_thread():
                     current_frame, 
                     actions=['emotion'], 
                     enforce_detection=True,
-                    detector_backend='retinaface' 
+                    # detector_backend='retinaface' 
+                    detector_backend='opencv' 
                 )
                 
                 face_data = result[0]

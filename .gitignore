@@ -18,3 +18,4 @@ __pycache__/
 *.avi
 *.mp4
 eeg_emotion_experiment/stimuli/
+eeg_venv/

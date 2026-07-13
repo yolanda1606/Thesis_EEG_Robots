@@ -10,7 +10,7 @@ IMAGE_EXP_DIR="$BASE_DIR/eeg_emotion_experiment"
 export TF_CPP_MIN_LOG_LEVEL=2 
 
 echo "================================================"
-echo "      🧠 EEG + ROBOT EXPERIMENT LAUNCHER 🤖      "
+echo "      EEG + ROBOT EXPERIMENT LAUNCHER      "
 echo "================================================"
 
 echo -n "Enter Participant ID (e.g., P01): "
@@ -80,7 +80,7 @@ case $EXP_CHOICE in
         # Leaves both task flags false, triggering the pure human-recording loop
         ;;
     *)
-        echo "❌ Invalid choice. Exiting."
+        echo " Invalid choice. Exiting."
         exit 1
         ;;
 esac
@@ -112,13 +112,13 @@ fi
 
 # --- THE EMERGENCY STOP TRAP ---
 # If you hit Ctrl+C, it kills the robot, the camera, AND the python GUI safely.
-trap 'trap - SIGINT; echo -e "\n🚨 STOPPING EXPERIMENT! Halting Processes..."; kill -2 $ROBOT_PID 2>/dev/null; pkill -2 -f "emotion_eeg_exp.py" 2>/dev/null; kill -15 $VISION_PID 2>/dev/null; wait $VISION_PID; exit 1' SIGINT
+trap 'trap - SIGINT; echo -e "\n STOPPING EXPERIMENT! Halting Processes..."; kill -2 $ROBOT_PID 2>/dev/null; pkill -2 -f "emotion_eeg_exp.py" 2>/dev/null; kill -15 $VISION_PID 2>/dev/null; wait $VISION_PID; exit 1' SIGINT
 
 echo ""
-echo "🚀 Starting Data Collection for: $EXP_DIR ($PROFILE)"
+echo "Starting Data Collection for: $EXP_DIR ($PROFILE)"
 
 # 1. Start Python Vision Node (in background)
-echo "📷 Starting Vision Node on Port 5005..."
+echo "Starting Vision Node on Port 5005..."
 python3 "$CAMERA_SCRIPT" --id "$PID" --exp "$EXP_DIR" --profile "$PROFILE" &
 VISION_PID=$!
 
@@ -126,8 +126,8 @@ sleep 4 # Give camera time to warm up pipeline
 
 # 2. Start Logic Branches
 if [ "$IS_ROBOT_TASK" = true ]; then
-    echo "🤖 Executing C++ Robot Node..."
-    cd "$ROBOT_BUILD_DIR" || { echo "❌ Could not find build directory"; kill -2 $VISION_PID; exit 1; }
+    echo "Executing C++ Robot Node..."
+    cd "$ROBOT_BUILD_DIR" || { echo " Could not find build directory"; kill -2 $VISION_PID; exit 1; }
 
     if [ "$NEEDS_CONFIG_PROMPT" = true ]; then
         echo -e "${PID}\n${FAULT_MODE}\n${SPEED_MODE}" | ./$EXEC_NAME &
@@ -138,13 +138,13 @@ if [ "$IS_ROBOT_TASK" = true ]; then
     ROBOT_PID=$!
     wait $ROBOT_PID
     
-    echo "✅ Robot path complete! Saving video files..."
+    echo "Robot path complete! Saving video files..."
     kill -15 $VISION_PID 2>/dev/null
     wait $VISION_PID
 
 elif [ "$IS_PYTHON_GUI_TASK" = true ]; then
-    echo "🖼️ Executing Image Presentation GUI..."
-    cd "$IMAGE_EXP_DIR" || { echo "❌ Could not find Image Exp directory"; kill -2 $VISION_PID; exit 1; }
+    echo "Executing Image Presentation GUI..."
+    cd "$IMAGE_EXP_DIR" || { echo " Could not find Image Exp directory"; kill -2 $VISION_PID; exit 1; }
     
     # Activate virtual environment
     source venv/bin/activate 
@@ -156,7 +156,7 @@ elif [ "$IS_PYTHON_GUI_TASK" = true ]; then
     # Wait for the python UI to close naturally
     wait $EXP_PID
     
-    echo "✅ Image experiment complete! Saving video files..."
+    echo " Image experiment complete! Saving video files..."
     kill -15 $VISION_PID 2>/dev/null
     wait $VISION_PID
     
@@ -165,11 +165,11 @@ elif [ "$IS_PYTHON_GUI_TASK" = true ]; then
 
 else
     # Non-Robot, Non-GUI Task Logic (Shape Sorter Alone)
-    echo "🧍 Human-only task started. The camera is recording."
+    echo "Human-only task started. The camera is recording."
     echo "Press [Ctrl+C] in this terminal when the participant is finished to save the video."
     
     # Keep script alive until user presses Ctrl+C
     while true; do sleep 1; done
 fi
 
-echo "🎉 Experiment sequence saved successfully!"
+echo "Experiment sequence saved successfully!"
