@@ -7,13 +7,16 @@ from autoreject import AutoReject
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error
+import pywt
+import scipy.stats as stats
+from scipy.signal import welch
 
 print("Starting Fully Automated EEG Processing Pipeline...")
 
 # ==========================================
 # 1. LOAD DATA & UNICORN MONTAGE
 # ==========================================
-bdf_path = '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data/M01_2026-06-05/Image Experiment/EEG/UnicornRecorder_05_06_2026_09_46_29.bdf'
+bdf_path = '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data/P12_2026-06-04/Image_Experiment/EEG/UnicornRecorder_04_06_2026_15_14_58.bdf'
 raw = mne.io.read_raw_bdf(bdf_path, preload=True)
 
 # NEW: Map the generic Unicorn channel names to the standard 10-20 physical locations
@@ -61,7 +64,7 @@ raw_filtered = raw.copy().filter(
 # 4. EPOCHING
 # ==========================================
 print("Creating Epochs...")
-csv_path = '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data/M01_2026-06-05/Image Experiment/emotion_ratings_09-46-32.csv'
+csv_path = '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data/P12_2026-06-04/Image_Experiment/emotion_ratings_15-14-53.csv'
 behavioral_data = pd.read_csv(csv_path)
 
 event_dict = {}
@@ -71,33 +74,30 @@ for index, row in behavioral_data.iterrows():
     trigger = row['trigger_sent']
     val = row['valence_rating']
     arou = row['arousal_rating']
+    default_cat = str(row['category']).strip() # e.g., 'HAHV'
     
-    # 1. Skip if the rating is missing (NaN)
-    if pd.isna(val) or pd.isna(arou) or pd.isna(trigger):
+    # Skip if there's no trigger code at all
+    if pd.isna(trigger):
         continue
         
     trigger = int(trigger)
     
-    # 2. Determine High vs Low based on a 1-7 scale (Midpoint is 4)
-    # We classify > 4 as High, and <= 4 as Low.
-    if val > 4:
-        v_label = "HV"
+    # --- NEW: Fallback Logic ---
+    if pd.isna(val) or pd.isna(arou):
+        # If ratings are missing, fallback to the pre-assigned category string
+        dynamic_category = default_cat
     else:
-        v_label = "LV"
-        
-    if arou > 4:
-        a_label = "HA"
-    else:
-        a_label = "LA"
-        
-    # 3. Smash them together (e.g., "HA" + "HV" = "HAHV")
-    dynamic_category = f"{a_label}{v_label}"
+        # Determine High vs Low based on a 1-7 scale (Midpoint is 4)
+        v_label = "HV" if val > 4 else "LV"
+        a_label = "HA" if arou > 4 else "LA"
+        dynamic_category = f"{a_label}{v_label}"
     
-    # 4. Add it to MNE's event dictionary using the hierarchical "/" tag
+    # Add it to MNE's event dictionary using the hierarchical "/" tag
     event_dict[f"{dynamic_category}/{trigger}"] = trigger
 
 # Create the epochs using your new personalized classifications!
-epochs = mne.Epochs(raw_filtered, events, event_id=event_dict, tmin=-0.5, tmax=2.0, baseline=(-0.5, 0), preload=True)
+# Note: 'on_missing="ignore"' is still highly recommended here just in case the EEG hardware dropped a trigger!
+epochs = mne.Epochs(raw_filtered, events, event_id=event_dict, tmin=-0.5, tmax=1.0, baseline=(-0.5, 0), preload=True, on_missing='ignore')
 
 # ==========================================
 # 5. MOTION ARTIFACT REMOVAL (ICA + ACCELEROMETER)
@@ -187,21 +187,41 @@ plt.show(block=True)
 # ==========================================
 # 8. FEATURE EXTRACTION (Relative Band Power)
 # ==========================================
-print("\nExtracting features (Relative Band Power)...")
+print("\nExtracting features (Temporal, Frequency, and Wavelet Domains)...")
 
-valence_map = dict(zip(behavioral_data['trigger_sent'], behavioral_data['valence_rating']))
-arousal_map = dict(zip(behavioral_data['trigger_sent'], behavioral_data['arousal_rating']))
+# --- Robust Map Generation with Proxy Values ---
+valence_map = {}
+arousal_map = {}
 
-psd = epochs.compute_psd(method='welch', fmin=4, fmax=30, tmin=0.0, tmax=2.0)
-data = psd.get_data()  
-freqs = psd.freqs
-bands = {'Theta': (4, 8), 'Alpha': (8, 12), 'Beta': (12, 30)}
+for index, row in behavioral_data.iterrows():
+    trigger = row['trigger_sent']
+    if pd.isna(trigger): continue
+    trigger = int(trigger)
+    
+    val = row['valence_rating']
+    arou = row['arousal_rating']
+    cat = str(row['category']).strip()
+    
+    # If a rating is missing, parse the "HAHV" string to assign a proxy score (6 for High, 2 for Low)
+    if pd.isna(val):
+        val = 6.0 if 'HV' in cat else 2.0
+    if pd.isna(arou):
+        arou = 6.0 if 'HA' in cat else 2.0
+        
+    valence_map[trigger] = val
+    arousal_map[trigger] = arou
+
+sfreq = epochs.info['sfreq'] 
 
 X = []      
 y_val = []  
 y_arou = [] 
 y_quadrant = [] 
 dropped_trials = 0
+
+# Extract all data at once into memory for speed 
+# Shape: (n_epochs, n_channels, n_times)
+all_epoch_data = epochs.get_data()
 
 for i, event in enumerate(epochs.events):
     trigger_code = event[2]
@@ -219,18 +239,65 @@ for i, event in enumerate(epochs.events):
     a_label = "HA" if arou_rating > 4 else "LA"
     y_quadrant.append(f"{a_label}{v_label}")
     
+    # Get the raw voltage data for this specific epoch
+    epoch_data = all_epoch_data[i]
+    
     epoch_features = []
-    for ch in range(data.shape[1]): 
-        # Calculate TOTAL power for this channel to normalize
-        total_power = np.mean(data[i, ch, :])
+    
+    for ch_idx in range(epoch_data.shape[0]): 
+        ch_signal = epoch_data[ch_idx, :]
         
-        for band_name, (fmin, fmax) in bands.items():
-            idx = np.logical_and(freqs >= fmin, freqs <= fmax)
-            band_power = np.mean(data[i, ch, idx])
-            
-            # NEW: Calculate RELATIVE power (percentage)
-            relative_power = band_power / total_power
-            epoch_features.append(relative_power)
+        # --- 1. TEMPORAL & STATISTICAL FEATURES ---
+        mean_val = np.mean(ch_signal)
+        var_val = np.var(ch_signal)
+        skew_val = stats.skew(ch_signal)
+        kurt_val = stats.kurtosis(ch_signal)
+        ptp_val = np.ptp(ch_signal) # Peak-to-peak amplitude
+        zcr = ((ch_signal[:-1] * ch_signal[1:]) < 0).sum() # Zero-crossing rate
+        
+        # Hjorth Parameters (Mobility & Complexity)
+        dy = np.diff(ch_signal)
+        ddy = np.diff(dy)
+        var_y = np.var(ch_signal)
+        var_dy = np.var(dy)
+        var_ddy = np.var(ddy)
+        mobility = np.sqrt(var_dy / var_y) if var_y > 0 else 0
+        complexity = (np.sqrt(var_ddy / var_dy) / mobility) if mobility > 0 else 0
+        
+        # --- 2. FREQUENCY FEATURES ---
+        # nperseg handles window size; bounded by signal length
+        nperseg = int(sfreq) if len(ch_signal) >= sfreq else len(ch_signal)
+        freqs_w, psd = welch(ch_signal, fs=sfreq, nperseg=nperseg)
+        
+        # Safely extract bands (fallback to 0 if band is missing)
+        delta = np.mean(psd[(freqs_w >= 1) & (freqs_w < 4)]) if any((freqs_w >= 1) & (freqs_w < 4)) else 0
+        theta = np.mean(psd[(freqs_w >= 4) & (freqs_w < 8)]) if any((freqs_w >= 4) & (freqs_w < 8)) else 0
+        alpha = np.mean(psd[(freqs_w >= 8) & (freqs_w < 12)]) if any((freqs_w >= 8) & (freqs_w < 12)) else 0
+        beta  = np.mean(psd[(freqs_w >= 12) & (freqs_w <= 30)]) if any((freqs_w >= 12) & (freqs_w <= 30)) else 0
+        
+        psd_norm = psd / (np.sum(psd) + 1e-12)
+        spec_entropy = -np.sum(psd_norm * np.log2(psd_norm + 1e-12))
+        
+        # --- 3. WAVELET FEATURES ---
+        # Using Daubechies 4 wavelet. Level 5 effectively isolates 2-4 Hz and 4-8 Hz at a 250Hz sample rate.
+        coeffs = pywt.wavedec(ch_signal, 'db4', level=5)
+        cA5, cD5, cD4, cD3, cD2, cD1 = coeffs
+        
+        # cA5 approximates 0-4 Hz (Delta). cD5 approximates 4-8 Hz (Theta).
+        theta_wav_energy = np.sum(cD5**2)
+        delta_wav_energy = np.sum(cA5**2)
+        theta_wav_var = np.var(cD5)
+        delta_wav_var = np.var(cA5)
+
+        # Concatenate all features for this single channel (17 features total)
+        ch_features = [
+            mean_val, var_val, skew_val, kurt_val, ptp_val, zcr, 
+            mobility, complexity, 
+            delta, theta, alpha, beta, spec_entropy,
+            theta_wav_energy, delta_wav_energy, theta_wav_var, delta_wav_var
+        ]
+        
+        epoch_features.extend(ch_features)
             
     X.append(epoch_features)
 
@@ -242,37 +309,66 @@ y_quadrant = np.array(y_quadrant)
 print(f"Clean Feature matrix shape: {X.shape}")
 
 # ==========================================
-# 9. REGRESSION & CLASSIFICATION TRAINING
+# 9. FEATURE SELECTION & CLASSIFICATION
 # ==========================================
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
 
-print("\nTraining Valence and Arousal AI Models...")
+print("\nAssigning Feature Names...")
+feature_types = [
+    "Mean", "Var", "Skew", "Kurt", "PtP", "ZCR", 
+    "Mobility", "Complexity", 
+    "Delta_PSD", "Theta_PSD", "Alpha_PSD", "Beta_PSD", "Spec_Entropy",
+    "Theta_Wav_Energy", "Delta_Wav_Energy", "Theta_Wav_Var", "Delta_Wav_Var"
+]
+
+# Generate the 136 column names based on the 8 channels and 17 features
+feature_names = np.array([f"{ch}_{feat}" for ch in epochs.ch_names for feat in feature_types])
+
+print("Training Initial AI Model to Evaluate Features...")
 
 X_train, X_test, y_val_train, y_val_test, y_arou_train, y_arou_test, y_quad_train, y_quad_test = train_test_split(
-    X, y_val, y_arou, y_quadrant, test_size=0.2, random_state=42, stratify=y_quadrant # STRATIFY keeps class ratios equal
+    X, y_val, y_arou, y_quadrant, test_size=0.2, random_state=42, stratify=y_quadrant
 )
 
-# --- 1. REGRESSION ---
-val_model = RandomForestRegressor(n_estimators=100, random_state=42)
-arou_model = RandomForestRegressor(n_estimators=100, random_state=42)
-
-val_model.fit(X_train, y_val_train)
-arou_model.fit(X_train, y_arou_train)
-
-print("\n--- Regression Results (Predicting 1-7 Scale) ---")
-print(f"Valence Mean Absolute Error: {mean_absolute_error(y_val_test, val_model.predict(X_test)):.2f} points off")
-print(f"Arousal Mean Absolute Error: {mean_absolute_error(y_arou_test, arou_model.predict(X_test)):.2f} points off")
-
-# --- 2. CLASSIFICATION (With Class Balancing) ---
-# NEW: class_weight='balanced' forces the AI to respect small categories
+# Train the initial classifier to map the data
 quad_model = RandomForestClassifier(n_estimators=150, max_depth=10, class_weight='balanced', random_state=42)
 quad_model.fit(X_train, y_quad_train)
 
-quad_predictions = quad_model.predict(X_test)
-quad_accuracy = accuracy_score(y_quad_test, quad_predictions)
+# --- NEW: Extract and Print Top 15 Features ---
+importances = quad_model.feature_importances_
+top_15_indices = np.argsort(importances)[::-1][:15]
 
-print("\n--- Classification Results (Predicting Quadrant) ---")
-print(f"Overall Accuracy: {quad_accuracy * 100:.2f}%")
+print("\n" + "="*45)
+print(" TOP 15 MOST IMPORTANT FEATURES")
+print("="*45)
+for i, idx in enumerate(top_15_indices):
+    print(f"{i+1:2d}. {feature_names[idx]:<25} (Score: {importances[idx]:.4f})")
+print("="*45)
+
+# --- NEW: Re-train with ONLY the Top 15 Features ---
+print("\nRe-training Model using ONLY the Top 15 Features...")
+X_train_selected = X_train[:, top_15_indices]
+X_test_selected = X_test[:, top_15_indices]
+
+optimized_model = RandomForestClassifier(n_estimators=150, max_depth=10, class_weight='balanced', random_state=42)
+optimized_model.fit(X_train_selected, y_quad_train)
+
+optimized_predictions = optimized_model.predict(X_test_selected)
+optimized_accuracy = accuracy_score(y_quad_test, optimized_predictions)
+
+print("\n--- Optimized Classification Results (Predicting Quadrant) ---")
+print(f"Overall Accuracy: {optimized_accuracy * 100:.2f}%")
 print("Detailed Report:")
-print(classification_report(y_quad_test, quad_predictions, zero_division=0))
+print(classification_report(y_quad_test, optimized_predictions, zero_division=0))
+
+# --- REGRESSION ---
+val_model = RandomForestRegressor(n_estimators=100, random_state=42)
+arou_model = RandomForestRegressor(n_estimators=100, random_state=42)
+
+val_model.fit(X_train_selected, y_val_train)
+arou_model.fit(X_train_selected, y_arou_train)
+
+print("\n--- Optimized Regression Results (Predicting 1-7 Scale) ---")
+print(f"Valence Mean Absolute Error: {mean_absolute_error(y_val_test, val_model.predict(X_test_selected)):.2f} points off")
+print(f"Arousal Mean Absolute Error: {mean_absolute_error(y_arou_test, arou_model.predict(X_test_selected)):.2f} points off")
