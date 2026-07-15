@@ -1,0 +1,13 @@
+{
+  "l_freq_hz": 0.1,
+  "h_freq_hz": 40.0,
+  "filter_method": "iir",
+  "iir_order": 4,
+  "reference": "average",
+  "epoch_tmin_s": -0.5,
+  "epoch_tmax_s": 2.0,
+  "baseline_s": [-0.5, 0.0],
+  "notch_hz": null,
+  "enable_ica": false,
+  "enable_autoreject": false
+}
