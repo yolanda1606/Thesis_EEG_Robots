@@ -1,0 +1,8 @@
+task,profile,sampled_frames,usable_frames,usable_pct,width_cv_pct,height_cv_pct,example_image
+Image Experiment,IMAGE_BASELINE,2276,2276,100.0,0.6134302450225418,1.4465046852862118,examples/image_experiment.jpg
+Pick and Place,PnP_CONTROL_SLOW,101,101,100.0,1.0441294398104122,1.4470889542062984,examples/pick_and_place.jpg
+Shape Sorter Observation,SHAPE_CONTROL_FAST,155,155,100.0,1.658780829284429,0.9328650754812515,examples/shape_sorter_observation.jpg
+Stack,STACK_FAULTY_FAST,188,186,98.93617021276596,2.961599663572094,1.5673944812652978,examples/stack.jpg
+Sisyphus,SISYPHUS_INTERACTION,137,137,100.0,3.9710493487578145,4.93390062819003,examples/sisyphus.jpg
+Shape Sorter Interaction,HRI_INTERACTION,217,217,100.0,1.6353809417819722,1.8116130521423834,examples/shape_sorter_interaction.jpg
+Shape Sorter Alone,SHAPE_ALONE,53,53,100.0,1.3340386046718173,1.98807024757768,examples/shape_sorter_alone.jpg
