@@ -24,6 +24,22 @@ It contains 120 rating/video trials and 119 retained EEG trials. EEG trigger 326
 | `src/features.py` | Extracts per-trial/per-channel EEG standard deviation, Shannon entropy, band-specific entropy, Hjorth mobility/complexity, median frequency, and delta/theta/alpha/beta/gamma band power. Gamma is 30–40 Hz. |
 | `src/video.py` | Creates crop previews; processes only the 2-second image window; preserves frame timestamps and landmarks; calculates normalised `IRISDO`, `ESO`, `ENSO`, `MNSO`, and `MWO`; creates per-trial summaries. |
 | `src/export.py` | Writes CSV and JSON tables without overwriting existing files. |
+| `src/configuration.py` | Strictly merges shared, Image Experiment, and participant YAML files. Unknown keys are errors. |
+| `src/health.py` | Performs read-only EEG, ratings, video-log, and synchronization health checks. It does not preprocess EEG or extract features. |
+
+## Configuration files
+
+New runs use three layered files:
+
+```text
+configs/pipeline/eeg_video_defaults.yaml
+    -> configs/experiments/image_experiment.yaml
+    -> configs/participants/P01.yaml
+```
+
+The pipeline prints these sources at startup and writes the fully resolved YAML
+to `config/resolved_configuration.yaml` in every new derived run. The earlier
+single P01 YAML remains temporarily supported with a visible deprecation warning.
 
 ## P01 processing sequence
 

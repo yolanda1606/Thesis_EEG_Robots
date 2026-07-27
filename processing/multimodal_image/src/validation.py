@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -10,16 +11,23 @@ import mne
 import pandas as pd
 
 
-def resolve_inputs(config: dict[str, Any], root: Path) -> dict[str, Path]:
+def resolve_inputs(config: dict[str, Any], root: Path, resource_root: Path | None = None) -> dict[str, Path]:
     inputs = config["inputs"]
     experiment = root / inputs["participant_dir"] / inputs["experiment_dir"]
+    if resource_root is None:
+        legacy_model = inputs.get("face_landmarker_model")
+        if not legacy_model:
+            raise ValueError("No resource root or legacy face-landmarker model path was supplied")
+        model = root / legacy_model
+    else:
+        model = resource_root / config["resources"]["face_landmarker_filename"]
     paths = {
         "experiment_dir": experiment,
         "eeg": experiment / inputs["eeg_file"],
         "ratings": experiment / inputs["ratings_file"],
         "video": experiment / inputs["video_file"],
         "vision_log": experiment / inputs["vision_log_file"],
-        "model": root / inputs["face_landmarker_model"],
+        "model": model,
     }
     for label, path in paths.items():
         if label != "experiment_dir" and not path.is_file():
@@ -40,7 +48,8 @@ def file_record(path: Path) -> dict[str, Any]:
     with path.open("rb") as handle:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(block)
-    return {"path": str(path.resolve()), "bytes": path.stat().st_size, "sha256": digest.hexdigest()}
+    stat = path.stat()
+    return {"path": str(path.resolve()), "bytes": stat.st_size, "modified_utc": datetime.fromtimestamp(stat.st_mtime, tz=timezone.utc).isoformat(), "sha256": digest.hexdigest()}
 
 
 def inspect_inputs(paths: dict[str, Path], config: dict[str, Any]) -> dict[str, Any]:

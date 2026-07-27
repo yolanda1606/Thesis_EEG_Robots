@@ -1,5 +1,6 @@
-# Initial P01 Image Experiment configuration.
-# This file is copied into every derived run directory for traceability.
+# Deprecated compatibility configuration. New runs should use:
+# configs/pipeline/eeg_video_defaults.yaml + configs/experiments/image_experiment.yaml
+# + configs/participants/P01.yaml.
 participant: P01
 experiment: image
 

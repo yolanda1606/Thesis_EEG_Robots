@@ -144,7 +144,7 @@ def process_video(paths: dict[str, Path], config: dict[str, Any], landmarks_path
                     row.update(_facial_measures(array, config["video"]["landmark_indices"], enlarged.shape[1], enlarged.shape[0]))
             frames.append(row)
             landmarks.append(array)
-            if len(frames) % 250 == 0:
+            if len(frames) % int(config["output"]["video_progress_interval_frames"]) == 0:
                 logger.info("Video landmarks: %d/%d image-window frames analysed", len(frames), expected_selected_frames)
     capture.release()
     landmarks_path.parent.mkdir(parents=True, exist_ok=True)

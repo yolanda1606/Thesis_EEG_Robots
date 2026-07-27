@@ -38,3 +38,15 @@ __pycache__/
 *.mp4
 eeg_emotion_experiment/stimuli/
 eeg_venv/
+
+# Local Codex instructions
+/AGENTS.md
+/processing/multimodal_image/AGENTS.md
+
+# Local pipeline documentation, configuration, and implementation files
+/docs/run_image_pipeline_commands.md
+/processing/multimodal_image/configs/experiments/
+/processing/multimodal_image/configs/participants/
+/processing/multimodal_image/configs/pipeline/
+/processing/multimodal_image/src/configuration.py
+/processing/multimodal_image/src/health.py
