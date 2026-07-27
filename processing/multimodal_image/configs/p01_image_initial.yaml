@@ -1,0 +1,98 @@
+# Initial P01 Image Experiment configuration.
+# This file is copied into every derived run directory for traceability.
+participant: P01
+experiment: image
+
+inputs:
+  participant_dir: data/P01_2026-05-26
+  experiment_dir: Image Experiment
+  eeg_file: EEG/UnicornRecorder_26_05_2026_15_15_30.bdf
+  ratings_file: emotion_ratings_15-15-35.csv
+  video_file: vision_video_15-15-17_IMAGE_BASELINE.avi
+  vision_log_file: vision_log_15-15-17_IMAGE_BASELINE.csv
+  face_landmarker_model: processing/multimodal_image/models/face_landmarker.task
+
+channels:
+  eeg_mapping:
+    EEG 1: Fz
+    EEG 2: C3
+    EEG 3: Cz
+    EEG 4: C4
+    EEG 5: Pz
+    EEG 6: PO7
+    EEG 7: Oz
+    EEG 8: PO8
+  montage: standard_1020
+  stim_channel: Status
+  motion_channels: [ACC X, ACC Y, ACC Z, GYR X, GYR Y, GYR Z]
+
+events:
+  image_ranges:
+    HAHV: [101, 130]
+    HALV: [201, 230]
+    LAHV: [301, 330]
+    LALV: [401, 430]
+
+eeg:
+  reference: average
+  filter:
+    l_freq_hz: 0.1
+    h_freq_hz: 40.0
+    iir_order: 4
+  epoch:
+    tmin_s: -0.5
+    tmax_s: 2.0
+    baseline_s: [-0.5, 0.0]
+  ica:
+    enabled: true
+    method: fastica
+    random_seed: 42
+    motion_correlation_threshold: 0.30
+  autoreject:
+    enabled: true
+    random_seed: 42
+  bad_channels:
+    # No automatic channel-rejection threshold is approved yet. Add only channels
+    # documented by a reviewed QC decision; listed channels are interpolated.
+    approved_for_interpolation: []
+
+features:
+  bands_hz:
+    delta: [0.5, 4.0]
+    theta: [4.0, 8.0]
+    alpha: [8.0, 12.0]
+    beta: [12.0, 30.0]
+    gamma: [30.0, 40.0]
+  deferred:
+    [FNN, DS, SK, SSN, DBAS, NB, BLM, BLS, NS, SLM, SLS, asymmetry]
+
+video:
+  analysis_window_s: 2.0
+  face_landmarker:
+    min_detection_confidence: 0.5
+    min_presence_confidence: 0.5
+    min_tracking_confidence: 0.5
+  crop:
+    # Provisional crop based on visual inspection of P01's middle frame.
+    # It centres the seated participant and excludes the standing researcher.
+    # It is deliberately marked unapproved: only --crop-preview-only may use it.
+    left: 150
+    top: 120
+    right: 420
+    bottom: 400
+    scale: 2.0
+    approved: true
+    approval_note: "Approved after review of p01_image_crop_preview_v3."
+  landmark_indices:
+    left_eye_outer: 33
+    right_eye_outer: 263
+    left_upper_eyelid: 159
+    left_lower_eyelid: 145
+    right_upper_eyelid: 386
+    right_lower_eyelid: 374
+    left_iris_center: 468
+    right_iris_center: 473
+    subnasale_approximation: 2
+    upper_lip_center: 0
+    mouth_left: 61
+    mouth_right: 291

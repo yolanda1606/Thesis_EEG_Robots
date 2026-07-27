@@ -1,5 +1,24 @@
-# Ignore the massive data folder
-data/
+# Research recordings and derived participant data
+/data/
+/derived/
+
+# Generated analysis output folders
+/processing/**/outputs/
+/**/analysis_outputs/
+
+# Raw EEG/video exports that may be copied outside data during acquisition
+*.bdf
+*.edf
+*.fif
+*.psydat
+*.npz
+**/Unicorn*.csv
+**/emotion_ratings_*.csv
+**/vision_log_*.csv
+**/robot_metrics_*.csv
+
+# Downloaded landmark model; retain locally but do not commit it
+/processing/multimodal_image/models/*.task
 
 # Ignore C++ build artifacts
 */build/

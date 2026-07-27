@@ -8,7 +8,8 @@ experiment. It is deliberately isolated from experiment acquisition code.
 - Inputs under `../../data/` are treated as read-only.
 - Nothing here launches PsychoPy, the camera, EEG recorder, or robot.
 - Generated files belong under `outputs/`, which is ignored by Git.
-- The legacy scripts in `../../Playground/Image_Experiment/` remain unchanged.
+- Retained legacy image scripts are located in `../legacy_image_tools/` and are
+  not part of this maintained workflow.
 
 ## Layout
 

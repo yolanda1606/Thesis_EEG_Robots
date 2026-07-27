@@ -60,8 +60,9 @@ robot_experiments/          Franka C++ robot tasks and robot metrics
 data/                       Sensitive acquisition data; read-only for analysis
 processing/emotional_baseline/
                             Reproducible image-experiment analysis pipeline
-Playground/Image_Experiment/
-                            Legacy exploratory scripts retained for reference
+processing/legacy_image_tools/
+                            Retained legacy image-analysis scripts; not used by
+                            the maintained pipelines
 eeg_venv/                   Required environment for EEG analysis commands
 ```
 
@@ -167,4 +168,3 @@ The root `.gitignore` excludes `data/`, virtual environments, videos, and build
 artifacts. This does not remove sensitive files that may already exist in Git
 history. Review tracked participant-derived exemplars before publishing or
 sharing the repository.
-
