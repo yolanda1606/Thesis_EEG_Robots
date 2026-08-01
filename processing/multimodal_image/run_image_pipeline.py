@@ -174,23 +174,24 @@ def main() -> int:
     if args.validate_only:
         logger.info("Validation-only run complete; no EEG or video preprocessing was performed"); return 0
     eeg_features = video_features = None
+    output_prefix = f"{config['participant'].lower()}_{config['experiment'].lower()}"
     if args.preprocess_eeg:
         epochs, qc, ica_table = preprocess_eeg(paths["eeg"], config, logger)
         if args.save_qc:
             write_json(run_dir / "eeg" / "quality_control" / "eeg_qc.json", qc)
             if len(ica_table): ica_table.to_csv(run_dir / "eeg" / "quality_control" / "ica_motion_correlation.csv", index=False)
-        if args.save_clean_epochs: epochs.save(run_dir / "eeg" / "cleaned_epochs" / "p01_image_cleaned-epo.fif", overwrite=False)
+        if args.save_clean_epochs: epochs.save(run_dir / "eeg" / "cleaned_epochs" / f"{output_prefix}_cleaned-epo.fif", overwrite=False)
         if args.extract_eeg_features:
             eeg_features = extract_eeg_features(epochs, config); eeg_features.to_csv(run_dir / "eeg" / "features" / "eeg_epoch_features.csv", index=False)
     elif args.extract_eeg_features: raise ValueError("--extract-eeg-features requires --preprocess-eeg")
     if args.preprocess_video:
         if not args.save_landmarks: raise ValueError("--preprocess-video requires --save-landmarks")
-        frames, video_features = process_video(paths, config, run_dir / "video" / "landmarks" / "p01_image_landmarks.npz", logger)
+        frames, video_features = process_video(paths, config, run_dir / "video" / "landmarks" / f"{output_prefix}_landmarks.npz", logger)
         frames.to_csv(run_dir / "video" / "features" / "video_frame_features.csv", index=False)
         if args.extract_video_features: video_features.to_csv(run_dir / "video" / "features" / "video_trial_features.csv", index=False)
     elif args.extract_video_features: raise ValueError("--extract-video-features requires --preprocess-video")
     if args.merge_modalities:
-        merged = merge_tables(paths["ratings"], eeg_features, video_features); merged.to_csv(run_dir / "merged" / "p01_image_trial_dataset.csv", index=False)
+        merged = merge_tables(paths["ratings"], eeg_features, video_features); merged.to_csv(run_dir / "merged" / f"{output_prefix}_trial_dataset.csv", index=False)
         logger.info("Wrote merged table with %d trial rows", len(merged))
     logger.info("Pipeline completed successfully"); return 0
 

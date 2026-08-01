@@ -260,7 +260,7 @@ int main(int argc, char** argv) {
                     // --- HRI FORCE SENSING TRIGGER ---
                     if (sensing_guard && dist_to_goal < 0.03) {
                         Eigen::Map<const Eigen::Matrix<double, 6, 1>> F_ext(robot_state.O_F_ext_hat_K.data());
-                        if (F_ext.head(3).norm() > 4.5) { 
+                        if (F_ext.head(3).norm() > 8.0) { 
                             piece_taken = true;
                             udp.send(shape.base_trigger + 5); 
                             
