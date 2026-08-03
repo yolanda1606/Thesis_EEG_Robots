@@ -1,24 +1,15 @@
-# Research recordings and derived participant data
+# Raw acquisition data and complete generated outputs are archived outside Git.
 /data/
 /derived/
 
-# Generated analysis output folders
+# Generated outputs outside the central derived archive.
 /processing/**/outputs/
 /**/analysis_outputs/
 
-# Raw EEG/video exports that may be copied outside data during acquisition
-*.bdf
-*.edf
-*.fif
-*.psydat
-*.npz
-**/Unicorn*.csv
-**/emotion_ratings_*.csv
-**/vision_log_*.csv
-**/robot_metrics_*.csv
-
-# Downloaded landmark model; retain locally but do not commit it
+# Downloaded landmark model and licensed experiment stimuli.
+# See docs/REPRODUCIBILITY.md for setup and provenance requirements.
 /processing/multimodal_image/models/*.task
+/eeg_emotion_experiment/stimuli/
 
 # Ignore C++ build artifacts
 */build/
@@ -33,20 +24,8 @@ env/
 __pycache__/
 *.pyc
 
-# Ignore stray video files if they accidentally save outside data/
-*.avi
-*.mp4
-eeg_emotion_experiment/stimuli/
 eeg_venv/
 
 # Local Codex instructions
 /AGENTS.md
 /processing/multimodal_image/AGENTS.md
-
-# Local pipeline documentation, configuration, and implementation files
-/docs/run_image_pipeline_commands.md
-/processing/multimodal_image/configs/experiments/
-/processing/multimodal_image/configs/participants/
-/processing/multimodal_image/configs/pipeline/
-/processing/multimodal_image/src/configuration.py
-/processing/multimodal_image/src/health.py

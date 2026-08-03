@@ -1,0 +1,27 @@
+participant: P27
+
+inputs:
+  participant_dir: data/P27_2026-07-08
+  eeg_file: EEG/UnicornRecorder_08_07_2026_16_11_57.bdf
+  ratings_file: emotion_ratings_16-11-50.csv
+  video_file: vision_video_16-11-41_IMAGE_BASELINE.avi
+  vision_log_file: vision_log_16-11-41_IMAGE_BASELINE.csv
+  authoritative_ratings: true
+
+eeg:
+  bad_channels:
+    approved_for_interpolation: []
+
+video:
+  crop:
+    left: 210
+    top: 90
+    right: 520
+    bottom: 480
+    scale: 1.0
+    approved: true
+    approval_note: "Participant-focused crop visually reviewed and approved on 2026-08-01."
+
+synchronization:
+  offset_override_s: null
+  drift_override_s_per_s: null

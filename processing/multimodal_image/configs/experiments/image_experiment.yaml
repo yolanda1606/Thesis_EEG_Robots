@@ -1,0 +1,27 @@
+experiment: image
+
+inputs:
+  experiment_dir: Image Experiment
+
+events:
+  image_ranges:
+    HAHV: [101, 130]
+    HALV: [201, 230]
+    LAHV: [301, 330]
+    LALV: [401, 430]
+
+ratings:
+  required_columns:
+    [stim_id, category, trigger_sent, valence_rating, arousal_rating]
+  rating_columns:
+    valence: valence_rating
+    arousal: arousal_rating
+  # "None" is a literal raw CSV value in P01; "" represents a blank cell.
+  missing_tokens: ["", "None", "NA", "N/A"]
+
+trials:
+  expected_image_trials: 120
+  event_locked: true
+
+video:
+  analysis_window_s: 2.0

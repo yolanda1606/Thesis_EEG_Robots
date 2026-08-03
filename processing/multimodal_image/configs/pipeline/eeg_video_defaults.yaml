@@ -1,0 +1,83 @@
+schema_version: 1
+
+resources:
+  face_landmarker_filename: face_landmarker.task
+
+channels:
+  eeg_mapping:
+    EEG 1: Fz
+    EEG 2: C3
+    EEG 3: Cz
+    EEG 4: C4
+    EEG 5: Pz
+    EEG 6: PO7
+    EEG 7: Oz
+    EEG 8: PO8
+  montage: standard_1020
+  stim_channel: Status
+  motion_channels: [ACC X, ACC Y, ACC Z, GYR X, GYR Y, GYR Z]
+  recorder_channels: [CNT, VALID, DT]
+
+eeg:
+  reference: average
+  filter:
+    l_freq_hz: 0.1
+    h_freq_hz: 40.0
+    iir_order: 4
+  epoch:
+    tmin_s: -0.5
+    tmax_s: 2.0
+    baseline_s: [-0.5, 0.0]
+  ica:
+    enabled: true
+    method: fastica
+    random_seed: 42
+    motion_correlation_threshold: 0.30
+  autoreject:
+    enabled: true
+    random_seed: 42
+
+features:
+  bands_hz:
+    delta: [0.5, 4.0]
+    theta: [4.0, 8.0]
+    alpha: [8.0, 12.0]
+    beta: [12.0, 30.0]
+    gamma: [30.0, 40.0]
+  deferred: [FNN, DS, SK, SSN, DBAS, NB, BLM, BLS, NS, SLM, SLS, asymmetry]
+
+video:
+  face_landmarker:
+    min_detection_confidence: 0.5
+    min_presence_confidence: 0.5
+    min_tracking_confidence: 0.5
+  landmark_indices:
+    left_eye_outer: 33
+    right_eye_outer: 263
+    left_upper_eyelid: 159
+    left_lower_eyelid: 145
+    right_upper_eyelid: 386
+    right_lower_eyelid: 374
+    left_iris_center: 468
+    right_iris_center: 473
+    subnasale_approximation: 2
+    upper_lip_center: 0
+    mouth_left: 61
+    mouth_right: 291
+
+health:
+  near_flat_variance_v2: 1.0e-16
+  large_amplitude_v: 5.0e-4
+  clipping_fraction_warning: 0.01
+  line_noise_ratio_warning: 5.0
+  video_frame_samples: 200
+  video_timestamp_gap_factor: 2.0
+  sync:
+    linear_rmse_warning_s: 0.05
+    linear_max_residual_warning_s: 0.10
+    outlier_residual_s: 0.05
+
+output:
+  experiment_output_dir: Image_Experiment
+  log_filename: pipeline.log
+  video_progress_interval_frames: 250
