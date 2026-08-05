@@ -4,8 +4,9 @@ This guide explains the commands available in
 `processing/multimodal_image/run_image_pipeline.py`.
 
 The pipeline reads files in `data/` but does not change them. All new results
-are written under `derived/`. Use a new `--run-name` every time: a run will
-stop rather than overwrite an existing folder.
+are written under `derived/`. By default a run stops rather than overwriting an
+existing folder. Use `--overwrite-run` only to replace the exact requested run
+directory after reviewing it.
 
 ## Start in the project folder
 
@@ -190,7 +191,7 @@ python -u processing/multimodal_image/run_image_pipeline.py \
   --verbose
 ```
 
-`--extract-video-features` makes one face-measurement summary per trial. It
+`--extract-video-features` makes one face-landmark-derived geometric-feature summary per trial. It
 requires `--preprocess-video` in the same command.
 
 ### Full multimodal run
@@ -229,6 +230,7 @@ them with the ratings in one trial-level table.
 | `--resource-root PATH` | Folder containing the face-landmark model. This is separate from scientific settings so it can differ between computers. |
 | `--output-root PATH` | Top-level folder for new derived results. Default: `derived`. It must not be inside `data/`. |
 | `--run-name NAME` | Required name for this run's output folder. It must be new. |
+| `--overwrite-run` | Explicitly replaces only the exact participant/experiment/mode/run-name directory. It is ignored by `--dry-run`. |
 | `--dry-run` | Displays settings, inputs, and intended outputs without creating files. |
 | `--validate-only` | Checks selected inputs and trial matching; does not preprocess EEG or video. |
 | `--health-check-only` | Runs read-only health checks and writes a health report. |
@@ -236,7 +238,7 @@ them with the ratings in one trial-level table.
 | `--preprocess-eeg` | Runs EEG preparation. |
 | `--preprocess-video` | Runs face-landmark processing on the video. Requires `--save-landmarks`. |
 | `--extract-eeg-features` | Creates trial-level EEG features. Requires `--preprocess-eeg`. |
-| `--extract-video-features` | Creates trial-level face features. Requires `--preprocess-video`. |
+| `--extract-video-features` | Creates trial-level face-landmark-derived geometric features. Requires `--preprocess-video`. |
 | `--merge-modalities` | Combines ratings with any EEG and face features created in that same run. |
 | `--save-clean-epochs` | Saves prepared EEG trial segments. Used with `--preprocess-eeg`. |
 | `--save-landmarks` | Saves detailed face-landmark data. Required with `--preprocess-video`. |
@@ -256,7 +258,8 @@ them with the ratings in one trial-level table.
 - `--merge-modalities` can be used with EEG features, video features, or both.
   It combines only results made in the current run.
 - A run name cannot be reused. Choose a new name instead of deleting or
-  overwriting an existing run folder.
+  overwriting an existing run folder, unless you explicitly use `--overwrite-run`
+  for that exact directory.
 - The pipeline protects raw data by refusing an output folder inside `data/`.
 
 ## Where results go

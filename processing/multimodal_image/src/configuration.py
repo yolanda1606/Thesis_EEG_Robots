@@ -25,7 +25,7 @@ SCHEMA: dict[str, Any] = {
             "ica": {"enabled": None, "method": None, "random_seed": None, "motion_correlation_threshold": None},
             "autoreject": {"enabled": None, "random_seed": None},
             "bad_channels": {"approved_for_interpolation": None}},
-    "features": {"bands_hz": None, "deferred": None},
+    "features": {"eeg_feature_window_s": None, "bands_hz": None, "deferred": None},
     "video": {"analysis_window_s": None,
               "face_landmarker": {"min_detection_confidence": None, "min_presence_confidence": None, "min_tracking_confidence": None},
               "landmark_indices": None,

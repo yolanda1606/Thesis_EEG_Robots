@@ -7,6 +7,7 @@ import argparse
 import json
 import logging
 import os
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -53,17 +54,6 @@ PARTICIPANT_RUNS = {
     "P15": "p15_image_initial_v2",
     "P18": "p18_image_initial_v1",
     "P27": "p27_image_initial_v1",
-}
-PARTICIPANT_DATASETS = {
-    participant: PROJECT_ROOT
-    / "derived"
-    / participant
-    / "Image_Experiment"
-    / "runs"
-    / run_name
-    / "merged"
-    / "p01_image_trial_dataset.csv"
-    for participant, run_name in PARTICIPANT_RUNS.items()
 }
 
 OUTPUT_DIR = PROJECT_ROOT / "derived" / "Image_Experiment" / "modeling"
@@ -119,6 +109,14 @@ TOP_N_GRIDS = {
     "Face": [1, 2, 3, 5, 10],
     "Multimodal": [1, 2, 3, 5, 10, 20, 40, 80, 130],
 }
+
+
+@dataclass(frozen=True)
+class ParticipantInput:
+    participant: str
+    run_name: str
+    manifest: Path
+    dataset: Path
 EXPECTED_AUDIT = {
     "P01": {
         "rows": 120,
@@ -240,19 +238,55 @@ def parse_arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def load_participant_data() -> dict[str, pd.DataFrame]:
+def resolve_participant_input(participant: str, run_name: str) -> ParticipantInput:
+    """Resolve one participant's uniquely identified merged dataset from its manifest."""
+    normalized = participant.upper()
+    run_dir = PROJECT_ROOT / "derived" / normalized / "Image_Experiment" / "runs" / run_name
+    if run_dir.name != run_name:
+        raise ValueError(f"Run identity mismatch for {normalized}: {run_dir}")
+    manifest = run_dir / "manifest" / "run_manifest.json"
+    if not manifest.is_file():
+        raise FileNotFoundError(f"Missing run manifest for {normalized}: {manifest}")
+    payload = json.loads(manifest.read_text(encoding="utf-8"))
+    resolved = payload.get("resolved_configuration", payload.get("configuration"))
+    if not isinstance(resolved, dict):
+        raise ValueError(f"Run manifest has no resolved configuration for {normalized}: {manifest}")
+    manifest_participant = str(resolved.get("participant", "")).upper()
+    if manifest_participant != normalized:
+        raise ValueError(
+            f"Manifest participant mismatch: requested {normalized}, but {manifest} records {manifest_participant or 'none'}"
+        )
+    if str(resolved.get("experiment", "")).lower() != "image":
+        raise ValueError(f"Manifest experiment mismatch for {normalized}: expected image in {manifest}")
+    merged_dir = run_dir / "merged"
+    candidates = sorted(merged_dir.glob("*_trial_dataset.csv")) if merged_dir.is_dir() else []
+    if len(candidates) != 1:
+        raise ValueError(
+            f"Expected exactly one merged trial dataset for {normalized} in {merged_dir}; found {len(candidates)}: {candidates}"
+        )
+    dataset = candidates[0]
+    expected_name = f"{normalized.lower()}_{str(resolved['experiment']).lower()}_trial_dataset.csv"
+    if dataset.name != expected_name:
+        raise ValueError(
+            f"Merged dataset identity mismatch for {normalized}: expected {expected_name}, found {dataset.name}"
+        )
+    return ParticipantInput(normalized, run_name, manifest.resolve(), dataset.resolve())
+
+
+def load_participant_data() -> tuple[dict[str, pd.DataFrame], dict[str, ParticipantInput]]:
     """Load and validate the four approved participant trial tables."""
     frames: dict[str, pd.DataFrame] = {}
+    inputs: dict[str, ParticipantInput] = {}
     required = set(EEG_COLUMNS).union(FACE_COLUMNS).union(TARGETS.values())
-    for participant, path in PARTICIPANT_DATASETS.items():
-        if not path.is_file():
-            raise FileNotFoundError(f"Missing merged dataset for {participant}: {path}")
-        frame = pd.read_csv(path)
+    for participant, run_name in PARTICIPANT_RUNS.items():
+        resolved = resolve_participant_input(participant, run_name)
+        frame = pd.read_csv(resolved.dataset)
         missing = sorted(required.difference(frame.columns))
         if missing:
             raise ValueError(f"{participant} is missing required columns: {missing}")
         frames[participant] = frame
-    return frames
+        inputs[participant] = resolved
+    return frames, inputs
 
 
 def participant_audit(frame: pd.DataFrame) -> dict[str, Any]:
@@ -296,13 +330,23 @@ def validate_inputs(frames: dict[str, pd.DataFrame]) -> None:
             raise ValueError(f"{participant} contains infinite predictor values")
 
 
-def print_dry_validation(frames: dict[str, pd.DataFrame]) -> None:
+def print_resolved_inputs(inputs: dict[str, ParticipantInput]) -> None:
+    """Print resolved participant/run/manifest/dataset identities before any fitting."""
+    for participant, resolved in inputs.items():
+        print(
+            f"RESOLVED {participant}: run={resolved.run_name}; manifest={resolved.manifest}; "
+            f"dataset={resolved.dataset}"
+        )
+
+
+def print_dry_validation(frames: dict[str, pd.DataFrame], inputs: dict[str, ParticipantInput]) -> None:
     """Print validated paths and counts without creating outputs."""
     print("DRY VALIDATION PASSED: no models fitted and no files created")
     print("Predictors: EEG=120, Face=10, Multimodal=130")
     for participant, frame in frames.items():
         audit = participant_audit(frame)
-        print(f"{participant}: {PARTICIPANT_DATASETS[participant]}")
+        resolved = inputs[participant]
+        print(f"{participant}: run={resolved.run_name}; manifest={resolved.manifest}; dataset={resolved.dataset}")
         print(
             "  rows={rows}, valid_eeg={valid_eeg}, valid_face={valid_face}, "
             "missing_valence={missing_valence}, missing_arousal={missing_arousal}".format(**audit)
@@ -845,10 +889,11 @@ def main() -> int:
     """Validate inputs, run requested evaluations, and write approved summaries."""
     args = parse_arguments()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
-    frames = load_participant_data()
+    frames, inputs = load_participant_data()
     validate_inputs(frames)
+    print_resolved_inputs(inputs)
     if args.dry_validate:
-        print_dry_validation(frames)
+        print_dry_validation(frames, inputs)
         return 0
 
     enforce_summary_overwrite_policy(args)

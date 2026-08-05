@@ -7,6 +7,7 @@ import importlib.metadata
 import logging
 import os
 import platform
+import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -15,6 +16,7 @@ from pathlib import Path
 os.environ.setdefault("MNE_DONTWRITE_HOME", "true")
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/multimodal_image_matplotlib")
 
+import cv2
 import pandas as pd
 import yaml
 
@@ -40,6 +42,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--resource-root", type=Path, default=HERE / "models", help="Directory containing the configured landmark-model filename.")
     parser.add_argument("--output-root", type=Path, default=Path("derived"))
     parser.add_argument("--run-name", required=True)
+    parser.add_argument("--overwrite-run", action="store_true", help="Replace only the exact requested run directory; ignored by --dry-run.")
     parser.add_argument("--health-check-only", action="store_true", help="Run read-only EEG, ratings, video, log, and synchronization checks only.")
     parser.add_argument("--crop-preview-only", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
@@ -62,6 +65,45 @@ def make_run_dir(root: Path, config: dict, args: argparse.Namespace) -> Path:
     return (root / config["participant"] / config["output"]["experiment_output_dir"] / section / args.run_name).resolve()
 
 
+def validate_output_root(output_root: Path, root: Path, raw_root: Path) -> None:
+    """Reject roots that could make a run replacement broader than intended."""
+    if output_root == root:
+        raise ValueError("--output-root must not be the repository root")
+    if output_root == Path(output_root.anchor):
+        raise ValueError("--output-root must not be a drive root")
+    if output_root == raw_root or raw_root in output_root.parents or output_root in raw_root.parents:
+        raise ValueError("--output-root must be outside data/ and must not contain it")
+
+
+def validate_run_directory(output_root: Path, run_dir: Path, config: dict, args: argparse.Namespace) -> None:
+    """Require the exact participant/experiment/mode/run-name location before replacement."""
+    run_name = args.run_name
+    if not run_name or run_name in {".", ".."} or "/" in run_name or "\\" in run_name:
+        raise ValueError("--run-name must be a single non-empty directory name")
+    section = "health_checks" if args.health_check_only else "runs"
+    expected = (str(config["participant"]), str(config["output"]["experiment_output_dir"]), section, run_name)
+    try:
+        relative = run_dir.relative_to(output_root)
+    except ValueError as exc:
+        raise ValueError("Resolved run directory must be inside --output-root") from exc
+    if relative.parts != expected:
+        raise ValueError(
+            "Resolved run directory does not match the requested participant, experiment, mode, and run name: "
+            f"expected {expected}, got {relative.parts}"
+        )
+
+
+def replace_run_directory_if_requested(run_dir: Path, output_root: Path, config: dict, args: argparse.Namespace, logger) -> None:
+    """Replace only an already validated exact run directory when explicitly requested."""
+    validate_run_directory(output_root, run_dir, config, args)
+    if not args.overwrite_run or not run_dir.exists():
+        return
+    if not run_dir.is_dir():
+        raise FileExistsError(f"Requested run path exists but is not a directory: {run_dir}")
+    logger.info("Replacing existing output directory: %s", run_dir)
+    shutil.rmtree(run_dir)
+
+
 def configure_logging(run_dir: Path | None, config: dict, level: str) -> logging.Logger:
     logger = logging.getLogger("multimodal_image")
     logger.handlers.clear(); logger.setLevel(logging.DEBUG)
@@ -74,7 +116,20 @@ def configure_logging(run_dir: Path | None, config: dict, level: str) -> logging
 
 
 def package_versions() -> dict[str, str]:
-    return {name: importlib.metadata.version(name) for name in ("mne", "autoreject", "mediapipe", "opencv-python", "numpy", "pandas", "scipy", "PyYAML")}
+    versions = {
+        name: importlib.metadata.version(name)
+        for name in ("mne", "autoreject", "mediapipe", "numpy", "pandas", "scipy", "PyYAML")
+    }
+    versions["opencv_runtime"] = cv2.__version__
+    for distribution in ("opencv-contrib-python", "opencv-python", "opencv-contrib-python-headless", "opencv-python-headless"):
+        try:
+            versions["opencv_distribution"] = f"{distribution}=={importlib.metadata.version(distribution)}"
+            break
+        except importlib.metadata.PackageNotFoundError:
+            continue
+    else:
+        versions["opencv_distribution"] = "metadata not found"
+    return versions
 
 
 def setup_run(run_dir: Path, config: dict, sources: list[str], args: argparse.Namespace, health_only: bool) -> None:
@@ -144,7 +199,7 @@ def main() -> int:
         config["resources"]["resource_root"] = str(resource_root)
     paths = resolve_inputs(config, root, resource_root)
     output_root = args.output_root.resolve(); raw_root = (root / "data").resolve()
-    if output_root == raw_root or raw_root in output_root.parents: raise ValueError("--output-root must be outside data/")
+    validate_output_root(output_root, root, raw_root)
     run_dir = make_run_dir(output_root, config, args)
     if args.dry_run:
         logger = configure_logging(None, config, args.log_level)
@@ -156,6 +211,8 @@ def main() -> int:
         return 0
     stage_flags = [args.crop_preview_only, args.validate_only, args.preprocess_eeg, args.preprocess_video, args.extract_eeg_features, args.extract_video_features, args.merge_modalities]
     if args.health_check_only and any(stage_flags): raise ValueError("--health-check-only cannot be combined with processing-stage flags")
+    replacement_logger = configure_logging(None, config, args.log_level)
+    replace_run_directory_if_requested(run_dir, output_root, config, args, replacement_logger)
     setup_run(run_dir, config, sources, args, args.health_check_only)
     logger = configure_logging(run_dir, config, args.log_level)
     logger.info("Activating %s %s pipeline", config["participant"], config["experiment"])

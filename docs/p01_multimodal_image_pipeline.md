@@ -21,8 +21,8 @@ It contains 120 rating/video trials and 119 retained EEG trials. EEG trigger 326
 | `src/validation.py` | Checks required inputs, ratings columns, unique image triggers, EEG header/events, video metadata, and the 120 shared trial codes. Creates input checksums. |
 | `src/alignment.py` | Matches image triggers between EEG and video logs. Saves per-trigger onset pairs and the video-to-EEG offset/drift model. |
 | `src/eeg.py` | Applies the approved EEG sequence: channel mapping, common-average reference, fourth-order 0.1–40 Hz Butterworth IIR filter, image epochs, ICA/motion review, optional approved channel interpolation, and AutoReject. |
-| `src/features.py` | Extracts per-trial/per-channel EEG standard deviation, Shannon entropy, band-specific entropy, Hjorth mobility/complexity, median frequency, and delta/theta/alpha/beta/gamma band power. Gamma is 30–40 Hz. |
-| `src/video.py` | Creates crop previews; processes only the 2-second image window; preserves frame timestamps and landmarks; calculates normalised `IRISDO`, `ESO`, `ENSO`, `MNSO`, and `MWO`; creates per-trial summaries. |
+| `src/features.py` | Extracts per-trial/per-channel EEG standard deviation, spectral Shannon entropy from normalized Welch PSD (including band-specific entropy, not amplitude-distribution entropy), Hjorth mobility/complexity, median frequency, and delta/theta/alpha/beta/gamma band power. Gamma is 30–40 Hz. |
+| `src/video.py` | Creates crop previews; processes only the 2-second image window; preserves frame timestamps and landmarks; calculates five face-landmark-derived normalized geometric measures (`IRISDO`, `ESO`, `ENSO`, `MNSO`, and `MWO`); creates per-trial summaries. |
 | `src/export.py` | Writes CSV and JSON tables without overwriting existing files. |
 | `src/configuration.py` | Strictly merges shared, Image Experiment, and participant YAML files. Unknown keys are errors. |
 | `src/health.py` | Performs read-only EEG, ratings, video-log, and synchronization health checks. It does not preprocess EEG or extract features. |
@@ -48,7 +48,7 @@ Read-only raw inputs
   ├── Ratings and triggers ──> validation and trial identifiers
   ├── EEG BDF ───────────────> CAR -> 0.1–40 Hz IIR -> epochs -> ICA review
   │                              -> AutoReject -> cleaned epochs -> EEG features
-  └── Video and frame log ───> approved crop -> landmarks -> facial features
+  └── Video and frame log ───> approved crop -> landmarks -> face-landmark-derived geometric features
                                       ↓
                          trigger-based EEG/video alignment
                                       ↓
@@ -69,8 +69,8 @@ All files below are inside `derived/P01/Image_Experiment/runs/p01_image_initial_
 | `eeg/quality_control/eeg_qc.json` | Retained/rejected epochs, ICA decision, and interpolation status. |
 | `eeg/quality_control/ica_motion_correlation.csv` | Motion correlations for eight ICA components. |
 | `video/landmarks/p01_image_landmarks.npz` | Derived normalised 3D landmarks, selected frame numbers, and trigger codes. |
-| `video/features/video_frame_features.csv` | 7,205 image-window frames and frame-level facial values. |
-| `video/features/video_trial_features.csv` | 120 rows with face-detection rate and facial mean/standard deviation values. |
+| `video/features/video_frame_features.csv` | 7,205 image-window frames and frame-level face-landmark-derived geometric values. |
+| `video/features/video_trial_features.csv` | 120 rows with face-detection rate and face-landmark-derived geometric mean/standard-deviation values. |
 | `alignment/trigger_alignment.csv` | EEG/video onset pair for every image trigger. |
 | `alignment/alignment_model.json` | Offset and drift summary. |
 | `merged/p01_image_trial_dataset.csv` | Ratings, stimulus details, EEG features, and facial features in one 120-row table. |

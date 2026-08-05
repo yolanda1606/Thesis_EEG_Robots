@@ -27,7 +27,7 @@ For example, `eeg_sd` becomes `eeg_sd__C3` through `eeg_sd__Pz`.
 | Source column / merged-column family | Meaning | Main characteristic | Calculation and interpretation |
 |---|---|---|---|
 | `eeg_sd` / `eeg_sd__{channel}` | Standard deviation of the EEG signal within the epoch. | Signal amplitude / variability | Larger values indicate greater variation in the recorded EEG voltage over the epoch. It is affected by neural activity, remaining noise, and signal scale; it is not frequency-specific. |
-| `eeg_se` / `eeg_se__{channel}` | Shannon entropy of the full Welch power spectral density (PSD). | Frequency-content complexity | The PSD values are converted to relative non-negative values and entropy is calculated as `-sum(p * log2(p))`. Larger values mean power is spread more evenly across frequencies; lower values mean power is concentrated in fewer frequencies. |
+| `eeg_se` / `eeg_se__{channel}` | Spectral Shannon entropy of the full Welch power spectral density (PSD), not amplitude-distribution entropy. | Frequency-content complexity | The PSD values are converted to relative non-negative values and entropy is calculated as `-sum(p * log2(p))`. Larger values mean power is spread more evenly across frequencies; lower values mean power is concentrated in fewer frequencies. |
 | `eeg_hm` / `eeg_hm__{channel}` | Hjorth mobility. | Temporal complexity / frequency-related activity | Calculated as `sqrt(var(diff(signal)) / var(signal))`. It summarizes how rapidly the signal changes from sample to sample. |
 | `eeg_hc` / `eeg_hc__{channel}` | Hjorth complexity. | Temporal complexity | Calculated as the mobility of the first difference divided by the mobility of the original signal. Larger values indicate a more complex waveform relative to a simple oscillation. |
 | `eeg_mf_hz` / `eeg_mf_hz__{channel}` | Median frequency in hertz. | Frequency content | The frequency at which cumulative trapezoid-integrated PSD reaches half of total spectral power. Higher values indicate relatively more high-frequency power. |
@@ -97,7 +97,7 @@ calculated across detected frames only within a trial’s two-second image windo
 | `video_mwo_norm_mean` | Trial mean normalized mouth width. |
 | `video_mwo_norm_std` | Trial standard deviation of normalized mouth width. |
 
-These measures describe facial geometry and within-window movement variability,
+These face-landmark-derived geometric measures describe facial geometry and within-window movement variability,
 not validated emotion labels. They can be affected by pose, camera view,
 landmark error, and expression changes unrelated to the presented image.
 

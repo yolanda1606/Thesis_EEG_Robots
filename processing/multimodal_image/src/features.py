@@ -24,13 +24,39 @@ def _median_frequency(frequencies: np.ndarray, psd: np.ndarray) -> float:
     return float(frequencies[np.searchsorted(cumulative, cumulative[-1] / 2.0) + 1])
 
 
+def _feature_window_epochs(epochs, config: dict[str, Any]):
+    """Return a safely cropped copy of cleaned epochs for feature calculation."""
+    window = config["features"].get("eeg_feature_window_s")
+    if not isinstance(window, (list, tuple)) or len(window) != 2:
+        raise ValueError("features.eeg_feature_window_s must contain [tmin_s, tmax_s]")
+    tmin_s, tmax_s = (float(value) for value in window)
+    if not np.isfinite([tmin_s, tmax_s]).all() or tmin_s >= tmax_s:
+        raise ValueError("features.eeg_feature_window_s must be finite with tmin_s < tmax_s")
+    if tmin_s < epochs.tmin or tmax_s > epochs.tmax:
+        raise ValueError(
+            "features.eeg_feature_window_s is outside the available cleaned epoch "
+            f"[{epochs.tmin:.6f}, {epochs.tmax:.6f}] s"
+        )
+    # MNE performs time-aware selection. include_tmax=True explicitly retains
+    # the +2.0 s sample when it lies on the sampling grid.
+    feature_epochs = epochs.copy().crop(tmin=tmin_s, tmax=tmax_s, include_tmax=True)
+    expected_samples = int(round((tmax_s - tmin_s) * float(epochs.info["sfreq"]))) + 1
+    if abs(len(feature_epochs.times) - expected_samples) > 1:
+        raise ValueError(
+            "Cropped EEG feature window has an unexpected sample count: "
+            f"expected approximately {expected_samples}, got {len(feature_epochs.times)}"
+        )
+    return feature_epochs
+
+
 def extract_eeg_features(epochs, config: dict[str, Any]) -> pd.DataFrame:
     """One transparent feature row per retained epoch and EEG channel."""
     bands = config["features"]["bands_hz"]
+    feature_epochs = _feature_window_epochs(epochs, config)
     rows: list[dict[str, Any]] = []
-    for epoch_index, (epoch, event) in enumerate(zip(epochs.get_data(copy=True), epochs.events)):
-        for channel, signal in zip(epochs.ch_names, epoch):
-            frequencies, psd = welch(signal, fs=float(epochs.info["sfreq"]), nperseg=min(len(signal), int(epochs.info["sfreq"])))
+    for epoch_index, (epoch, event) in enumerate(zip(feature_epochs.get_data(copy=True), feature_epochs.events)):
+        for channel, signal in zip(feature_epochs.ch_names, epoch):
+            frequencies, psd = welch(signal, fs=float(feature_epochs.info["sfreq"]), nperseg=min(len(signal), int(feature_epochs.info["sfreq"])))
             row: dict[str, Any] = {"epoch_index": epoch_index, "trigger": int(event[2]), "channel": channel,
                                    "eeg_sd": float(np.std(signal)), "eeg_se": _entropy(psd), "eeg_hm": _hjorth_mobility(signal),
                                    "eeg_hc": _hjorth_complexity(signal), "eeg_mf_hz": _median_frequency(frequencies, psd)}

@@ -38,6 +38,9 @@ eeg:
     random_seed: 42
 
 features:
+  # Feature calculation uses this post-stimulus portion of the cleaned epoch.
+  # The full -0.5 to +2.0 s epoch remains available for QC and saving.
+  eeg_feature_window_s: [0.0, 2.0]
   bands_hz:
     delta: [0.5, 4.0]
     theta: [4.0, 8.0]
