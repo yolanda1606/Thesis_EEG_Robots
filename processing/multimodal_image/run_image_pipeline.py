@@ -30,6 +30,13 @@ from src.features import extract_eeg_features
 from src.health import eeg_health, markdown_report, ratings_health, synchronization_health, video_health
 from src.validation import file_record, inspect_inputs, resolve_inputs
 from src.video import create_crop_preview, process_video
+from src.qc import (autoreject_rows, save_autoreject_plot,
+                    save_event_related_band_power, save_fz_time_frequency)
+
+
+def ensure_parent(path: Path) -> None:
+    """Create an output branch only immediately before its first write."""
+    path.parent.mkdir(parents=True, exist_ok=True)
 
 
 def parse_args() -> argparse.Namespace:
@@ -110,6 +117,7 @@ def configure_logging(run_dir: Path | None, config: dict, level: str) -> logging
     formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
     console = logging.StreamHandler(); console.setLevel(getattr(logging, level)); console.setFormatter(formatter); logger.addHandler(console)
     if run_dir is not None:
+        ensure_parent(run_dir / "logs" / config["output"]["log_filename"])
         handler = logging.FileHandler(run_dir / "logs" / config["output"]["log_filename"], encoding="utf-8")
         handler.setLevel(logging.DEBUG); handler.setFormatter(formatter); logger.addHandler(handler)
     return logger
@@ -135,8 +143,8 @@ def package_versions() -> dict[str, str]:
 def setup_run(run_dir: Path, config: dict, sources: list[str], args: argparse.Namespace, health_only: bool) -> None:
     if run_dir.exists():
         raise FileExistsError(f"Output directory already exists: {run_dir}. Choose a new --run-name.")
-    folders = ("manifest", "config", "logs") if health_only else ("manifest", "config", "eeg/cleaned_epochs", "eeg/features", "eeg/quality_control", "video/crop_preview", "video/landmarks", "video/features", "video/quality_control", "alignment", "merged", "logs")
-    for folder in folders: (run_dir / folder).mkdir(parents=True, exist_ok=False)
+    run_dir.mkdir(parents=True, exist_ok=False)
+    ensure_parent(run_dir / "config" / "resolved_configuration.yaml")
     with (run_dir / "config" / "resolved_configuration.yaml").open("x", encoding="utf-8") as handle: yaml.safe_dump(config, handle, sort_keys=False)
     git = subprocess.run(["git", "rev-parse", "HEAD"], cwd=HERE.parents[1], text=True, capture_output=True, check=False).stdout.strip() or None
     write_json(run_dir / "manifest" / "run_manifest.json", {"created_utc": datetime.now(timezone.utc).isoformat(), "command": " ".join(map(str, sys.argv)), "configuration_sources": sources, "python": sys.executable, "python_version": sys.version, "platform": platform.platform(), "git_commit": git, "package_versions": package_versions(), "resolved_configuration": config, "flags": vars(args)})
@@ -233,22 +241,47 @@ def main() -> int:
     eeg_features = video_features = None
     output_prefix = f"{config['participant'].lower()}_{config['experiment'].lower()}"
     if args.preprocess_eeg:
-        epochs, qc, ica_table = preprocess_eeg(paths["eeg"], config, logger)
+        epochs, qc, ica_table, reject_log, autoreject_events = preprocess_eeg(paths["eeg"], config, logger)
         if args.save_qc:
             write_json(run_dir / "eeg" / "quality_control" / "eeg_qc.json", qc)
-            if len(ica_table): ica_table.to_csv(run_dir / "eeg" / "quality_control" / "ica_motion_correlation.csv", index=False)
-        if args.save_clean_epochs: epochs.save(run_dir / "eeg" / "cleaned_epochs" / f"{output_prefix}_cleaned-epo.fif", overwrite=False)
+            qc_dir = run_dir / "eeg" / "quality_control"
+            if len(ica_table):
+                ensure_parent(qc_dir / "ica_motion_correlation.csv")
+                ica_table.to_csv(qc_dir / "ica_motion_correlation.csv", index=False)
+            if reject_log is not None:
+                write_rows(qc_dir / "autoreject_epoch_channel_log.csv", autoreject_rows(reject_log, autoreject_events))
+                save_autoreject_plot(reject_log, qc_dir / "autoreject_epoch_channel_log.png", config["participant"], args.run_name)
+            missing = save_event_related_band_power(
+                epochs, config, qc_dir / "event_related_band_power_by_category.png",
+                qc_dir / "event_related_band_power_by_category.csv", config["participant"], args.run_name,
+            )
+            if missing:
+                logger.warning("Spectral QC has no retained epochs for categories: %s", ", ".join(missing))
+            save_fz_time_frequency(
+                epochs, config, qc_dir / "event_related_time_frequency_Fz_by_category.png",
+                config["participant"], args.run_name, logger,
+            )
+        if args.save_clean_epochs:
+            ensure_parent(run_dir / "eeg" / "cleaned_epochs" / f"{output_prefix}_cleaned-epo.fif")
+            epochs.save(run_dir / "eeg" / "cleaned_epochs" / f"{output_prefix}_cleaned-epo.fif", overwrite=False)
         if args.extract_eeg_features:
-            eeg_features = extract_eeg_features(epochs, config); eeg_features.to_csv(run_dir / "eeg" / "features" / "eeg_epoch_features.csv", index=False)
+            eeg_features = extract_eeg_features(epochs, config)
+            ensure_parent(run_dir / "eeg" / "features" / "eeg_epoch_features.csv")
+            eeg_features.to_csv(run_dir / "eeg" / "features" / "eeg_epoch_features.csv", index=False)
     elif args.extract_eeg_features: raise ValueError("--extract-eeg-features requires --preprocess-eeg")
     if args.preprocess_video:
         if not args.save_landmarks: raise ValueError("--preprocess-video requires --save-landmarks")
         frames, video_features = process_video(paths, config, run_dir / "video" / "landmarks" / f"{output_prefix}_landmarks.npz", logger)
+        ensure_parent(run_dir / "video" / "features" / "video_frame_features.csv")
         frames.to_csv(run_dir / "video" / "features" / "video_frame_features.csv", index=False)
-        if args.extract_video_features: video_features.to_csv(run_dir / "video" / "features" / "video_trial_features.csv", index=False)
+        if args.extract_video_features:
+            ensure_parent(run_dir / "video" / "features" / "video_trial_features.csv")
+            video_features.to_csv(run_dir / "video" / "features" / "video_trial_features.csv", index=False)
     elif args.extract_video_features: raise ValueError("--extract-video-features requires --preprocess-video")
     if args.merge_modalities:
-        merged = merge_tables(paths["ratings"], eeg_features, video_features); merged.to_csv(run_dir / "merged" / f"{output_prefix}_trial_dataset.csv", index=False)
+        merged = merge_tables(paths["ratings"], eeg_features, video_features)
+        ensure_parent(run_dir / "merged" / f"{output_prefix}_trial_dataset.csv")
+        merged.to_csv(run_dir / "merged" / f"{output_prefix}_trial_dataset.csv", index=False)
         logger.info("Wrote merged table with %d trial rows", len(merged))
     logger.info("Pipeline completed successfully"); return 0
 

@@ -23,7 +23,7 @@ SCHEMA: dict[str, Any] = {
     "eeg": {"reference": None, "filter": {"l_freq_hz": None, "h_freq_hz": None, "iir_order": None},
             "epoch": {"tmin_s": None, "tmax_s": None, "baseline_s": None},
             "ica": {"enabled": None, "method": None, "random_seed": None, "motion_correlation_threshold": None},
-            "autoreject": {"enabled": None, "random_seed": None},
+            "autoreject": {"enabled": None, "random_seed": None, "allow_epoch_channel_interpolation": None},
             "bad_channels": {"approved_for_interpolation": None}},
     "features": {"eeg_feature_window_s": None, "bands_hz": None, "deferred": None},
     "video": {"analysis_window_s": None,

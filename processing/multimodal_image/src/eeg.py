@@ -31,7 +31,7 @@ def _prepare_raw(path, config: dict[str, Any]) -> mne.io.BaseRaw:
     return raw
 
 
-def preprocess_eeg(path, config: dict[str, Any], logger) -> tuple[mne.Epochs, dict[str, Any], pd.DataFrame]:
+def preprocess_eeg(path, config: dict[str, Any], logger) -> tuple[mne.Epochs, dict[str, Any], pd.DataFrame, Any | None, np.ndarray]:
     """Apply the approved CAR, IIR, epoch, ICA, AutoReject, and interpolation stages."""
     raw = _prepare_raw(path, config)
     stim_channel = config["channels"]["stim_channel"]
@@ -100,18 +100,29 @@ def preprocess_eeg(path, config: dict[str, Any], logger) -> tuple[mne.Epochs, di
         logger.info("No channels are approved for interpolation in this run")
 
     rejection_summary: dict[str, Any] = {"autoreject_enabled": bool(config["eeg"]["autoreject"]["enabled"]), "dropped_epochs": []}
+    autoreject_events = eeg_epochs.events.copy()
+    reject_log = None
     if config["eeg"]["autoreject"]["enabled"]:
         seed = int(config["eeg"]["autoreject"]["random_seed"])
+        allow_interpolation = bool(config["eeg"]["autoreject"].get("allow_epoch_channel_interpolation", False))
         logger.info("Running AutoReject with random seed %d", seed)
-        ar = AutoReject(n_jobs=1, random_state=seed, verbose=False)
+        logger.info("AutoReject epoch-wise channel interpolation: %s", "enabled" if allow_interpolation else "disabled")
+        # AutoReject 0.4.3 supports [0], which leaves channel observations
+        # marked bad in the log but makes affected epochs drop rather than be
+        # repaired by its epoch-wise interpolation step.
+        ar = AutoReject(n_interpolate=None if allow_interpolation else [0], n_jobs=1, random_state=seed, verbose=False)
         eeg_epochs, reject_log = ar.fit_transform(eeg_epochs, return_log=True)
+        retained_triggers = autoreject_events[~np.asarray(reject_log.bad_epochs, dtype=bool), 2]
+        if not np.array_equal(retained_triggers, eeg_epochs.events[:, 2]):
+            raise RuntimeError("Trigger IDs no longer align with epochs retained by AutoReject")
         rejected_indices = np.flatnonzero(reject_log.bad_epochs).astype(int).tolist()
         rejection_summary["dropped_epochs"] = rejected_indices
         rejection_summary["autoreject_labels"] = reject_log.labels.tolist()
+        rejection_summary["allow_epoch_channel_interpolation"] = allow_interpolation
         logger.info("AutoReject retained %d epochs; marked %d epochs for rejection", len(eeg_epochs), len(rejected_indices))
 
     qc = {"all_event_count": int(len(all_events)), "image_event_count": int(len(events)), "epochs_before_cleaning": int(len(epochs_all)),
           "epochs_after_cleaning": int(len(eeg_epochs)), "ica_rejected_components": selected_components,
           "interpolated_channels": interpolated, "rejection": rejection_summary, "sampling_hz": float(eeg_epochs.info["sfreq"]),
           "epoch_tmin_s": float(eeg_epochs.tmin), "epoch_tmax_s": float(eeg_epochs.tmax)}
-    return eeg_epochs, qc, pd.DataFrame(ica_rows)
+    return eeg_epochs, qc, pd.DataFrame(ica_rows), reject_log, autoreject_events

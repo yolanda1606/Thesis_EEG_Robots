@@ -137,7 +137,10 @@ python -u processing/multimodal_image/run_image_pipeline.py \
 
 `--preprocess-eeg` runs the configured EEG preparation steps. `--save-clean-epochs`
 saves the resulting trial segments. `--save-qc` saves the EEG quality-control
-summary and any ICA movement-correlation table.
+summary, any ICA movement-correlation table, the AutoReject epoch-by-channel
+decision graph and its event-aligned CSV, plus a participant-level
+event-related spectral-power QC plot and CSV, plus a single Fz
+event-related time-frequency figure.
 
 ### EEG preprocessing and EEG features
 
@@ -279,3 +282,39 @@ derived/<participant>/Image_Experiment/health_checks/<run name>/
 Each created run includes the resolved settings, input manifest, run manifest,
 validation summary, and log. Processing runs can additionally contain EEG,
 video, timing-alignment, and merged-data folders according to the options used.
+Directories are created lazily immediately before their first file is written,
+so successful runs do not contain empty output branches.
+
+## EEG QC outputs
+
+With `--preprocess-eeg --save-qc`, EEG QC files are written beneath
+`eeg/quality_control/`. `autoreject_epoch_channel_log.png` is AutoReject's
+standard epoch-by-channel display: good observations, interpolated
+observations, bad observations, and rejected epochs. Its accompanying CSV
+keeps each pre-rejection epoch index aligned to its trigger ID and records the
+AutoReject decision.
+
+`event_related_band_power_by_category.png` is descriptive participant-level QC,
+not statistical evidence that emotional category caused an EEG difference. It
+uses the complete cleaned event-locked epoch (-0.5 to +2.0 s), computes
+time-resolved Morlet power in the shared configured bands, normalizes each
+trial/channel/frequency to the -0.5 to 0.0 s baseline as dB
+(`10 * log10(power / baseline power)`), and summarizes retained trials in the
+HAHV, HALV, LAHV, and LALV trigger categories. The companion CSV contains the
+plotted curves. Model EEG features remain deliberately restricted to 0.0 to
+2.0 s.
+
+AutoReject's epoch-wise channel interpolation is disabled by default for this
+eight-channel montage (`allow_epoch_channel_interpolation: false`). AutoReject
+still learns participant-specific thresholds and records bad channel
+observations, but affected epochs are dropped instead of being repaired. This
+can increase rejected epochs. Separately approved whole-channel interpolation
+in the participant configuration remains unchanged; retained epochs otherwise
+contain only recorded channels.
+
+`event_related_time_frequency_Fz_by_category.png` is the single requested
+time-frequency QC figure. It has four Fz panels (HAHV, LALV, HALV, LAHV), uses
+Morlet power from 4 to 30 Hz at 20 log-spaced frequencies with
+`n_cycles = frequency / 2`, and uses MNE's `logratio` normalization relative
+to the -0.5 to 0.0 s baseline. It is descriptive QC only and does not change
+epoch or feature data.

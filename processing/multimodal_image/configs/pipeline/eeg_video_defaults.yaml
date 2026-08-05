@@ -21,7 +21,7 @@ channels:
 eeg:
   reference: average
   filter:
-    l_freq_hz: 0.1
+    l_freq_hz: 1.0
     h_freq_hz: 40.0
     iir_order: 4
   epoch:
@@ -36,13 +36,16 @@ eeg:
   autoreject:
     enabled: true
     random_seed: 42
+    # Sparse eight-channel montage: reject affected epochs instead of
+    # AutoReject's epoch-wise channel repair.
+    allow_epoch_channel_interpolation: false
 
 features:
   # Feature calculation uses this post-stimulus portion of the cleaned epoch.
   # The full -0.5 to +2.0 s epoch remains available for QC and saving.
   eeg_feature_window_s: [0.0, 2.0]
   bands_hz:
-    delta: [0.5, 4.0]
+    delta: [1.0, 4.0]
     theta: [4.0, 8.0]
     alpha: [8.0, 12.0]
     beta: [12.0, 30.0]
