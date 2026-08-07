@@ -12,14 +12,16 @@ import yaml
 SCHEMA: dict[str, Any] = {
     "schema_version": None, "resources": {"face_landmarker_filename": None},
     "participant": None, "experiment": None,
-    "inputs": {"participant_dir": None, "experiment_dir": None, "eeg_file": None,
+    "inputs": {"participant_dir": None, "experiment_dir": None, "eeg_file": None, "eeg_files": None,
                "ratings_file": None, "video_file": None, "vision_log_file": None,
                "authoritative_ratings": None, "face_landmarker_model": None},
     "channels": {"eeg_mapping": None, "montage": None, "stim_channel": None,
                  "motion_channels": None, "recorder_channels": None},
     "events": {"image_ranges": None},
     "ratings": {"required_columns": None, "rating_columns": {"valence": None, "arousal": None}, "missing_tokens": None},
-    "trials": {"expected_image_trials": None, "event_locked": None},
+    "trials": {"expected_image_trials": None, "event_locked": None,
+               "allow_incomplete_image_trials": None, "expected_available_triggers": None,
+               "known_missing_triggers": None},
     "eeg": {"reference": None, "filter": {"l_freq_hz": None, "h_freq_hz": None, "iir_order": None},
             "epoch": {"tmin_s": None, "tmax_s": None, "baseline_s": None},
             "ica": {"enabled": None, "method": None, "random_seed": None, "motion_correlation_threshold": None},
@@ -83,7 +85,8 @@ def load_resolved_config(shared_path: Path, experiment_path: Path, participant_p
     _validate_known_keys(shared, SCHEMA, shared_path)
     if participant_path is None and "participant" in shared and "inputs" in shared:
         warnings.warn("Single-YAML configuration is deprecated; use --config plus --participant-config.", UserWarning, stacklevel=2)
-        _require(shared, "participant", "experiment", "inputs.participant_dir", "inputs.eeg_file", "inputs.ratings_file", "inputs.video_file", "inputs.vision_log_file")
+        _require(shared, "participant", "experiment", "inputs.participant_dir", "inputs.ratings_file", "inputs.video_file", "inputs.vision_log_file")
+        _validate_eeg_input_choice(shared)
         return shared, sources
     experiment = _read_yaml(experiment_path)
     _validate_known_keys(experiment, SCHEMA, experiment_path)
@@ -93,6 +96,19 @@ def load_resolved_config(shared_path: Path, experiment_path: Path, participant_p
     _validate_known_keys(participant, SCHEMA, participant_path)
     sources.extend([str(experiment_path.resolve()), str(participant_path.resolve())])
     config = _merge(_merge(shared, experiment), participant)
-    _require(config, "participant", "experiment", "inputs.participant_dir", "inputs.experiment_dir", "inputs.eeg_file",
+    _require(config, "participant", "experiment", "inputs.participant_dir", "inputs.experiment_dir",
              "inputs.ratings_file", "inputs.video_file", "inputs.vision_log_file", "resources.face_landmarker_filename")
+    _validate_eeg_input_choice(config)
     return config, sources
+
+
+def _validate_eeg_input_choice(config: dict[str, Any]) -> None:
+    inputs = config["inputs"]
+    has_single = bool(inputs.get("eeg_file"))
+    has_multiple = "eeg_files" in inputs and inputs.get("eeg_files") is not None
+    if has_single == has_multiple:
+        raise ValueError("Configuration must define exactly one of inputs.eeg_file or inputs.eeg_files")
+    if has_multiple:
+        files = inputs["eeg_files"]
+        if not isinstance(files, list) or not files or not all(isinstance(value, str) and value for value in files):
+            raise ValueError("inputs.eeg_files must be a non-empty ordered list of filenames")

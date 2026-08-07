@@ -1,0 +1,32 @@
+participant: P03
+
+inputs:
+  participant_dir: data/P03_2026-05-28
+  experiment_dir: Image_Experiment
+  eeg_file: EEG/UnicornRecorder_28_05_2026_10_19_41.bdf
+  ratings_file: emotion_ratings_10-11-42.csv
+  video_file: vision_video_10-11-30_IMAGE_BASELINE.avi
+  vision_log_file: vision_log_10-11-30_IMAGE_BASELINE.csv
+  authoritative_ratings: true
+
+trials:
+  allow_incomplete_image_trials: true
+  expected_available_triggers: [101, 105, 107, 108, 109, 110, 111, 112, 118, 119, 120, 123, 124, 125, 202, 203, 205, 208, 215, 216, 217, 220, 221, 227, 301, 304, 305, 307, 308, 310, 311, 313, 314, 315, 316, 317, 319, 322, 323, 325, 326, 330, 401, 403, 405, 406, 409, 411, 414, 416, 418, 419, 421, 423]
+  known_missing_triggers: [102, 103, 104, 106, 113, 114, 115, 116, 117, 121, 122, 126, 127, 128, 129, 130, 201, 204, 206, 207, 209, 210, 211, 212, 213, 214, 218, 219, 222, 223, 224, 225, 226, 228, 229, 230, 302, 303, 306, 309, 312, 318, 320, 321, 324, 327, 328, 329, 402, 404, 407, 408, 410, 412, 413, 415, 417, 420, 422, 424, 425, 426, 427, 428, 429, 430]
+
+eeg:
+  bad_channels:
+    approved_for_interpolation: []
+
+video:
+  crop:
+    left: 190
+    top: 80
+    right: 500
+    bottom: 450
+    scale: 1.0
+    approved: true
+    approval_note: "Approved" 
+synchronization:
+  offset_override_s: null
+  drift_override_s_per_s: null

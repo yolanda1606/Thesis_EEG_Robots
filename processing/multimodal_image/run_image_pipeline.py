@@ -25,6 +25,7 @@ sys.path.insert(0, str(HERE))
 from src.alignment import build_alignment
 from src.configuration import load_resolved_config
 from src.eeg import preprocess_eeg
+from src.eeg_sources import load_eeg_session
 from src.export import write_json, write_rows
 from src.features import extract_eeg_features
 from src.health import eeg_health, markdown_report, ratings_health, synchronization_health, video_health
@@ -140,29 +141,36 @@ def package_versions() -> dict[str, str]:
     return versions
 
 
-def setup_run(run_dir: Path, config: dict, sources: list[str], args: argparse.Namespace, health_only: bool) -> None:
+def setup_run(run_dir: Path, config: dict, sources: list[str], args: argparse.Namespace, health_only: bool, paths: dict | None = None) -> None:
     if run_dir.exists():
         raise FileExistsError(f"Output directory already exists: {run_dir}. Choose a new --run-name.")
     run_dir.mkdir(parents=True, exist_ok=False)
     ensure_parent(run_dir / "config" / "resolved_configuration.yaml")
     with (run_dir / "config" / "resolved_configuration.yaml").open("x", encoding="utf-8") as handle: yaml.safe_dump(config, handle, sort_keys=False)
     git = subprocess.run(["git", "rev-parse", "HEAD"], cwd=HERE.parents[1], text=True, capture_output=True, check=False).stdout.strip() or None
-    write_json(run_dir / "manifest" / "run_manifest.json", {"created_utc": datetime.now(timezone.utc).isoformat(), "command": " ".join(map(str, sys.argv)), "configuration_sources": sources, "python": sys.executable, "python_version": sys.version, "platform": platform.platform(), "git_commit": git, "package_versions": package_versions(), "resolved_configuration": config, "flags": vars(args)})
+    write_json(run_dir / "manifest" / "run_manifest.json", {"created_utc": datetime.now(timezone.utc).isoformat(), "command": " ".join(map(str, sys.argv)), "configuration_sources": sources, "python": sys.executable, "python_version": sys.version, "platform": platform.platform(), "git_commit": git, "package_versions": package_versions(), "resolved_configuration": config, "flags": vars(args), "incomplete_session": bool(config.get("trials", {}).get("allow_incomplete_image_trials", False)), "input_sources": input_manifest(paths, config) if paths is not None else {}})
 
 
 def input_manifest(paths: dict[str, Path], config: dict) -> dict:
     result = {}
     for role, path in paths.items():
         if role == "experiment_dir": continue
+        if role == "eeg_files":
+            _, _, metadata = load_eeg_session(paths, config, preload=False)
+            result[role] = [{"role": "eeg_fragment", **file_record(item), **metadata[index]} for index, item in enumerate(path)]
+            continue
         record = {"role": role, **file_record(path)}
         if role == "ratings": record["authoritative"] = bool(config["inputs"].get("authoritative_ratings", False))
         result[role] = record
     return result
 
 
-def merge_tables(ratings_path: Path, eeg: pd.DataFrame | None, video: pd.DataFrame | None) -> pd.DataFrame:
+def merge_tables(ratings_path: Path, eeg: pd.DataFrame | None, video: pd.DataFrame | None, config: dict | None = None) -> pd.DataFrame:
     ratings = pd.read_csv(ratings_path, encoding="utf-8-sig").rename(columns={"trigger_sent": "trigger"})
     selected = ratings[["trigger", "stim_id", "category", "valence_rating", "arousal_rating", "valence_rt", "arousal_rt"]].copy()
+    if config and config.get("trials", {}).get("allow_incomplete_image_trials", False):
+        available = set(map(int, config["trials"]["expected_available_triggers"]))
+        selected = selected[selected["trigger"].isin(available)].copy()
     if eeg is not None:
         wide_eeg = eeg.pivot(index="trigger", columns="channel"); wide_eeg.columns = [f"{feature}__{channel}" for feature, channel in wide_eeg.columns]
         selected = selected.merge(wide_eeg.reset_index(), on="trigger", how="left", validate="one_to_one")
@@ -171,7 +179,7 @@ def merge_tables(ratings_path: Path, eeg: pd.DataFrame | None, video: pd.DataFra
 
 
 def run_health_checks(paths: dict[str, Path], config: dict, run_dir: Path, logger) -> None:
-    eeg, eeg_rows = eeg_health(paths["eeg"], config, logger)
+    eeg, eeg_rows = eeg_health(paths, config, logger)
     ratings, ratings_rows = ratings_health(paths["ratings"], config, logger)
     video, video_rows = video_health(paths["video"], paths["vision_log"], config, logger)
     sync, pairs = synchronization_health(paths, config, logger)
@@ -221,7 +229,7 @@ def main() -> int:
     if args.health_check_only and any(stage_flags): raise ValueError("--health-check-only cannot be combined with processing-stage flags")
     replacement_logger = configure_logging(None, config, args.log_level)
     replace_run_directory_if_requested(run_dir, output_root, config, args, replacement_logger)
-    setup_run(run_dir, config, sources, args, args.health_check_only)
+    setup_run(run_dir, config, sources, args, args.health_check_only, paths)
     logger = configure_logging(run_dir, config, args.log_level)
     logger.info("Activating %s %s pipeline", config["participant"], config["experiment"])
     logger.info("Configuration sources: %s", sources)
@@ -241,7 +249,7 @@ def main() -> int:
     eeg_features = video_features = None
     output_prefix = f"{config['participant'].lower()}_{config['experiment'].lower()}"
     if args.preprocess_eeg:
-        epochs, qc, ica_table, reject_log, autoreject_events = preprocess_eeg(paths["eeg"], config, logger)
+        epochs, qc, ica_table, reject_log, autoreject_events = preprocess_eeg(paths, config, logger)
         if args.save_qc:
             write_json(run_dir / "eeg" / "quality_control" / "eeg_qc.json", qc)
             qc_dir = run_dir / "eeg" / "quality_control"
@@ -279,7 +287,7 @@ def main() -> int:
             video_features.to_csv(run_dir / "video" / "features" / "video_trial_features.csv", index=False)
     elif args.extract_video_features: raise ValueError("--extract-video-features requires --preprocess-video")
     if args.merge_modalities:
-        merged = merge_tables(paths["ratings"], eeg_features, video_features)
+        merged = merge_tables(paths["ratings"], eeg_features, video_features, config)
         ensure_parent(run_dir / "merged" / f"{output_prefix}_trial_dataset.csv")
         merged.to_csv(run_dir / "merged" / f"{output_prefix}_trial_dataset.csv", index=False)
         logger.info("Wrote merged table with %d trial rows", len(merged))

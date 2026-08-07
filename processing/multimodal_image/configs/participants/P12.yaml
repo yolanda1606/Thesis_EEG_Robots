@@ -1,0 +1,28 @@
+participant: P12
+
+inputs:
+  participant_dir: data/P12_2026-06-04
+  experiment_dir: Image_Experiment
+  eeg_file: EEG/UnicornRecorder_04_06_2026_15_14_58.bdf
+  ratings_file: emotion_ratings_15-14-53.csv
+  video_file: vision_video_15-14-39_IMAGE_BASELINE.avi
+  vision_log_file: vision_log_15-14-39_IMAGE_BASELINE.csv
+  authoritative_ratings: true
+
+eeg:
+  bad_channels:
+    approved_for_interpolation: []
+
+video:
+  crop:
+    left: 220
+    top: 80
+    right: 530
+    bottom: 460
+    scale: 1.0
+    approved: false
+    approval_note: "No face detected."
+
+synchronization:
+  offset_override_s: null
+  drift_override_s_per_s: null

@@ -8,11 +8,12 @@ import pandas as pd
 from autoreject import AutoReject
 from scipy.stats import pearsonr
 
-from .validation import image_codes
+from .eeg_sources import load_eeg_session
+from .validation import available_image_codes
 
 
-def _prepare_raw(path, config: dict[str, Any]) -> mne.io.BaseRaw:
-    raw = mne.io.read_raw_bdf(path, preload=True, verbose="ERROR")
+def _prepare_raw(paths, config: dict[str, Any]):
+    raw, all_events, source_metadata = load_eeg_session(paths, config, preload=True)
     mapping = config["channels"]["eeg_mapping"]
     expected = set(mapping).union(config["channels"]["motion_channels"]).union({config["channels"]["stim_channel"]})
     missing = expected.difference(raw.ch_names)
@@ -28,18 +29,16 @@ def _prepare_raw(path, config: dict[str, Any]) -> mne.io.BaseRaw:
     raw.rename_channels(mapping)
     raw.set_montage(mne.channels.make_standard_montage(config["channels"]["montage"]),
                     match_case=False, on_missing="raise")
-    return raw
+    return raw, all_events, source_metadata
 
 
-def preprocess_eeg(path, config: dict[str, Any], logger) -> tuple[mne.Epochs, dict[str, Any], pd.DataFrame, Any | None, np.ndarray]:
+def preprocess_eeg(paths, config: dict[str, Any], logger) -> tuple[mne.Epochs, dict[str, Any], pd.DataFrame, Any | None, np.ndarray]:
     """Apply the approved CAR, IIR, epoch, ICA, AutoReject, and interpolation stages."""
-    raw = _prepare_raw(path, config)
-    stim_channel = config["channels"]["stim_channel"]
-    all_events = mne.find_events(raw, stim_channel=stim_channel, verbose=False)
-    valid_codes = image_codes(config)
+    raw, all_events, source_metadata = _prepare_raw(paths, config)
+    valid_codes = available_image_codes(config)
     events = all_events[np.isin(all_events[:, 2], list(valid_codes))]
-    if len(events) != len(valid_codes) or len(np.unique(events[:, 2])) != len(valid_codes):
-        raise ValueError("Image events are not complete and unique; preprocessing stopped")
+    if set(map(int, events[:, 2])) != valid_codes or len(events) != len(valid_codes):
+        raise ValueError("Available image events are not complete and unique; preprocessing stopped")
 
     eeg_names = list(config["channels"]["eeg_mapping"].values())
     logger.info("Applying common average reference across %d EEG channels", len(eeg_names))
@@ -52,6 +51,7 @@ def preprocess_eeg(path, config: dict[str, Any], logger) -> tuple[mne.Epochs, di
     event_id = {str(code): code for code in sorted(valid_codes)}
     epochs_all = mne.Epochs(raw, events, event_id=event_id, tmin=epoch_config["tmin_s"], tmax=epoch_config["tmax_s"],
                             baseline=tuple(epoch_config["baseline_s"]), preload=True, on_missing="raise", verbose=False)
+    boundary_omitted = sorted(valid_codes.difference(map(int, epochs_all.events[:, 2])))
     eeg_epochs = epochs_all.copy().pick(eeg_names)
     motion_names = [name for name in config["channels"]["motion_channels"] if name in epochs_all.ch_names]
     motion_epochs = epochs_all.copy().pick(motion_names)
@@ -124,5 +124,6 @@ def preprocess_eeg(path, config: dict[str, Any], logger) -> tuple[mne.Epochs, di
     qc = {"all_event_count": int(len(all_events)), "image_event_count": int(len(events)), "epochs_before_cleaning": int(len(epochs_all)),
           "epochs_after_cleaning": int(len(eeg_epochs)), "ica_rejected_components": selected_components,
           "interpolated_channels": interpolated, "rejection": rejection_summary, "sampling_hz": float(eeg_epochs.info["sfreq"]),
-          "epoch_tmin_s": float(eeg_epochs.tmin), "epoch_tmax_s": float(eeg_epochs.tmax)}
+          "epoch_tmin_s": float(eeg_epochs.tmin), "epoch_tmax_s": float(eeg_epochs.tmax),
+          "eeg_sources": source_metadata, "boundary_omitted_epoch_triggers": boundary_omitted}
     return eeg_epochs, qc, pd.DataFrame(ica_rows), reject_log, autoreject_events

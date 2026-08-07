@@ -10,15 +10,16 @@ import numpy as np
 import pandas as pd
 from scipy.signal import welch
 
-from .validation import image_codes
+from .eeg_sources import load_eeg_session
+from .validation import available_image_codes, image_codes
 
 
 def _status(reasons: list[str]) -> str:
     return "PASS" if not reasons else "PASS_WITH_WARNINGS"
 
 
-def eeg_health(path, config: dict[str, Any], logger) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    raw = mne.io.read_raw_bdf(path, preload=True, verbose="ERROR")
+def eeg_health(paths, config: dict[str, Any], logger) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    raw, events, source_metadata = load_eeg_session(paths, config, preload=True)
     mapping = config["channels"]["eeg_mapping"]
     names = list(mapping)
     missing = sorted(set(names).difference(raw.ch_names))
@@ -46,8 +47,7 @@ def eeg_health(path, config: dict[str, Any], logger) -> tuple[dict[str, Any], li
         rows.append({"domain": "eeg_channel", "name": name, "finite": finite, "variance_v2": variance, "max_abs_v": maximum,
                      "flat": flat, "near_flat": near_flat, "clipping_fraction": clipped_fraction, "line_noise_ratio_50hz": line_ratio,
                      "status": "PASS_WITH_WARNINGS" if warning else "PASS"})
-    events = mne.find_events(raw, stim_channel=config["channels"]["stim_channel"], verbose=False)
-    expected = image_codes(config)
+    expected = available_image_codes(config)
     image = events[np.isin(events[:, 2], list(expected))]
     observed = [int(event[2]) for event in image]
     duplicate_triggers = sorted({code for code in observed if observed.count(code) > 1})
@@ -55,12 +55,14 @@ def eeg_health(path, config: dict[str, Any], logger) -> tuple[dict[str, Any], li
     event_ordered = bool(np.all(np.diff(events[:, 0]) > 0))
     if duplicate_triggers or missing_triggers or not event_ordered:
         reasons.append(f"Trigger integrity: duplicates={duplicate_triggers}, missing={missing_triggers}, time_ordered={event_ordered}")
+    if config.get("trials", {}).get("allow_incomplete_image_trials", False):
+        reasons.append(f"Approved incomplete session: known_missing_triggers={config['trials']['known_missing_triggers']}")
     summary = {"status": _status(reasons), "reasons": reasons, "format": "BDF", "sampling_hz": sfreq,
                "sample_count": int(raw.n_times), "duration_s": float(raw.times[-1]), "sample_interval_s": 1.0 / sfreq,
                "sample_count_duration_consistent": bool(abs(raw.n_times / sfreq - (raw.times[-1] + 1.0 / sfreq)) < 1e-9),
                "expected_eeg_channels": names, "motion_channels_present": [name for name in config["channels"]["motion_channels"] if name in raw.ch_names],
                "stim_channel_present": config["channels"]["stim_channel"] in raw.ch_names, "missing_channels": missing,
-               "duplicate_channel_names": duplicates, "total_events": int(len(events)), "image_trigger_count": int(len(image)),
+               "duplicate_channel_names": duplicates, "total_events": int(len(events)), "image_trigger_count": int(len(image)), "eeg_sources": source_metadata,
                "duplicate_image_triggers": duplicate_triggers, "missing_image_triggers": missing_triggers, "events_time_ordered": event_ordered}
     logger.info("EEG health: %s; %d image triggers", summary["status"], len(image))
     return summary, rows
@@ -141,11 +143,10 @@ def video_health(video_path, log_path, config: dict[str, Any], logger) -> tuple[
 
 
 def synchronization_health(paths, config: dict[str, Any], logger) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    expected = image_codes(config)
+    expected = available_image_codes(config)
     ratings = pd.read_csv(paths["ratings"], encoding="utf-8-sig", na_values=config["ratings"]["missing_tokens"])
     rating_codes = set(ratings["trigger_sent"].dropna().astype(int))
-    raw = mne.io.read_raw_bdf(paths["eeg"], preload=False, verbose="ERROR")
-    events = mne.find_events(raw, stim_channel=config["channels"]["stim_channel"], verbose=False)
+    raw, events, _ = load_eeg_session(paths, config, preload=False)
     eeg = {int(event[2]): float(event[0]) / raw.info["sfreq"] for event in events if int(event[2]) in expected}
     with paths["vision_log"].open(encoding="utf-8-sig", newline="") as handle:
         log = list(csv.DictReader(handle))
@@ -162,6 +163,8 @@ def synchronization_health(paths, config: dict[str, Any], logger) -> tuple[dict[
                       "linear_outlier": bool(abs(l_res) > float(cfg["outlier_residual_s"]))})
     linear_rmse = float(np.sqrt(np.mean(linear_residual ** 2))); linear_max = float(np.max(np.abs(linear_residual)))
     reasons = []
+    if config.get("trials", {}).get("allow_incomplete_image_trials", False):
+        reasons.append(f"Approved incomplete session: known_missing_triggers={config['trials']['known_missing_triggers']}")
     if len(shared) != len(expected): reasons.append(f"Only {len(shared)} of {len(expected)} expected triggers are shared")
     if linear_rmse > float(cfg["linear_rmse_warning_s"]) or linear_max > float(cfg["linear_max_residual_warning_s"]): reasons.append(f"Linear residuals exceed threshold: rmse={linear_rmse:.4f}s, max={linear_max:.4f}s")
     summary = {"status": _status(reasons), "reasons": reasons, "expected_trials": len(expected), "ratings_trigger_count": len(rating_codes.intersection(expected)),

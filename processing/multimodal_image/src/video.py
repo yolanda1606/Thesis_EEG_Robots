@@ -10,6 +10,8 @@ import numpy as np
 import pandas as pd
 from mediapipe.tasks.python import BaseOptions, vision
 
+from .validation import available_image_codes
+
 
 LANDMARK_COUNT = 478
 
@@ -81,7 +83,7 @@ def create_crop_preview(paths: dict[str, Path], config: dict[str, Any], destinat
 
 
 def _vision_log(path: Path, config: dict[str, Any]) -> tuple[dict[int, dict[str, str]], dict[int, float]]:
-    codes = {code for low, high in config["events"]["image_ranges"].values() for code in range(low, high + 1)}
+    codes = available_image_codes(config)
     with path.open(encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
     by_frame = {int(float(row["Frame_Count"])): row for row in rows}

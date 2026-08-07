@@ -1,0 +1,27 @@
+participant: P19
+
+inputs:
+  participant_dir: data/P19_2026-06-11
+  eeg_file: EEG/UnicornRecorder_11_06_2026_15_29_00.bdf
+  ratings_file: emotion_ratings_15-28-54.csv
+  video_file: vision_video_15-28-45_IMAGE_BASELINE.avi
+  vision_log_file: vision_log_15-28-45_IMAGE_BASELINE.csv
+  authoritative_ratings: true
+
+eeg:
+  bad_channels:
+    approved_for_interpolation: []
+
+video:
+  crop:
+    left: 148
+    top: 55
+    right: 428
+    bottom: 385
+    scale: 1.0
+    approved: true
+    approval_note: "Approved."
+
+synchronization:
+  offset_override_s: null
+  drift_override_s_per_s: null

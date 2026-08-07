@@ -7,7 +7,8 @@ from typing import Any
 import mne
 import numpy as np
 
-from .validation import image_codes
+from .eeg_sources import load_eeg_session
+from .validation import available_image_codes
 
 
 def build_alignment(paths: dict[str, Path], config: dict[str, Any]) -> tuple[list[dict[str, Any]], dict[str, float]]:
@@ -18,9 +19,8 @@ def build_alignment(paths: dict[str, Path], config: dict[str, Any]) -> tuple[lis
         for row in log_rows
         if row.get("Trigger", "").strip() not in ("", "0", "0.0")
     }
-    raw = mne.io.read_raw_bdf(paths["eeg"], preload=False, verbose="ERROR")
-    events = mne.find_events(raw, stim_channel=config["channels"]["stim_channel"], verbose=False)
-    expected = image_codes(config)
+    raw, events, _ = load_eeg_session(paths, config, preload=False)
+    expected = available_image_codes(config)
     eeg_onsets = {int(event[2]): float(event[0]) / raw.info["sfreq"] for event in events if int(event[2]) in expected}
     codes = sorted(expected.intersection(video_onsets, eeg_onsets))
     if len(codes) != len(expected):
