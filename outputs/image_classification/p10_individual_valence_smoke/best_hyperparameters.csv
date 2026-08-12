@@ -1,0 +1,181 @@
+mode,participant,held_out_participant,target,modality,classifier,feature_count_request,feature_count_resolved,fold,best_parameters,inner_best_balanced_accuracy
+individual,P10,P10,valence,eeg,knn,all,all,1,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,knn,all,all,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,knn,all,all,3,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,knn,all,all,4,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,knn,all,all,5,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,knn,5,5,1,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""distance""}",1.0
+individual,P10,P10,valence,eeg,knn,5,5,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,knn,5,5,3,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,knn,5,5,4,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",1.0
+individual,P10,P10,valence,eeg,knn,5,5,5,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,knn,10,10,1,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,knn,10,10,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""distance""}",1.0
+individual,P10,P10,valence,eeg,knn,10,10,3,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,knn,10,10,4,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,knn,10,10,5,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,knn,20,20,1,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,knn,20,20,2,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,knn,20,20,3,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,knn,20,20,4,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",1.0
+individual,P10,P10,valence,eeg,knn,20,20,5,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,eeg,svm,all,all,1,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,eeg,svm,all,all,2,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,eeg,svm,all,all,3,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,eeg,svm,all,all,4,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,eeg,svm,all,all,5,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,eeg,svm,5,5,1,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,eeg,svm,5,5,2,"{""classifier__C"": 1, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,eeg,svm,5,5,3,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,eeg,svm,5,5,4,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,eeg,svm,5,5,5,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,eeg,svm,10,10,1,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,eeg,svm,10,10,2,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,eeg,svm,10,10,3,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,eeg,svm,10,10,4,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,eeg,svm,10,10,5,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,eeg,svm,20,20,1,"{""classifier__C"": 10, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,eeg,svm,20,20,2,"{""classifier__C"": 10, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,eeg,svm,20,20,3,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,eeg,svm,20,20,4,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,eeg,svm,20,20,5,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,eeg,gnb,all,all,1,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,all,all,2,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,all,all,3,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,all,all,4,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,all,all,5,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,5,5,1,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,5,5,2,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,5,5,3,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,5,5,4,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,5,5,5,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,10,10,1,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,10,10,2,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,10,10,3,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,10,10,4,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,10,10,5,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,20,20,1,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,20,20,2,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,20,20,3,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,20,20,4,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,eeg,gnb,20,20,5,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,knn,all,all,1,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,all,all,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""distance""}",1.0
+individual,P10,P10,valence,face,knn,all,all,3,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,all,all,4,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,all,all,5,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,5,5,1,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,5,5,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,5,5,3,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,5,5,4,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,5,5,5,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,10,10,1,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,10,10,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""distance""}",1.0
+individual,P10,P10,valence,face,knn,10,10,3,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,10,10,4,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,10,10,5,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,20,10,1,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,20,10,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""distance""}",1.0
+individual,P10,P10,valence,face,knn,20,10,3,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,20,10,4,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,knn,20,10,5,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,face,svm,all,all,1,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,all,all,2,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,all,all,3,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,all,all,4,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,all,all,5,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,face,svm,5,5,1,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,5,5,2,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,5,5,3,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,5,5,4,"{""classifier__C"": 1, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,face,svm,5,5,5,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,10,10,1,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,10,10,2,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,10,10,3,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,10,10,4,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,10,10,5,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,face,svm,20,10,1,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,20,10,2,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,20,10,3,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,20,10,4,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,face,svm,20,10,5,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,face,gnb,all,all,1,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,all,all,2,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,all,all,3,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,all,all,4,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,all,all,5,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,5,5,1,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,5,5,2,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,5,5,3,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,5,5,4,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,5,5,5,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,10,10,1,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,10,10,2,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,10,10,3,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,10,10,4,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,10,10,5,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,20,10,1,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,20,10,2,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,20,10,3,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,20,10,4,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,face,gnb,20,10,5,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,knn,all,all,1,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,multimodal,knn,all,all,2,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,multimodal,knn,all,all,3,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,multimodal,knn,all,all,4,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,multimodal,knn,all,all,5,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,multimodal,knn,5,5,1,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,multimodal,knn,5,5,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,multimodal,knn,5,5,3,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,multimodal,knn,5,5,4,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",1.0
+individual,P10,P10,valence,multimodal,knn,5,5,5,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,multimodal,knn,10,10,1,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",1.0
+individual,P10,P10,valence,multimodal,knn,10,10,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""distance""}",1.0
+individual,P10,P10,valence,multimodal,knn,10,10,3,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,multimodal,knn,10,10,4,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,multimodal,knn,10,10,5,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",1.0
+individual,P10,P10,valence,multimodal,knn,20,20,1,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,multimodal,knn,20,20,2,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,multimodal,knn,20,20,3,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,multimodal,knn,20,20,4,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",1.0
+individual,P10,P10,valence,multimodal,knn,20,20,5,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",1.0
+individual,P10,P10,valence,multimodal,svm,all,all,1,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,multimodal,svm,all,all,2,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,multimodal,svm,all,all,3,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,multimodal,svm,all,all,4,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,multimodal,svm,all,all,5,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,multimodal,svm,5,5,1,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,multimodal,svm,5,5,2,"{""classifier__C"": 1, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,multimodal,svm,5,5,3,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,multimodal,svm,5,5,4,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,multimodal,svm,5,5,5,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,multimodal,svm,10,10,1,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,multimodal,svm,10,10,2,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,multimodal,svm,10,10,3,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,multimodal,svm,10,10,4,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,multimodal,svm,10,10,5,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,multimodal,svm,20,20,1,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,multimodal,svm,20,20,2,"{""classifier__C"": 10, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,multimodal,svm,20,20,3,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,multimodal,svm,20,20,4,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",1.0
+individual,P10,P10,valence,multimodal,svm,20,20,5,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",1.0
+individual,P10,P10,valence,multimodal,gnb,all,all,1,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,all,all,2,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,all,all,3,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,all,all,4,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,all,all,5,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,5,5,1,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,5,5,2,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,5,5,3,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,5,5,4,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,5,5,5,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,10,10,1,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,10,10,2,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,10,10,3,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,10,10,4,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,10,10,5,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,20,20,1,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,20,20,2,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,20,20,3,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,20,20,4,"{""classifier__var_smoothing"": 1e-11}",1.0
+individual,P10,P10,valence,multimodal,gnb,20,20,5,"{""classifier__var_smoothing"": 1e-11}",1.0

@@ -1,0 +1,11 @@
+participant,eeg_usable_trials,face_usable_trials,valence_multimodal_usable_trials,arousal_multimodal_usable_trials,eeg_retention_percent,face_detection_percent,motion_correction_percent,missing_valence,missing_arousal,qc_group,reason
+P10,120,120,120,120,100.0,100.0,17.5,0,0,Very clean,No AutoReject epoch losses.
+P11,120,120,120,120,100.0,100.0,20.83333333333333,0,0,Very clean,No AutoReject epoch losses.
+P19,120,120,120,120,100.0,100.0,27.5,0,0,Very clean,No AutoReject epoch losses.
+P22,120,120,120,120,100.0,100.0,24.166666666666668,0,0,Very clean,No AutoReject epoch losses.
+P25,120,120,120,120,100.0,100.0,21.666666666666668,0,0,Very clean,No AutoReject epoch losses.
+P32,120,120,120,120,100.0,100.0,26.666666666666668,0,0,Very clean,No AutoReject epoch losses.
+P40,120,120,120,120,100.0,100.0,16.666666666666668,0,0,Very clean,No AutoReject epoch losses.
+P42,120,120,120,120,100.0,100.0,21.666666666666668,0,0,Very clean,No AutoReject epoch losses.
+P43,120,120,120,120,100.0,100.0,19.166666666666668,0,0,Very clean,No AutoReject epoch losses.
+P45,120,120,120,120,100.0,100.0,22.5,0,0,Very clean,No AutoReject epoch losses.

@@ -1,6 +1,7 @@
 # Raw acquisition data and complete generated outputs are archived outside Git.
 /data/
 /derived/
+/old_derived/
 
 # Generated outputs outside the central derived archive.
 /processing/**/outputs/

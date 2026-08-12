@@ -1,0 +1,78 @@
+{
+  "created_utc": "2026-08-12T16:37:01.446070+00:00",
+  "git_commit": "be1e1be88b1d073607f3f48750fba8c913e81ad2",
+  "python": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/bin/python",
+  "python_version": "3.10.12 (main, Jun 22 2026, 18:55:27) [GCC 11.4.0]",
+  "platform": "Linux-5.15.0-1078-realtime-x86_64-with-glibc2.35",
+  "numpy": "2.2.6",
+  "scipy": "1.15.3",
+  "pandas": "2.3.3",
+  "sklearn": "1.7.2",
+  "seed": 42,
+  "mode": "individual",
+  "target": [
+    "valence"
+  ],
+  "modalities": [
+    "eeg",
+    "face",
+    "multimodal"
+  ],
+  "models": [
+    "knn",
+    "svm",
+    "gnb"
+  ],
+  "feature_counts": [
+    "all",
+    "5",
+    "10",
+    "20"
+  ],
+  "resolved_participants": [
+    "P10"
+  ],
+  "cohort_source": "explicit participants",
+  "source_merged_tables": {
+    "P10": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P10/Image_Experiment/runs/p10_final/merged/p10_image_trial_dataset.csv"
+  },
+  "label_definition": "LOW: rating < 4; HIGH: rating >= 4",
+  "cv_strategy": "StratifiedKFold nested CV",
+  "hyperparameter_grids": {
+    "knn": {
+      "n_neighbors": [
+        3,
+        5,
+        7,
+        11
+      ],
+      "weights": [
+        "uniform",
+        "distance"
+      ]
+    },
+    "svm": {
+      "kernel": [
+        "linear",
+        "rbf"
+      ],
+      "C": [
+        0.1,
+        1,
+        10
+      ],
+      "rbf_gamma": [
+        "scale",
+        0.01,
+        0.1
+      ]
+    },
+    "gnb": {
+      "var_smoothing": [
+        1e-11,
+        1e-09,
+        1e-07
+      ]
+    }
+  }
+}

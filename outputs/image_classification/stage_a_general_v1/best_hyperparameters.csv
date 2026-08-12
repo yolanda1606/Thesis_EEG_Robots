@@ -1,0 +1,121 @@
+mode,participant,held_out_participant,target,modality,classifier,feature_count_request,feature_count_resolved,fold,best_parameters,inner_best_balanced_accuracy
+general,COHORT,P10,valence,eeg,knn,all,all,1,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5013870460786052
+general,COHORT,P11,valence,eeg,knn,all,all,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5001028191613484
+general,COHORT,P19,valence,eeg,knn,all,all,3,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4937290282741314
+general,COHORT,P22,valence,eeg,knn,all,all,4,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4887989676451909
+general,COHORT,P25,valence,eeg,knn,all,all,5,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5038232609092583
+general,COHORT,P32,valence,eeg,knn,all,all,6,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4897670305434424
+general,COHORT,P40,valence,eeg,knn,all,all,7,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4916544796043073
+general,COHORT,P42,valence,eeg,knn,all,all,8,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4927872834900878
+general,COHORT,P43,valence,eeg,knn,all,all,9,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.48625829039708907
+general,COHORT,P45,valence,eeg,knn,all,all,10,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.48686313676373894
+general,COHORT,P10,valence,eeg,knn,5,5,1,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5006819639557376
+general,COHORT,P11,valence,eeg,knn,5,5,2,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.5055626016946458
+general,COHORT,P19,valence,eeg,knn,5,5,3,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""distance""}",0.5064390273600969
+general,COHORT,P22,valence,eeg,knn,5,5,4,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""distance""}",0.5075168083513864
+general,COHORT,P25,valence,eeg,knn,5,5,5,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5024293795086883
+general,COHORT,P32,valence,eeg,knn,5,5,6,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5209186691526903
+general,COHORT,P40,valence,eeg,knn,5,5,7,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.4997981580985947
+general,COHORT,P42,valence,eeg,knn,5,5,8,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""distance""}",0.5401353554026983
+general,COHORT,P43,valence,eeg,knn,5,5,9,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""distance""}",0.507282161486755
+general,COHORT,P45,valence,eeg,knn,5,5,10,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.4904746183098065
+general,COHORT,P10,valence,eeg,knn,10,10,1,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.496942269471469
+general,COHORT,P11,valence,eeg,knn,10,10,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4907681147781622
+general,COHORT,P19,valence,eeg,knn,10,10,3,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5039902855949892
+general,COHORT,P22,valence,eeg,knn,10,10,4,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5135754156607794
+general,COHORT,P25,valence,eeg,knn,10,10,5,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5027433845651463
+general,COHORT,P32,valence,eeg,knn,10,10,6,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5067217276288538
+general,COHORT,P40,valence,eeg,knn,10,10,7,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5174620764083266
+general,COHORT,P42,valence,eeg,knn,10,10,8,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""distance""}",0.5162870803389655
+general,COHORT,P43,valence,eeg,knn,10,10,9,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.5109738922865127
+general,COHORT,P45,valence,eeg,knn,10,10,10,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4874220184159898
+general,COHORT,P10,valence,eeg,knn,20,20,1,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5129963273875825
+general,COHORT,P11,valence,eeg,knn,20,20,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.509487376894816
+general,COHORT,P19,valence,eeg,knn,20,20,3,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4986130777512866
+general,COHORT,P22,valence,eeg,knn,20,20,4,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.47774356680375024
+general,COHORT,P25,valence,eeg,knn,20,20,5,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5220869129659571
+general,COHORT,P32,valence,eeg,knn,20,20,6,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.5317256081915305
+general,COHORT,P40,valence,eeg,knn,20,20,7,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.5344191645224559
+general,COHORT,P42,valence,eeg,knn,20,20,8,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5106254705983747
+general,COHORT,P43,valence,eeg,knn,20,20,9,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5278006549224951
+general,COHORT,P45,valence,eeg,knn,20,20,10,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5022562920884299
+general,COHORT,P10,valence,eeg,svm,all,all,1,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P11,valence,eeg,svm,all,all,2,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P19,valence,eeg,svm,all,all,3,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P22,valence,eeg,svm,all,all,4,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5102587003922603
+general,COHORT,P25,valence,eeg,svm,all,all,5,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5113219275686205
+general,COHORT,P32,valence,eeg,svm,all,all,6,"{""classifier__C"": 1, ""classifier__kernel"": ""linear""}",0.5034653539295249
+general,COHORT,P40,valence,eeg,svm,all,all,7,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5128617942826912
+general,COHORT,P42,valence,eeg,svm,all,all,8,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P43,valence,eeg,svm,all,all,9,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P45,valence,eeg,svm,all,all,10,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P10,valence,eeg,svm,5,5,1,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5006632542715017
+general,COHORT,P11,valence,eeg,svm,5,5,2,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P19,valence,eeg,svm,5,5,3,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5080593057071795
+general,COHORT,P22,valence,eeg,svm,5,5,4,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5132230806851951
+general,COHORT,P25,valence,eeg,svm,5,5,5,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5002285988306048
+general,COHORT,P32,valence,eeg,svm,5,5,6,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5175275754427194
+general,COHORT,P40,valence,eeg,svm,5,5,7,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5056688466052932
+general,COHORT,P42,valence,eeg,svm,5,5,8,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5235231119916623
+general,COHORT,P43,valence,eeg,svm,5,5,9,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5172786173856398
+general,COHORT,P45,valence,eeg,svm,5,5,10,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P10,valence,eeg,svm,10,10,1,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5002579730815334
+general,COHORT,P11,valence,eeg,svm,10,10,2,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5000563221627711
+general,COHORT,P19,valence,eeg,svm,10,10,3,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5012187499999999
+general,COHORT,P22,valence,eeg,svm,10,10,4,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5038079021137665
+general,COHORT,P25,valence,eeg,svm,10,10,5,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5120397814782008
+general,COHORT,P32,valence,eeg,svm,10,10,6,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5046088578156168
+general,COHORT,P40,valence,eeg,svm,10,10,7,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5047830416098942
+general,COHORT,P42,valence,eeg,svm,10,10,8,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5211105486373324
+general,COHORT,P43,valence,eeg,svm,10,10,9,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P45,valence,eeg,svm,10,10,10,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P10,valence,eeg,svm,20,20,1,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5042086717912581
+general,COHORT,P11,valence,eeg,svm,20,20,2,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5058954442045694
+general,COHORT,P19,valence,eeg,svm,20,20,3,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5125580357142857
+general,COHORT,P22,valence,eeg,svm,20,20,4,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5053307865569096
+general,COHORT,P25,valence,eeg,svm,20,20,5,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5149007764429099
+general,COHORT,P32,valence,eeg,svm,20,20,6,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5101607167628217
+general,COHORT,P40,valence,eeg,svm,20,20,7,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5162854877164623
+general,COHORT,P42,valence,eeg,svm,20,20,8,"{""classifier__C"": 10, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5173859471042208
+general,COHORT,P43,valence,eeg,svm,20,20,9,"{""classifier__C"": 10, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5038903559603982
+general,COHORT,P45,valence,eeg,svm,20,20,10,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P10,valence,eeg,gnb,all,all,1,"{""classifier__var_smoothing"": 1e-11}",0.4966945812183446
+general,COHORT,P11,valence,eeg,gnb,all,all,2,"{""classifier__var_smoothing"": 1e-11}",0.4718966488915009
+general,COHORT,P19,valence,eeg,gnb,all,all,3,"{""classifier__var_smoothing"": 1e-11}",0.48375417763078843
+general,COHORT,P22,valence,eeg,gnb,all,all,4,"{""classifier__var_smoothing"": 1e-11}",0.4906339430076397
+general,COHORT,P25,valence,eeg,gnb,all,all,5,"{""classifier__var_smoothing"": 1e-11}",0.4668116999232631
+general,COHORT,P32,valence,eeg,gnb,all,all,6,"{""classifier__var_smoothing"": 1e-11}",0.49469407434581825
+general,COHORT,P40,valence,eeg,gnb,all,all,7,"{""classifier__var_smoothing"": 1e-11}",0.49650587739437296
+general,COHORT,P42,valence,eeg,gnb,all,all,8,"{""classifier__var_smoothing"": 1e-11}",0.5086229327385429
+general,COHORT,P43,valence,eeg,gnb,all,all,9,"{""classifier__var_smoothing"": 1e-11}",0.48762487656207626
+general,COHORT,P45,valence,eeg,gnb,all,all,10,"{""classifier__var_smoothing"": 1e-11}",0.4916622490749619
+general,COHORT,P10,valence,eeg,gnb,5,5,1,"{""classifier__var_smoothing"": 1e-11}",0.4977369966546881
+general,COHORT,P11,valence,eeg,gnb,5,5,2,"{""classifier__var_smoothing"": 1e-11}",0.47583815273156727
+general,COHORT,P19,valence,eeg,gnb,5,5,3,"{""classifier__var_smoothing"": 1e-11}",0.4664984620190806
+general,COHORT,P22,valence,eeg,gnb,5,5,4,"{""classifier__var_smoothing"": 1e-11}",0.5008163402961848
+general,COHORT,P25,valence,eeg,gnb,5,5,5,"{""classifier__var_smoothing"": 1e-11}",0.4724178748409235
+general,COHORT,P32,valence,eeg,gnb,5,5,6,"{""classifier__var_smoothing"": 1e-11}",0.5079084016431904
+general,COHORT,P40,valence,eeg,gnb,5,5,7,"{""classifier__var_smoothing"": 1e-11}",0.4738159530626633
+general,COHORT,P42,valence,eeg,gnb,5,5,8,"{""classifier__var_smoothing"": 1e-11}",0.4943727625388881
+general,COHORT,P43,valence,eeg,gnb,5,5,9,"{""classifier__var_smoothing"": 1e-11}",0.48212169414071393
+general,COHORT,P45,valence,eeg,gnb,5,5,10,"{""classifier__var_smoothing"": 1e-11}",0.4897890277713894
+general,COHORT,P10,valence,eeg,gnb,10,10,1,"{""classifier__var_smoothing"": 1e-11}",0.4722699647815986
+general,COHORT,P11,valence,eeg,gnb,10,10,2,"{""classifier__var_smoothing"": 1e-11}",0.4863906286963792
+general,COHORT,P19,valence,eeg,gnb,10,10,3,"{""classifier__var_smoothing"": 1e-11}",0.4739851732245418
+general,COHORT,P22,valence,eeg,gnb,10,10,4,"{""classifier__var_smoothing"": 1e-11}",0.5055609095156252
+general,COHORT,P25,valence,eeg,gnb,10,10,5,"{""classifier__var_smoothing"": 1e-11}",0.47445771645163815
+general,COHORT,P32,valence,eeg,gnb,10,10,6,"{""classifier__var_smoothing"": 1e-11}",0.5026766153609901
+general,COHORT,P40,valence,eeg,gnb,10,10,7,"{""classifier__var_smoothing"": 1e-11}",0.4931670440448707
+general,COHORT,P42,valence,eeg,gnb,10,10,8,"{""classifier__var_smoothing"": 1e-11}",0.4974120712684818
+general,COHORT,P43,valence,eeg,gnb,10,10,9,"{""classifier__var_smoothing"": 1e-11}",0.4857054845200294
+general,COHORT,P45,valence,eeg,gnb,10,10,10,"{""classifier__var_smoothing"": 1e-11}",0.4759919927877595
+general,COHORT,P10,valence,eeg,gnb,20,20,1,"{""classifier__var_smoothing"": 1e-11}",0.48193302145694544
+general,COHORT,P11,valence,eeg,gnb,20,20,2,"{""classifier__var_smoothing"": 1e-11}",0.5040322864815865
+general,COHORT,P19,valence,eeg,gnb,20,20,3,"{""classifier__var_smoothing"": 1e-11}",0.4801806452782613
+general,COHORT,P22,valence,eeg,gnb,20,20,4,"{""classifier__var_smoothing"": 1e-11}",0.5005531810971364
+general,COHORT,P25,valence,eeg,gnb,20,20,5,"{""classifier__var_smoothing"": 1e-11}",0.46554765412826793
+general,COHORT,P32,valence,eeg,gnb,20,20,6,"{""classifier__var_smoothing"": 1e-11}",0.5024655641881239
+general,COHORT,P40,valence,eeg,gnb,20,20,7,"{""classifier__var_smoothing"": 1e-11}",0.49714809547023586
+general,COHORT,P42,valence,eeg,gnb,20,20,8,"{""classifier__var_smoothing"": 1e-11}",0.47270112703331213
+general,COHORT,P43,valence,eeg,gnb,20,20,9,"{""classifier__var_smoothing"": 1e-11}",0.4845815116527697
+general,COHORT,P45,valence,eeg,gnb,20,20,10,"{""classifier__var_smoothing"": 1e-11}",0.47765630551225924
