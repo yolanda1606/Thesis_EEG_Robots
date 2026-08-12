@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 from typing import Any
+import warnings
 
 import mne
 import numpy as np
 import pandas as pd
 from autoreject import AutoReject
+from sklearn.exceptions import ConvergenceWarning
 from scipy.stats import pearsonr
+from scipy.signal import butter, sosfiltfilt
 
 from .eeg_sources import load_eeg_session
 from .validation import available_image_codes
@@ -49,44 +52,120 @@ def preprocess_eeg(paths, config: dict[str, Any], logger) -> tuple[mne.Epochs, d
                iir_params={"order": filter_config["iir_order"], "ftype": "butter", "output": "sos"}, verbose=False)
     epoch_config = config["eeg"]["epoch"]
     event_id = {str(code): code for code in sorted(valid_codes)}
+    # ICA is fitted to the filtered, un-baselined epochs.  Baseline correction
+    # is applied after source correction so it cannot reduce the ICA rank or
+    # trigger MNE's warning about fitting ICA to baseline-corrected data.
     epochs_all = mne.Epochs(raw, events, event_id=event_id, tmin=epoch_config["tmin_s"], tmax=epoch_config["tmax_s"],
-                            baseline=tuple(epoch_config["baseline_s"]), preload=True, on_missing="raise", verbose=False)
+                            baseline=None, preload=True, on_missing="raise", verbose=False)
     boundary_omitted = sorted(valid_codes.difference(map(int, epochs_all.events[:, 2])))
     eeg_epochs = epochs_all.copy().pick(eeg_names)
-    motion_names = [name for name in config["channels"]["motion_channels"] if name in epochs_all.ch_names]
+    # Only the three accelerometer axes are motion references for ICA.
+    motion_names = [name for name in ("ACC X", "ACC Y", "ACC Z") if name in epochs_all.ch_names]
+    if len(motion_names) != 3:
+        raise ValueError(f"ICA requires ACC X/Y/Z motion references; found {motion_names}")
     motion_epochs = epochs_all.copy().pick(motion_names)
     ica_rows: list[dict[str, Any]] = []
-    selected_components: list[int] = []
+    selected_components: list[dict[str, Any]] = []
+    ica_qc: dict[str, Any] = {"enabled": bool(config["eeg"]["ica"]["enabled"]), "trials": []}
     if config["eeg"]["ica"]["enabled"]:
         ica_cfg = config["eeg"]["ica"]
-        logger.info("Fitting ICA with %d components and random seed %d", len(eeg_names), ica_cfg["random_seed"])
-        ica = mne.preprocessing.ICA(n_components=len(eeg_names), method=ica_cfg["method"], random_state=ica_cfg["random_seed"], verbose=False)
-        ica.fit(eeg_epochs, verbose=False)
-        source = ica.get_sources(eeg_epochs).get_data()
-        motion = motion_epochs.get_data()
-        correlations = np.full((source.shape[1], motion.shape[1]), np.nan)
-        for component in range(source.shape[1]):
-            for motion_index in range(motion.shape[1]):
-                values = []
-                for epoch_index in range(source.shape[0]):
-                    r, _ = pearsonr(source[epoch_index, component], motion[epoch_index, motion_index])
-                    if np.isfinite(r):
-                        values.append(abs(float(r)))
-                correlations[component, motion_index] = float(np.mean(values)) if values else np.nan
-        threshold = float(ica_cfg["motion_correlation_threshold"])
-        for component in range(source.shape[1]):
-            maximum = float(np.nanmax(correlations[component]))
-            rejected = maximum > threshold
-            selected_components.extend([component] if rejected else [])
-            ica_rows.append({"component": component, "maximum_mean_abs_motion_correlation": maximum,
-                             "threshold": threshold, "rejected": rejected,
-                             "motion_channel": motion_names[int(np.nanargmax(correlations[component]))]})
-        ica.exclude = selected_components
-        if selected_components:
-            logger.warning("ICA components selected for removal: %s", selected_components)
-            eeg_epochs = ica.apply(eeg_epochs, verbose=False)
-        else:
-            logger.info("No ICA components exceeded the approved correlation threshold")
+        # Fit one decomposition to the valid image-epoch collection.  This
+        # supplies enough samples for a stable ICA fit while retaining the
+        # requested trial-specific ACC source assessment and correction below.
+        concatenated = eeg_epochs.get_data().transpose(1, 0, 2).reshape(len(eeg_names), -1)
+        rank = int(np.linalg.matrix_rank(concatenated))
+        fit_duration_s = float(concatenated.shape[1] / eeg_epochs.info["sfreq"])
+        if rank < 1:
+            raise RuntimeError("ICA cannot be fitted: concatenated post-CAR EEG rank is zero")
+        if rank < len(eeg_names) - 1:
+            logger.warning("ICA QC review: concatenated post-CAR EEG rank is unexpectedly low: %d", rank)
+        logger.info("Fitting rank-aware ICA on %.3f s of concatenated valid image-epoch data: rank=%d, requested components=%d, seed=%d",
+                    fit_duration_s, rank, rank, ica_cfg["random_seed"])
+        ica = mne.preprocessing.ICA(n_components=rank, method=ica_cfg["method"],
+                                     random_state=ica_cfg["random_seed"], verbose=False)
+        with warnings.catch_warnings(record=True) as fit_warnings:
+            warnings.simplefilter("always")
+            ica.fit(eeg_epochs, verbose=False)
+        convergence_warnings = [str(item.message) for item in fit_warnings if issubclass(item.category, ConvergenceWarning)]
+        if convergence_warnings:
+            logger.warning("ICA convergence warnings: %s", convergence_warnings)
+            raise RuntimeError("Rank-aware concatenated ICA did not converge; preprocessing stopped")
+        mixing_warnings = [str(item.message) for item in fit_warnings if "unstable mixing matrix" in str(item.message)]
+        if mixing_warnings:
+            logger.warning("ICA mixing-matrix warnings: %s", mixing_warnings)
+            raise RuntimeError("Rank-aware concatenated ICA reported an unstable mixing matrix; preprocessing stopped")
+        if int(ica.n_components_) > rank:
+            raise RuntimeError("ICA fitted more components than the detected EEG rank")
+        logger.info("Rank-aware ICA fit converged: detected rank=%d, fitted components=%d", rank, ica.n_components_)
+        highpass_sos = butter(4, 3.0, btype="highpass", fs=float(eeg_epochs.info["sfreq"]), output="sos")
+        corrected = eeg_epochs.get_data(copy=True)
+        all_sources = ica.get_sources(eeg_epochs).get_data()
+        for epoch_index in range(len(eeg_epochs)):
+            trigger_id = int(eeg_epochs.events[epoch_index, 2])
+            trial_qc = {"epoch_index": epoch_index, "trigger_id": trigger_id, "detected_eeg_rank": rank,
+                        "requested_ica_components": rank, "fitted_ica_components": None,
+                        "fit_failed": False, "motion_related_components": [], "corrected_source_count": 0,
+                        "corrected_axes": [], "rank_below_normal_post_car": rank < len(eeg_names) - 1}
+            try:
+                sources = all_sources[epoch_index].copy()
+                trial_qc["fitted_ica_components"] = int(ica.n_components_)
+                motion = motion_epochs.get_data()[epoch_index]
+                correlations = np.full((ica.n_components_, len(motion_names)), np.nan)
+                axis_mean = np.full(len(motion_names), np.nan)
+                axis_std = np.full(len(motion_names), np.nan)
+                for axis_index, axis_name in enumerate(motion_names):
+                    for component in range(ica.n_components_):
+                        r, _ = pearsonr(sources[component], motion[axis_index])
+                        correlations[component, axis_index] = float(r) if np.isfinite(r) else np.nan
+                    finite = correlations[:, axis_index][np.isfinite(correlations[:, axis_index])]
+                    if len(finite):
+                        axis_mean[axis_index] = float(np.mean(finite))
+                        axis_std[axis_index] = float(np.std(finite, ddof=0))
+                flagged = []
+                for component in range(ica.n_components_):
+                    axes = [motion_names[axis] for axis in range(len(motion_names))
+                            if np.isfinite(correlations[component, axis]) and np.isfinite(axis_mean[axis])
+                            and correlations[component, axis] > axis_mean[axis] + 2.0 * axis_std[axis]]
+                    if axes:
+                        sources[component] = sosfiltfilt(highpass_sos, sources[component])
+                        flagged.append({"component": component, "axes": axes})
+                        selected_components.append({"trigger_id": trigger_id, "component": component, "axes": axes})
+                    for axis_index, axis_name in enumerate(motion_names):
+                        ica_rows.append({"epoch_index": epoch_index, "trigger_id": trigger_id, "detected_eeg_rank": rank,
+                                         "requested_ica_components": rank, "fitted_ica_components": int(ica.n_components_),
+                                         "component": component, "acc_axis": axis_name,
+                                         "correlation": correlations[component, axis_index],
+                                         "axis_mean_correlation": axis_mean[axis_index], "axis_std_correlation": axis_std[axis_index],
+                                         "motion_related": axis_name in axes, "source_highpass_3hz": bool(axes)})
+                # Reconstruct manually from the edited ICA sources. This is the
+                # same back-projection used by MNE, except selected sources are
+                # high-pass filtered rather than zeroed/excluded.
+                prewhitened = ica.pca_components_[:ica.n_components_].T @ (ica.mixing_matrix_ @ sources)
+                if ica.pca_mean_ is not None:
+                    prewhitened += ica.pca_mean_[:, None]
+                if ica.noise_cov is None:
+                    reconstructed = prewhitened * ica.pre_whitener_
+                else:
+                    reconstructed = np.linalg.pinv(ica.pre_whitener_, rcond=1e-14) @ prewhitened
+                corrected[epoch_index] = reconstructed
+                trial_qc["motion_related_components"] = flagged
+                trial_qc["corrected_source_count"] = len(flagged)
+                trial_qc["corrected_axes"] = sorted({axis for item in flagged for axis in item["axes"]})
+            except Exception as exc:
+                trial_qc["fit_failed"] = True
+                trial_qc["failure_reason"] = f"{type(exc).__name__}: {exc}"
+                logger.warning("ICA failed for trigger %d: %s", trigger_id, trial_qc["failure_reason"])
+            ica_qc["trials"].append(trial_qc)
+        eeg_epochs._data = corrected
+        ica_qc.update({"fit_data_duration_s": fit_duration_s, "detected_eeg_rank": rank,
+                       "requested_ica_components": rank, "fitted_ica_components": int(ica.n_components_),
+                       "convergence_warnings": convergence_warnings, "mixing_matrix_warnings": mixing_warnings})
+        logger.info("Concatenated ICA trial correction complete: %d fit failures; %d corrected sources",
+                    sum(item["fit_failed"] for item in ica_qc["trials"]),
+                    sum(item["corrected_source_count"] for item in ica_qc["trials"]))
+    # Keep the approved baseline interval, but apply it only after ICA
+    # reconstruction and before AutoReject/feature extraction.
+    eeg_epochs.apply_baseline(tuple(epoch_config["baseline_s"]), verbose=False)
 
     interpolated = list(config["eeg"]["bad_channels"]["approved_for_interpolation"])
     unknown = set(interpolated).difference(eeg_epochs.ch_names)
@@ -123,6 +202,7 @@ def preprocess_eeg(paths, config: dict[str, Any], logger) -> tuple[mne.Epochs, d
 
     qc = {"all_event_count": int(len(all_events)), "image_event_count": int(len(events)), "epochs_before_cleaning": int(len(epochs_all)),
           "epochs_after_cleaning": int(len(eeg_epochs)), "ica_rejected_components": selected_components,
+          "ica_trialwise": ica_qc,
           "interpolated_channels": interpolated, "rejection": rejection_summary, "sampling_hz": float(eeg_epochs.info["sfreq"]),
           "epoch_tmin_s": float(eeg_epochs.tmin), "epoch_tmax_s": float(eeg_epochs.tmax),
           "eeg_sources": source_metadata, "boundary_omitted_epoch_triggers": boundary_omitted}

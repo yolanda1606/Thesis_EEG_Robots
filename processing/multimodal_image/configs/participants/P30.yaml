@@ -19,7 +19,7 @@ video:
     right: 566
     bottom: 353
     scale: 1.0
-    approved: Approved
+    approved: true
     approval_note: "Approved."
 
 synchronization:
