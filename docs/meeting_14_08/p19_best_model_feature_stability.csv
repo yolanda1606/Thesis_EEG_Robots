@@ -1,0 +1,19 @@
+feature,number_of_folds_selected,selection_frequency_percent,mean_feature_score_if_available,feature_family,channel_if_eeg,frequency_band_if_eeg,statistic_if_identifiable,modality,plain_description
+eeg_bp_beta__PO8,5,100.0,18.689764909857182,eeg_bp_beta,PO8,beta,power,EEG,beta-band power at PO8
+eeg_bp_beta__Fz,5,100.0,14.585742810777726,eeg_bp_beta,Fz,beta,power,EEG,beta-band power at Fz
+eeg_hc__Fz,5,100.0,14.020115171982644,eeg_hc,Fz,,Hjorth complexity,EEG,Hjorth complexity at Fz
+eeg_hm__Fz,5,100.0,11.67936446053999,eeg_hm,Fz,,Hjorth mobility,EEG,Hjorth mobility at Fz
+eeg_se__Fz,5,100.0,11.613661067489295,eeg_se,Fz,,spectral entropy,EEG,spectral entropy at Fz
+eeg_hc__PO8,4,80.0,11.0744096687823,eeg_hc,PO8,,Hjorth complexity,EEG,Hjorth complexity at PO8
+eeg_mf_hz__Fz,4,80.0,10.107369511134369,eeg_mf_hz,Fz,,median frequency,EEG,median frequency at Fz
+eeg_mf_hz__PO8,3,60.0,11.82579286015545,eeg_mf_hz,PO8,,median frequency,EEG,median frequency at PO8
+eeg_hm__PO8,3,60.0,11.053434965477186,eeg_hm,PO8,,Hjorth mobility,EEG,Hjorth mobility at PO8
+eeg_mf_hz__Cz,2,40.0,11.151776315908412,eeg_mf_hz,Cz,,median frequency,EEG,median frequency at Cz
+eeg_hm__Oz,2,40.0,8.892632277843333,eeg_hm,Oz,,Hjorth mobility,EEG,Hjorth mobility at Oz
+eeg_bp_beta__PO7,1,20.0,17.142308204124596,eeg_bp_beta,PO7,beta,power,EEG,beta-band power at PO7
+eeg_se__PO8,1,20.0,11.531446467235757,eeg_se,PO8,,spectral entropy,EEG,spectral entropy at PO8
+eeg_bp_beta__Oz,1,20.0,10.89567908403574,eeg_bp_beta,Oz,beta,power,EEG,beta-band power at Oz
+eeg_bp_delta__Oz,1,20.0,8.157717560674566,eeg_bp_delta,Oz,delta,power,EEG,delta-band power at Oz
+eeg_bp_beta__Pz,1,20.0,7.45564696660809,eeg_bp_beta,Pz,beta,power,EEG,beta-band power at Pz
+eeg_mf_hz__PO7,1,20.0,7.228021011912615,eeg_mf_hz,PO7,,median frequency,EEG,median frequency at PO7
+eeg_bp_delta__Fz,1,20.0,7.106195729712248,eeg_bp_delta,Fz,delta,power,EEG,delta-band power at Fz

@@ -119,3 +119,603 @@ general,COHORT,P40,valence,eeg,gnb,20,20,7,"{""classifier__var_smoothing"": 1e-1
 general,COHORT,P42,valence,eeg,gnb,20,20,8,"{""classifier__var_smoothing"": 1e-11}",0.47270112703331213
 general,COHORT,P43,valence,eeg,gnb,20,20,9,"{""classifier__var_smoothing"": 1e-11}",0.4845815116527697
 general,COHORT,P45,valence,eeg,gnb,20,20,10,"{""classifier__var_smoothing"": 1e-11}",0.47765630551225924
+general,COHORT,P10,valence,face,knn,all,all,1,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5015945105100752
+general,COHORT,P11,valence,face,knn,all,all,2,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4908323425834797
+general,COHORT,P19,valence,face,knn,all,all,3,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.524508716047698
+general,COHORT,P22,valence,face,knn,all,all,4,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5247227442785432
+general,COHORT,P25,valence,face,knn,all,all,5,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4867091618817348
+general,COHORT,P32,valence,face,knn,all,all,6,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5060883858973284
+general,COHORT,P40,valence,face,knn,all,all,7,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5258541881923477
+general,COHORT,P42,valence,face,knn,all,all,8,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5071865458737059
+general,COHORT,P43,valence,face,knn,all,all,9,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5169178517121411
+general,COHORT,P45,valence,face,knn,all,all,10,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4801029668887927
+general,COHORT,P10,valence,face,knn,5,5,1,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.5101936885491198
+general,COHORT,P11,valence,face,knn,5,5,2,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""distance""}",0.48212534379799
+general,COHORT,P19,valence,face,knn,5,5,3,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5004637192704203
+general,COHORT,P22,valence,face,knn,5,5,4,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5117184943788882
+general,COHORT,P25,valence,face,knn,5,5,5,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""distance""}",0.532008849477083
+general,COHORT,P32,valence,face,knn,5,5,6,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.52687670883821
+general,COHORT,P40,valence,face,knn,5,5,7,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""distance""}",0.5173978849616886
+general,COHORT,P42,valence,face,knn,5,5,8,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.5113119692006562
+general,COHORT,P43,valence,face,knn,5,5,9,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.506899579743797
+general,COHORT,P45,valence,face,knn,5,5,10,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5271462055605032
+general,COHORT,P10,valence,face,knn,10,10,1,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5015945105100752
+general,COHORT,P11,valence,face,knn,10,10,2,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4908323425834797
+general,COHORT,P19,valence,face,knn,10,10,3,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.524508716047698
+general,COHORT,P22,valence,face,knn,10,10,4,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5247227442785432
+general,COHORT,P25,valence,face,knn,10,10,5,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4867091618817348
+general,COHORT,P32,valence,face,knn,10,10,6,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5060883858973284
+general,COHORT,P40,valence,face,knn,10,10,7,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5258541881923477
+general,COHORT,P42,valence,face,knn,10,10,8,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5071865458737059
+general,COHORT,P43,valence,face,knn,10,10,9,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5169178517121411
+general,COHORT,P45,valence,face,knn,10,10,10,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4801029668887927
+general,COHORT,P10,valence,face,knn,20,10,1,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5015945105100752
+general,COHORT,P11,valence,face,knn,20,10,2,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4908323425834797
+general,COHORT,P19,valence,face,knn,20,10,3,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.524508716047698
+general,COHORT,P22,valence,face,knn,20,10,4,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5247227442785432
+general,COHORT,P25,valence,face,knn,20,10,5,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4867091618817348
+general,COHORT,P32,valence,face,knn,20,10,6,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5060883858973284
+general,COHORT,P40,valence,face,knn,20,10,7,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5258541881923477
+general,COHORT,P42,valence,face,knn,20,10,8,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5071865458737059
+general,COHORT,P43,valence,face,knn,20,10,9,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5169178517121411
+general,COHORT,P45,valence,face,knn,20,10,10,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4801029668887927
+general,COHORT,P10,valence,face,svm,all,all,1,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5079373379690575
+general,COHORT,P11,valence,face,svm,all,all,2,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5114701513510493
+general,COHORT,P19,valence,face,svm,all,all,3,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5196020155746315
+general,COHORT,P22,valence,face,svm,all,all,4,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5148059735586181
+general,COHORT,P25,valence,face,svm,all,all,5,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P32,valence,face,svm,all,all,6,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P40,valence,face,svm,all,all,7,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5128802098571563
+general,COHORT,P42,valence,face,svm,all,all,8,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5160103359937531
+general,COHORT,P43,valence,face,svm,all,all,9,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P45,valence,face,svm,all,all,10,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P10,valence,face,svm,5,5,1,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5131926114700477
+general,COHORT,P11,valence,face,svm,5,5,2,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P19,valence,face,svm,5,5,3,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5032708333333333
+general,COHORT,P22,valence,face,svm,5,5,4,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5100339341557277
+general,COHORT,P25,valence,face,svm,5,5,5,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P32,valence,face,svm,5,5,6,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5100521157963682
+general,COHORT,P40,valence,face,svm,5,5,7,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5051666904789274
+general,COHORT,P42,valence,face,svm,5,5,8,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5065163782298048
+general,COHORT,P43,valence,face,svm,5,5,9,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5018011167748886
+general,COHORT,P45,valence,face,svm,5,5,10,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P10,valence,face,svm,10,10,1,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5079373379690575
+general,COHORT,P11,valence,face,svm,10,10,2,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5114701513510493
+general,COHORT,P19,valence,face,svm,10,10,3,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5196020155746315
+general,COHORT,P22,valence,face,svm,10,10,4,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5148059735586181
+general,COHORT,P25,valence,face,svm,10,10,5,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P32,valence,face,svm,10,10,6,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P40,valence,face,svm,10,10,7,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5128802098571563
+general,COHORT,P42,valence,face,svm,10,10,8,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5160103359937531
+general,COHORT,P43,valence,face,svm,10,10,9,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P45,valence,face,svm,10,10,10,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P10,valence,face,svm,20,10,1,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5079373379690575
+general,COHORT,P11,valence,face,svm,20,10,2,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5114701513510493
+general,COHORT,P19,valence,face,svm,20,10,3,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5196020155746315
+general,COHORT,P22,valence,face,svm,20,10,4,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5148059735586181
+general,COHORT,P25,valence,face,svm,20,10,5,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P32,valence,face,svm,20,10,6,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P40,valence,face,svm,20,10,7,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5128802098571563
+general,COHORT,P42,valence,face,svm,20,10,8,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5160103359937531
+general,COHORT,P43,valence,face,svm,20,10,9,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P45,valence,face,svm,20,10,10,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P10,valence,face,gnb,all,all,1,"{""classifier__var_smoothing"": 1e-11}",0.49643545525436306
+general,COHORT,P11,valence,face,gnb,all,all,2,"{""classifier__var_smoothing"": 1e-11}",0.49208626241190806
+general,COHORT,P19,valence,face,gnb,all,all,3,"{""classifier__var_smoothing"": 1e-11}",0.5208380911399597
+general,COHORT,P22,valence,face,gnb,all,all,4,"{""classifier__var_smoothing"": 1e-11}",0.5029639815725512
+general,COHORT,P25,valence,face,gnb,all,all,5,"{""classifier__var_smoothing"": 1e-11}",0.4820407761284148
+general,COHORT,P32,valence,face,gnb,all,all,6,"{""classifier__var_smoothing"": 1e-11}",0.4793943818242069
+general,COHORT,P40,valence,face,gnb,all,all,7,"{""classifier__var_smoothing"": 1e-11}",0.4950074711892767
+general,COHORT,P42,valence,face,gnb,all,all,8,"{""classifier__var_smoothing"": 1e-11}",0.4903291194204897
+general,COHORT,P43,valence,face,gnb,all,all,9,"{""classifier__var_smoothing"": 1e-11}",0.4725944258302266
+general,COHORT,P45,valence,face,gnb,all,all,10,"{""classifier__var_smoothing"": 1e-11}",0.47595121600105694
+general,COHORT,P10,valence,face,gnb,5,5,1,"{""classifier__var_smoothing"": 1e-11}",0.5169857014051906
+general,COHORT,P11,valence,face,gnb,5,5,2,"{""classifier__var_smoothing"": 1e-11}",0.5036176414818734
+general,COHORT,P19,valence,face,gnb,5,5,3,"{""classifier__var_smoothing"": 1e-11}",0.49759123930193516
+general,COHORT,P22,valence,face,gnb,5,5,4,"{""classifier__var_smoothing"": 1e-11}",0.520163335161597
+general,COHORT,P25,valence,face,gnb,5,5,5,"{""classifier__var_smoothing"": 1e-11}",0.4984728682445924
+general,COHORT,P32,valence,face,gnb,5,5,6,"{""classifier__var_smoothing"": 1e-11}",0.5120811788850371
+general,COHORT,P40,valence,face,gnb,5,5,7,"{""classifier__var_smoothing"": 1e-11}",0.5070960774845947
+general,COHORT,P42,valence,face,gnb,5,5,8,"{""classifier__var_smoothing"": 1e-11}",0.5003204040238953
+general,COHORT,P43,valence,face,gnb,5,5,9,"{""classifier__var_smoothing"": 1e-11}",0.47327392678227814
+general,COHORT,P45,valence,face,gnb,5,5,10,"{""classifier__var_smoothing"": 1e-11}",0.4863969772733907
+general,COHORT,P10,valence,face,gnb,10,10,1,"{""classifier__var_smoothing"": 1e-11}",0.49643545525436306
+general,COHORT,P11,valence,face,gnb,10,10,2,"{""classifier__var_smoothing"": 1e-11}",0.49208626241190806
+general,COHORT,P19,valence,face,gnb,10,10,3,"{""classifier__var_smoothing"": 1e-11}",0.5208380911399597
+general,COHORT,P22,valence,face,gnb,10,10,4,"{""classifier__var_smoothing"": 1e-11}",0.5029639815725512
+general,COHORT,P25,valence,face,gnb,10,10,5,"{""classifier__var_smoothing"": 1e-11}",0.4820407761284148
+general,COHORT,P32,valence,face,gnb,10,10,6,"{""classifier__var_smoothing"": 1e-11}",0.4793943818242069
+general,COHORT,P40,valence,face,gnb,10,10,7,"{""classifier__var_smoothing"": 1e-11}",0.4950074711892767
+general,COHORT,P42,valence,face,gnb,10,10,8,"{""classifier__var_smoothing"": 1e-11}",0.4903291194204897
+general,COHORT,P43,valence,face,gnb,10,10,9,"{""classifier__var_smoothing"": 1e-11}",0.4725944258302266
+general,COHORT,P45,valence,face,gnb,10,10,10,"{""classifier__var_smoothing"": 1e-11}",0.47595121600105694
+general,COHORT,P10,valence,face,gnb,20,10,1,"{""classifier__var_smoothing"": 1e-11}",0.49643545525436306
+general,COHORT,P11,valence,face,gnb,20,10,2,"{""classifier__var_smoothing"": 1e-11}",0.49208626241190806
+general,COHORT,P19,valence,face,gnb,20,10,3,"{""classifier__var_smoothing"": 1e-11}",0.5208380911399597
+general,COHORT,P22,valence,face,gnb,20,10,4,"{""classifier__var_smoothing"": 1e-11}",0.5029639815725512
+general,COHORT,P25,valence,face,gnb,20,10,5,"{""classifier__var_smoothing"": 1e-11}",0.4820407761284148
+general,COHORT,P32,valence,face,gnb,20,10,6,"{""classifier__var_smoothing"": 1e-11}",0.4793943818242069
+general,COHORT,P40,valence,face,gnb,20,10,7,"{""classifier__var_smoothing"": 1e-11}",0.4950074711892767
+general,COHORT,P42,valence,face,gnb,20,10,8,"{""classifier__var_smoothing"": 1e-11}",0.4903291194204897
+general,COHORT,P43,valence,face,gnb,20,10,9,"{""classifier__var_smoothing"": 1e-11}",0.4725944258302266
+general,COHORT,P45,valence,face,gnb,20,10,10,"{""classifier__var_smoothing"": 1e-11}",0.47595121600105694
+general,COHORT,P10,valence,multimodal,knn,all,all,1,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.48479542519326824
+general,COHORT,P11,valence,multimodal,knn,all,all,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4919512327923906
+general,COHORT,P19,valence,multimodal,knn,all,all,3,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4928406553712611
+general,COHORT,P22,valence,multimodal,knn,all,all,4,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.49626395029991527
+general,COHORT,P25,valence,multimodal,knn,all,all,5,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.49772929354909456
+general,COHORT,P32,valence,multimodal,knn,all,all,6,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4938845238842725
+general,COHORT,P40,valence,multimodal,knn,all,all,7,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.49993206865635703
+general,COHORT,P42,valence,multimodal,knn,all,all,8,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.49917143964295657
+general,COHORT,P43,valence,multimodal,knn,all,all,9,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.49679303045630885
+general,COHORT,P45,valence,multimodal,knn,all,all,10,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.48088522119635185
+general,COHORT,P10,valence,multimodal,knn,5,5,1,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5138301771421279
+general,COHORT,P11,valence,multimodal,knn,5,5,2,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.49860564112943784
+general,COHORT,P19,valence,multimodal,knn,5,5,3,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""distance""}",0.49855978117672706
+general,COHORT,P22,valence,multimodal,knn,5,5,4,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5262441229427952
+general,COHORT,P25,valence,multimodal,knn,5,5,5,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""distance""}",0.4976422986925752
+general,COHORT,P32,valence,multimodal,knn,5,5,6,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5209186691526903
+general,COHORT,P40,valence,multimodal,knn,5,5,7,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""distance""}",0.5056034124736662
+general,COHORT,P42,valence,multimodal,knn,5,5,8,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""distance""}",0.5109563739796729
+general,COHORT,P43,valence,multimodal,knn,5,5,9,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.48185168250266514
+general,COHORT,P45,valence,multimodal,knn,5,5,10,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""distance""}",0.4879074922054062
+general,COHORT,P10,valence,multimodal,knn,10,10,1,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5043276920247675
+general,COHORT,P11,valence,multimodal,knn,10,10,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""distance""}",0.4859940562441638
+general,COHORT,P19,valence,multimodal,knn,10,10,3,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""distance""}",0.4984049980303203
+general,COHORT,P22,valence,multimodal,knn,10,10,4,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.495081234910056
+general,COHORT,P25,valence,multimodal,knn,10,10,5,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.504663015779557
+general,COHORT,P32,valence,multimodal,knn,10,10,6,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.4968168394424176
+general,COHORT,P40,valence,multimodal,knn,10,10,7,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5140440817386956
+general,COHORT,P42,valence,multimodal,knn,10,10,8,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5036885738305953
+general,COHORT,P43,valence,multimodal,knn,10,10,9,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""distance""}",0.49391513105652285
+general,COHORT,P45,valence,multimodal,knn,10,10,10,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4974741570063574
+general,COHORT,P10,valence,multimodal,knn,20,20,1,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5214958063650639
+general,COHORT,P11,valence,multimodal,knn,20,20,2,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.5099960539261298
+general,COHORT,P19,valence,multimodal,knn,20,20,3,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.4898144909214498
+general,COHORT,P22,valence,multimodal,knn,20,20,4,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.49137462926594794
+general,COHORT,P25,valence,multimodal,knn,20,20,5,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5073474064001899
+general,COHORT,P32,valence,multimodal,knn,20,20,6,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""distance""}",0.5277093068753229
+general,COHORT,P40,valence,multimodal,knn,20,20,7,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5263148396675855
+general,COHORT,P42,valence,multimodal,knn,20,20,8,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.510185359115006
+general,COHORT,P43,valence,multimodal,knn,20,20,9,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5285988141463153
+general,COHORT,P45,valence,multimodal,knn,20,20,10,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5038887383702273
+general,COHORT,P10,valence,multimodal,svm,all,all,1,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5133689419701652
+general,COHORT,P11,valence,multimodal,svm,all,all,2,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",0.5063638117976319
+general,COHORT,P19,valence,multimodal,svm,all,all,3,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P22,valence,multimodal,svm,all,all,4,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5114283512277243
+general,COHORT,P25,valence,multimodal,svm,all,all,5,"{""classifier__C"": 1, ""classifier__kernel"": ""linear""}",0.5196951066900969
+general,COHORT,P32,valence,multimodal,svm,all,all,6,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P40,valence,multimodal,svm,all,all,7,"{""classifier__C"": 1, ""classifier__kernel"": ""linear""}",0.5150057184713719
+general,COHORT,P42,valence,multimodal,svm,all,all,8,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P43,valence,multimodal,svm,all,all,9,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P45,valence,multimodal,svm,all,all,10,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P10,valence,multimodal,svm,5,5,1,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5099944549224071
+general,COHORT,P11,valence,multimodal,svm,5,5,2,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P19,valence,multimodal,svm,5,5,3,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5063207555974952
+general,COHORT,P22,valence,multimodal,svm,5,5,4,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5007884528130673
+general,COHORT,P25,valence,multimodal,svm,5,5,5,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P32,valence,multimodal,svm,5,5,6,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5175275754427194
+general,COHORT,P40,valence,multimodal,svm,5,5,7,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5073955734986663
+general,COHORT,P42,valence,multimodal,svm,5,5,8,"{""classifier__C"": 10, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5190113215143107
+general,COHORT,P43,valence,multimodal,svm,5,5,9,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.502
+general,COHORT,P45,valence,multimodal,svm,5,5,10,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5006376674173284
+general,COHORT,P10,valence,multimodal,svm,10,10,1,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P11,valence,multimodal,svm,10,10,2,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P19,valence,multimodal,svm,10,10,3,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5076441863548823
+general,COHORT,P22,valence,multimodal,svm,10,10,4,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5100683335493906
+general,COHORT,P25,valence,multimodal,svm,10,10,5,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P32,valence,multimodal,svm,10,10,6,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.504058676283306
+general,COHORT,P40,valence,multimodal,svm,10,10,7,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5008620689655172
+general,COHORT,P42,valence,multimodal,svm,10,10,8,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",0.5164194695384685
+general,COHORT,P43,valence,multimodal,svm,10,10,9,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P45,valence,multimodal,svm,10,10,10,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P10,valence,multimodal,svm,20,20,1,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5203114290602081
+general,COHORT,P11,valence,multimodal,svm,20,20,2,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5029598675425178
+general,COHORT,P19,valence,multimodal,svm,20,20,3,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5043705357142857
+general,COHORT,P22,valence,multimodal,svm,20,20,4,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5083686704512488
+general,COHORT,P25,valence,multimodal,svm,20,20,5,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5224525294939677
+general,COHORT,P32,valence,multimodal,svm,20,20,6,"{""classifier__C"": 10, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5045764814220629
+general,COHORT,P40,valence,multimodal,svm,20,20,7,"{""classifier__C"": 10, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5164736221918016
+general,COHORT,P42,valence,multimodal,svm,20,20,8,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P43,valence,multimodal,svm,20,20,9,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5073622788948641
+general,COHORT,P45,valence,multimodal,svm,20,20,10,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P10,valence,multimodal,gnb,all,all,1,"{""classifier__var_smoothing"": 1e-11}",0.4937363138398164
+general,COHORT,P11,valence,multimodal,gnb,all,all,2,"{""classifier__var_smoothing"": 1e-11}",0.4780480759271574
+general,COHORT,P19,valence,multimodal,gnb,all,all,3,"{""classifier__var_smoothing"": 1e-11}",0.49252490690151773
+general,COHORT,P22,valence,multimodal,gnb,all,all,4,"{""classifier__var_smoothing"": 1e-11}",0.4945414630005335
+general,COHORT,P25,valence,multimodal,gnb,all,all,5,"{""classifier__var_smoothing"": 1e-11}",0.47087430697792626
+general,COHORT,P32,valence,multimodal,gnb,all,all,6,"{""classifier__var_smoothing"": 1e-11}",0.4949355505294487
+general,COHORT,P40,valence,multimodal,gnb,all,all,7,"{""classifier__var_smoothing"": 1e-11}",0.4971972630366084
+general,COHORT,P42,valence,multimodal,gnb,all,all,8,"{""classifier__var_smoothing"": 1e-11}",0.5095264002428352
+general,COHORT,P43,valence,multimodal,gnb,all,all,9,"{""classifier__var_smoothing"": 1e-11}",0.4932450380389173
+general,COHORT,P45,valence,multimodal,gnb,all,all,10,"{""classifier__var_smoothing"": 1e-11}",0.4865821500604367
+general,COHORT,P10,valence,multimodal,gnb,5,5,1,"{""classifier__var_smoothing"": 1e-11}",0.489002163130816
+general,COHORT,P11,valence,multimodal,gnb,5,5,2,"{""classifier__var_smoothing"": 1e-11}",0.480992791906825
+general,COHORT,P19,valence,multimodal,gnb,5,5,3,"{""classifier__var_smoothing"": 1e-11}",0.46820109100521473
+general,COHORT,P22,valence,multimodal,gnb,5,5,4,"{""classifier__var_smoothing"": 1e-11}",0.5077952788833708
+general,COHORT,P25,valence,multimodal,gnb,5,5,5,"{""classifier__var_smoothing"": 1e-11}",0.47417720284831805
+general,COHORT,P32,valence,multimodal,gnb,5,5,6,"{""classifier__var_smoothing"": 1e-11}",0.5079084016431904
+general,COHORT,P40,valence,multimodal,gnb,5,5,7,"{""classifier__var_smoothing"": 1e-11}",0.47056875539185283
+general,COHORT,P42,valence,multimodal,gnb,5,5,8,"{""classifier__var_smoothing"": 1e-11}",0.48399042216413807
+general,COHORT,P43,valence,multimodal,gnb,5,5,9,"{""classifier__var_smoothing"": 1e-11}",0.4644473528608242
+general,COHORT,P45,valence,multimodal,gnb,5,5,10,"{""classifier__var_smoothing"": 1e-11}",0.4562786905377957
+general,COHORT,P10,valence,multimodal,gnb,10,10,1,"{""classifier__var_smoothing"": 1e-11}",0.46281849656895047
+general,COHORT,P11,valence,multimodal,gnb,10,10,2,"{""classifier__var_smoothing"": 1e-11}",0.4709773111786741
+general,COHORT,P19,valence,multimodal,gnb,10,10,3,"{""classifier__var_smoothing"": 1e-11}",0.4669242753595202
+general,COHORT,P22,valence,multimodal,gnb,10,10,4,"{""classifier__var_smoothing"": 1e-11}",0.5018609831533276
+general,COHORT,P25,valence,multimodal,gnb,10,10,5,"{""classifier__var_smoothing"": 1e-11}",0.47871539502262656
+general,COHORT,P32,valence,multimodal,gnb,10,10,6,"{""classifier__var_smoothing"": 1e-11}",0.5025595479219376
+general,COHORT,P40,valence,multimodal,gnb,10,10,7,"{""classifier__var_smoothing"": 1e-11}",0.48898345228980566
+general,COHORT,P42,valence,multimodal,gnb,10,10,8,"{""classifier__var_smoothing"": 1e-11}",0.48292536836090283
+general,COHORT,P43,valence,multimodal,gnb,10,10,9,"{""classifier__var_smoothing"": 1e-11}",0.4838559277629703
+general,COHORT,P45,valence,multimodal,gnb,10,10,10,"{""classifier__var_smoothing"": 1e-11}",0.4689596758072329
+general,COHORT,P10,valence,multimodal,gnb,20,20,1,"{""classifier__var_smoothing"": 1e-11}",0.48071255351784464
+general,COHORT,P11,valence,multimodal,gnb,20,20,2,"{""classifier__var_smoothing"": 1e-11}",0.4910925435866478
+general,COHORT,P19,valence,multimodal,gnb,20,20,3,"{""classifier__var_smoothing"": 1e-11}",0.4736776591106488
+general,COHORT,P22,valence,multimodal,gnb,20,20,4,"{""classifier__var_smoothing"": 1e-11}",0.498515944493534
+general,COHORT,P25,valence,multimodal,gnb,20,20,5,"{""classifier__var_smoothing"": 1e-11}",0.4658723447043143
+general,COHORT,P32,valence,multimodal,gnb,20,20,6,"{""classifier__var_smoothing"": 1e-11}",0.5038089294157034
+general,COHORT,P40,valence,multimodal,gnb,20,20,7,"{""classifier__var_smoothing"": 1e-11}",0.49211474179508946
+general,COHORT,P42,valence,multimodal,gnb,20,20,8,"{""classifier__var_smoothing"": 1e-11}",0.47369077584210667
+general,COHORT,P43,valence,multimodal,gnb,20,20,9,"{""classifier__var_smoothing"": 1e-11}",0.49055708680753296
+general,COHORT,P45,valence,multimodal,gnb,20,20,10,"{""classifier__var_smoothing"": 1e-11}",0.4770385568608641
+general,COHORT,P10,arousal,eeg,knn,all,all,1,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.49811264972509567
+general,COHORT,P11,arousal,eeg,knn,all,all,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4966335614232621
+general,COHORT,P19,arousal,eeg,knn,all,all,3,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5062284669527172
+general,COHORT,P22,arousal,eeg,knn,all,all,4,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4824670603139804
+general,COHORT,P25,arousal,eeg,knn,all,all,5,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4987421163560004
+general,COHORT,P32,arousal,eeg,knn,all,all,6,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.49154815511225924
+general,COHORT,P40,arousal,eeg,knn,all,all,7,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4822834654574682
+general,COHORT,P42,arousal,eeg,knn,all,all,8,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.48535471697080457
+general,COHORT,P43,arousal,eeg,knn,all,all,9,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5065365420135416
+general,COHORT,P45,arousal,eeg,knn,all,all,10,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.48595620066245726
+general,COHORT,P10,arousal,eeg,knn,5,5,1,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.48780173925681625
+general,COHORT,P11,arousal,eeg,knn,5,5,2,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5350998007150654
+general,COHORT,P19,arousal,eeg,knn,5,5,3,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""distance""}",0.5158496752995125
+general,COHORT,P22,arousal,eeg,knn,5,5,4,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.5160213968892652
+general,COHORT,P25,arousal,eeg,knn,5,5,5,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4940253210521258
+general,COHORT,P32,arousal,eeg,knn,5,5,6,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5324961283166849
+general,COHORT,P40,arousal,eeg,knn,5,5,7,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""distance""}",0.524061800850754
+general,COHORT,P42,arousal,eeg,knn,5,5,8,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.5338550098756886
+general,COHORT,P43,arousal,eeg,knn,5,5,9,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.5044831795234537
+general,COHORT,P45,arousal,eeg,knn,5,5,10,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.5184327525467505
+general,COHORT,P10,arousal,eeg,knn,10,10,1,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""distance""}",0.505672886334013
+general,COHORT,P11,arousal,eeg,knn,10,10,2,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""distance""}",0.5109447905957769
+general,COHORT,P19,arousal,eeg,knn,10,10,3,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5246711901163629
+general,COHORT,P22,arousal,eeg,knn,10,10,4,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.4824127015171005
+general,COHORT,P25,arousal,eeg,knn,10,10,5,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5187180580330748
+general,COHORT,P32,arousal,eeg,knn,10,10,6,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.49785657148416096
+general,COHORT,P40,arousal,eeg,knn,10,10,7,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""distance""}",0.5124723666451306
+general,COHORT,P42,arousal,eeg,knn,10,10,8,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5009379261773061
+general,COHORT,P43,arousal,eeg,knn,10,10,9,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.5321118988118357
+general,COHORT,P45,arousal,eeg,knn,10,10,10,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""distance""}",0.5087034055369156
+general,COHORT,P10,arousal,eeg,knn,20,20,1,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5085304946544214
+general,COHORT,P11,arousal,eeg,knn,20,20,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5068895297880796
+general,COHORT,P19,arousal,eeg,knn,20,20,3,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5038129094613051
+general,COHORT,P22,arousal,eeg,knn,20,20,4,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.5031449819310858
+general,COHORT,P25,arousal,eeg,knn,20,20,5,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.48533550128192565
+general,COHORT,P32,arousal,eeg,knn,20,20,6,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.4940809187476294
+general,COHORT,P40,arousal,eeg,knn,20,20,7,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5014825149223124
+general,COHORT,P42,arousal,eeg,knn,20,20,8,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5164102822085793
+general,COHORT,P43,arousal,eeg,knn,20,20,9,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5103441221629111
+general,COHORT,P45,arousal,eeg,knn,20,20,10,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.5070914027600135
+general,COHORT,P10,arousal,eeg,svm,all,all,1,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",0.5061757501346511
+general,COHORT,P11,arousal,eeg,svm,all,all,2,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5068120516503354
+general,COHORT,P19,arousal,eeg,svm,all,all,3,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5114787057474806
+general,COHORT,P22,arousal,eeg,svm,all,all,4,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P25,arousal,eeg,svm,all,all,5,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P32,arousal,eeg,svm,all,all,6,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5022779215589523
+general,COHORT,P40,arousal,eeg,svm,all,all,7,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P42,arousal,eeg,svm,all,all,8,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5079643467610531
+general,COHORT,P43,arousal,eeg,svm,all,all,9,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5269592476489028
+general,COHORT,P45,arousal,eeg,svm,all,all,10,"{""classifier__C"": 1, ""classifier__kernel"": ""linear""}",0.5238025882384314
+general,COHORT,P10,arousal,eeg,svm,5,5,1,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P11,arousal,eeg,svm,5,5,2,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5318181818181819
+general,COHORT,P19,arousal,eeg,svm,5,5,3,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5282412520344106
+general,COHORT,P22,arousal,eeg,svm,5,5,4,"{""classifier__C"": 10, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5061644682098982
+general,COHORT,P25,arousal,eeg,svm,5,5,5,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5007758308526254
+general,COHORT,P32,arousal,eeg,svm,5,5,6,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5207383274202438
+general,COHORT,P40,arousal,eeg,svm,5,5,7,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.50031237785812
+general,COHORT,P42,arousal,eeg,svm,5,5,8,"{""classifier__C"": 10, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5281614284811216
+general,COHORT,P43,arousal,eeg,svm,5,5,9,"{""classifier__C"": 10, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5281779864498978
+general,COHORT,P45,arousal,eeg,svm,5,5,10,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5246031746031746
+general,COHORT,P10,arousal,eeg,svm,10,10,1,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P11,arousal,eeg,svm,10,10,2,"{""classifier__C"": 1, ""classifier__kernel"": ""linear""}",0.5166118096016957
+general,COHORT,P19,arousal,eeg,svm,10,10,3,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5202557532175643
+general,COHORT,P22,arousal,eeg,svm,10,10,4,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P25,arousal,eeg,svm,10,10,5,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.506817729820666
+general,COHORT,P32,arousal,eeg,svm,10,10,6,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",0.5144362810820738
+general,COHORT,P40,arousal,eeg,svm,10,10,7,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.49356964720463187
+general,COHORT,P42,arousal,eeg,svm,10,10,8,"{""classifier__C"": 1, ""classifier__kernel"": ""linear""}",0.5161443662402742
+general,COHORT,P43,arousal,eeg,svm,10,10,9,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5306317881959177
+general,COHORT,P45,arousal,eeg,svm,10,10,10,"{""classifier__C"": 1, ""classifier__kernel"": ""linear""}",0.516515873015873
+general,COHORT,P10,arousal,eeg,svm,20,20,1,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P11,arousal,eeg,svm,20,20,2,"{""classifier__C"": 1, ""classifier__kernel"": ""linear""}",0.5246291558003766
+general,COHORT,P19,arousal,eeg,svm,20,20,3,"{""classifier__C"": 10, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.527990338248127
+general,COHORT,P22,arousal,eeg,svm,20,20,4,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P25,arousal,eeg,svm,20,20,5,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.508414218280399
+general,COHORT,P32,arousal,eeg,svm,20,20,6,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5112235729039961
+general,COHORT,P40,arousal,eeg,svm,20,20,7,"{""classifier__C"": 10, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5077226039992503
+general,COHORT,P42,arousal,eeg,svm,20,20,8,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5015658644315621
+general,COHORT,P43,arousal,eeg,svm,20,20,9,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5217345872518286
+general,COHORT,P45,arousal,eeg,svm,20,20,10,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5154366121683195
+general,COHORT,P10,arousal,eeg,gnb,all,all,1,"{""classifier__var_smoothing"": 1e-11}",0.5048401999178577
+general,COHORT,P11,arousal,eeg,gnb,all,all,2,"{""classifier__var_smoothing"": 1e-11}",0.5070137454107202
+general,COHORT,P19,arousal,eeg,gnb,all,all,3,"{""classifier__var_smoothing"": 1e-11}",0.5053292341909814
+general,COHORT,P22,arousal,eeg,gnb,all,all,4,"{""classifier__var_smoothing"": 1e-11}",0.4596902133068654
+general,COHORT,P25,arousal,eeg,gnb,all,all,5,"{""classifier__var_smoothing"": 1e-11}",0.4923544913841057
+general,COHORT,P32,arousal,eeg,gnb,all,all,6,"{""classifier__var_smoothing"": 1e-11}",0.4989790698703856
+general,COHORT,P40,arousal,eeg,gnb,all,all,7,"{""classifier__var_smoothing"": 1e-11}",0.45608122309991517
+general,COHORT,P42,arousal,eeg,gnb,all,all,8,"{""classifier__var_smoothing"": 1e-11}",0.47781840164489414
+general,COHORT,P43,arousal,eeg,gnb,all,all,9,"{""classifier__var_smoothing"": 1e-11}",0.48598428022086654
+general,COHORT,P45,arousal,eeg,gnb,all,all,10,"{""classifier__var_smoothing"": 1e-11}",0.48268118890335215
+general,COHORT,P10,arousal,eeg,gnb,5,5,1,"{""classifier__var_smoothing"": 1e-11}",0.5075097609573748
+general,COHORT,P11,arousal,eeg,gnb,5,5,2,"{""classifier__var_smoothing"": 1e-11}",0.502789524811293
+general,COHORT,P19,arousal,eeg,gnb,5,5,3,"{""classifier__var_smoothing"": 1e-11}",0.5178711239256752
+general,COHORT,P22,arousal,eeg,gnb,5,5,4,"{""classifier__var_smoothing"": 1e-11}",0.4931414214982528
+general,COHORT,P25,arousal,eeg,gnb,5,5,5,"{""classifier__var_smoothing"": 1e-11}",0.47828996175782834
+general,COHORT,P32,arousal,eeg,gnb,5,5,6,"{""classifier__var_smoothing"": 1e-11}",0.4987729980051646
+general,COHORT,P40,arousal,eeg,gnb,5,5,7,"{""classifier__var_smoothing"": 1e-11}",0.472993696230583
+general,COHORT,P42,arousal,eeg,gnb,5,5,8,"{""classifier__var_smoothing"": 1e-11}",0.5045566911974185
+general,COHORT,P43,arousal,eeg,gnb,5,5,9,"{""classifier__var_smoothing"": 1e-11}",0.4913413972405598
+general,COHORT,P45,arousal,eeg,gnb,5,5,10,"{""classifier__var_smoothing"": 1e-11}",0.5161420032188856
+general,COHORT,P10,arousal,eeg,gnb,10,10,1,"{""classifier__var_smoothing"": 1e-11}",0.49119069357955414
+general,COHORT,P11,arousal,eeg,gnb,10,10,2,"{""classifier__var_smoothing"": 1e-11}",0.4997988725260294
+general,COHORT,P19,arousal,eeg,gnb,10,10,3,"{""classifier__var_smoothing"": 1e-11}",0.49447372238510934
+general,COHORT,P22,arousal,eeg,gnb,10,10,4,"{""classifier__var_smoothing"": 1e-11}",0.48190010372248526
+general,COHORT,P25,arousal,eeg,gnb,10,10,5,"{""classifier__var_smoothing"": 1e-11}",0.4952315090758386
+general,COHORT,P32,arousal,eeg,gnb,10,10,6,"{""classifier__var_smoothing"": 1e-11}",0.4809234539160866
+general,COHORT,P40,arousal,eeg,gnb,10,10,7,"{""classifier__var_smoothing"": 1e-11}",0.4757982116380071
+general,COHORT,P42,arousal,eeg,gnb,10,10,8,"{""classifier__var_smoothing"": 1e-11}",0.49847222929064355
+general,COHORT,P43,arousal,eeg,gnb,10,10,9,"{""classifier__var_smoothing"": 1e-11}",0.480020591141226
+general,COHORT,P45,arousal,eeg,gnb,10,10,10,"{""classifier__var_smoothing"": 1e-11}",0.5035007244434604
+general,COHORT,P10,arousal,eeg,gnb,20,20,1,"{""classifier__var_smoothing"": 1e-11}",0.4854517012728149
+general,COHORT,P11,arousal,eeg,gnb,20,20,2,"{""classifier__var_smoothing"": 1e-11}",0.4955358985764864
+general,COHORT,P19,arousal,eeg,gnb,20,20,3,"{""classifier__var_smoothing"": 1e-11}",0.5198279592559266
+general,COHORT,P22,arousal,eeg,gnb,20,20,4,"{""classifier__var_smoothing"": 1e-11}",0.4968317929515223
+general,COHORT,P25,arousal,eeg,gnb,20,20,5,"{""classifier__var_smoothing"": 1e-11}",0.47906578621951496
+general,COHORT,P32,arousal,eeg,gnb,20,20,6,"{""classifier__var_smoothing"": 1e-11}",0.4927375731482232
+general,COHORT,P40,arousal,eeg,gnb,20,20,7,"{""classifier__var_smoothing"": 1e-11}",0.4645091871295266
+general,COHORT,P42,arousal,eeg,gnb,20,20,8,"{""classifier__var_smoothing"": 1e-11}",0.4859306875322719
+general,COHORT,P43,arousal,eeg,gnb,20,20,9,"{""classifier__var_smoothing"": 1e-11}",0.477868552813268
+general,COHORT,P45,arousal,eeg,gnb,20,20,10,"{""classifier__var_smoothing"": 1e-11}",0.5090308115324023
+general,COHORT,P10,arousal,face,knn,all,all,1,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5070383576104545
+general,COHORT,P11,arousal,face,knn,all,all,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5014534081760555
+general,COHORT,P19,arousal,face,knn,all,all,3,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4886242210232997
+general,COHORT,P22,arousal,face,knn,all,all,4,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5025854620544281
+general,COHORT,P25,arousal,face,knn,all,all,5,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5167250686681475
+general,COHORT,P32,arousal,face,knn,all,all,6,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5163528706333274
+general,COHORT,P40,arousal,face,knn,all,all,7,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.49843164250620725
+general,COHORT,P42,arousal,face,knn,all,all,8,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4876520495150025
+general,COHORT,P43,arousal,face,knn,all,all,9,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.49339148626392876
+general,COHORT,P45,arousal,face,knn,all,all,10,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.47691385787568186
+general,COHORT,P10,arousal,face,knn,5,5,1,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5205069345938942
+general,COHORT,P11,arousal,face,knn,5,5,2,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.5303077308611484
+general,COHORT,P19,arousal,face,knn,5,5,3,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""distance""}",0.49883123456892636
+general,COHORT,P22,arousal,face,knn,5,5,4,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""distance""}",0.5190147551073144
+general,COHORT,P25,arousal,face,knn,5,5,5,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5483138709320624
+general,COHORT,P32,arousal,face,knn,5,5,6,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.5089501022761189
+general,COHORT,P40,arousal,face,knn,5,5,7,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5077393676379703
+general,COHORT,P42,arousal,face,knn,5,5,8,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.5131505464212408
+general,COHORT,P43,arousal,face,knn,5,5,9,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""distance""}",0.4907092332097912
+general,COHORT,P45,arousal,face,knn,5,5,10,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.5096722086250189
+general,COHORT,P10,arousal,face,knn,10,10,1,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5070383576104545
+general,COHORT,P11,arousal,face,knn,10,10,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5014534081760555
+general,COHORT,P19,arousal,face,knn,10,10,3,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4886242210232997
+general,COHORT,P22,arousal,face,knn,10,10,4,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5025854620544281
+general,COHORT,P25,arousal,face,knn,10,10,5,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5167250686681475
+general,COHORT,P32,arousal,face,knn,10,10,6,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5163528706333274
+general,COHORT,P40,arousal,face,knn,10,10,7,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.49843164250620725
+general,COHORT,P42,arousal,face,knn,10,10,8,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4876520495150025
+general,COHORT,P43,arousal,face,knn,10,10,9,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.49339148626392876
+general,COHORT,P45,arousal,face,knn,10,10,10,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.47691385787568186
+general,COHORT,P10,arousal,face,knn,20,10,1,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5070383576104545
+general,COHORT,P11,arousal,face,knn,20,10,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5014534081760555
+general,COHORT,P19,arousal,face,knn,20,10,3,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4886242210232997
+general,COHORT,P22,arousal,face,knn,20,10,4,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5025854620544281
+general,COHORT,P25,arousal,face,knn,20,10,5,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5167250686681475
+general,COHORT,P32,arousal,face,knn,20,10,6,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5163528706333274
+general,COHORT,P40,arousal,face,knn,20,10,7,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.49843164250620725
+general,COHORT,P42,arousal,face,knn,20,10,8,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4876520495150025
+general,COHORT,P43,arousal,face,knn,20,10,9,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.49339148626392876
+general,COHORT,P45,arousal,face,knn,20,10,10,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.47691385787568186
+general,COHORT,P10,arousal,face,svm,all,all,1,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P11,arousal,face,svm,all,all,2,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5125408526837386
+general,COHORT,P19,arousal,face,svm,all,all,3,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",0.5114327821049368
+general,COHORT,P22,arousal,face,svm,all,all,4,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P25,arousal,face,svm,all,all,5,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P32,arousal,face,svm,all,all,6,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5034829495773827
+general,COHORT,P40,arousal,face,svm,all,all,7,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5089933967104782
+general,COHORT,P42,arousal,face,svm,all,all,8,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P43,arousal,face,svm,all,all,9,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.49801462904911176
+general,COHORT,P45,arousal,face,svm,all,all,10,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P10,arousal,face,svm,5,5,1,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5070440223760143
+general,COHORT,P11,arousal,face,svm,5,5,2,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P19,arousal,face,svm,5,5,3,"{""classifier__C"": 1, ""classifier__kernel"": ""linear""}",0.5157670454545455
+general,COHORT,P22,arousal,face,svm,5,5,4,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5
+general,COHORT,P25,arousal,face,svm,5,5,5,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5302309029113159
+general,COHORT,P32,arousal,face,svm,5,5,6,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5037577937712634
+general,COHORT,P40,arousal,face,svm,5,5,7,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5080920819040603
+general,COHORT,P42,arousal,face,svm,5,5,8,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5101902768501858
+general,COHORT,P43,arousal,face,svm,5,5,9,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.4997387669801463
+general,COHORT,P45,arousal,face,svm,5,5,10,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5063173819992484
+general,COHORT,P10,arousal,face,svm,10,10,1,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P11,arousal,face,svm,10,10,2,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5125408526837386
+general,COHORT,P19,arousal,face,svm,10,10,3,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",0.5114327821049368
+general,COHORT,P22,arousal,face,svm,10,10,4,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P25,arousal,face,svm,10,10,5,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P32,arousal,face,svm,10,10,6,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5034829495773827
+general,COHORT,P40,arousal,face,svm,10,10,7,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5089933967104782
+general,COHORT,P42,arousal,face,svm,10,10,8,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P43,arousal,face,svm,10,10,9,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.49801462904911176
+general,COHORT,P45,arousal,face,svm,10,10,10,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P10,arousal,face,svm,20,10,1,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P11,arousal,face,svm,20,10,2,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5125408526837386
+general,COHORT,P19,arousal,face,svm,20,10,3,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",0.5114327821049368
+general,COHORT,P22,arousal,face,svm,20,10,4,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P25,arousal,face,svm,20,10,5,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P32,arousal,face,svm,20,10,6,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5034829495773827
+general,COHORT,P40,arousal,face,svm,20,10,7,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5089933967104782
+general,COHORT,P42,arousal,face,svm,20,10,8,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P43,arousal,face,svm,20,10,9,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.49801462904911176
+general,COHORT,P45,arousal,face,svm,20,10,10,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P10,arousal,face,gnb,all,all,1,"{""classifier__var_smoothing"": 1e-11}",0.49120535398202136
+general,COHORT,P11,arousal,face,gnb,all,all,2,"{""classifier__var_smoothing"": 1e-11}",0.49041041856071865
+general,COHORT,P19,arousal,face,gnb,all,all,3,"{""classifier__var_smoothing"": 1e-11}",0.4911890614132825
+general,COHORT,P22,arousal,face,gnb,all,all,4,"{""classifier__var_smoothing"": 1e-11}",0.4639043220709045
+general,COHORT,P25,arousal,face,gnb,all,all,5,"{""classifier__var_smoothing"": 1e-11}",0.5199710221740513
+general,COHORT,P32,arousal,face,gnb,all,all,6,"{""classifier__var_smoothing"": 1e-11}",0.5116166849199695
+general,COHORT,P40,arousal,face,gnb,all,all,7,"{""classifier__var_smoothing"": 1e-11}",0.49510229302262704
+general,COHORT,P42,arousal,face,gnb,all,all,8,"{""classifier__var_smoothing"": 1e-11}",0.48571318608200276
+general,COHORT,P43,arousal,face,gnb,all,all,9,"{""classifier__var_smoothing"": 1e-11}",0.48865482888771233
+general,COHORT,P45,arousal,face,gnb,all,all,10,"{""classifier__var_smoothing"": 1e-11}",0.47144148754700177
+general,COHORT,P10,arousal,face,gnb,5,5,1,"{""classifier__var_smoothing"": 1e-11}",0.4916716212250596
+general,COHORT,P11,arousal,face,gnb,5,5,2,"{""classifier__var_smoothing"": 1e-11}",0.48804203978834204
+general,COHORT,P19,arousal,face,gnb,5,5,3,"{""classifier__var_smoothing"": 1e-11}",0.5065226874526311
+general,COHORT,P22,arousal,face,gnb,5,5,4,"{""classifier__var_smoothing"": 1e-11}",0.46295234158139875
+general,COHORT,P25,arousal,face,gnb,5,5,5,"{""classifier__var_smoothing"": 1e-11}",0.5201899415065474
+general,COHORT,P32,arousal,face,gnb,5,5,6,"{""classifier__var_smoothing"": 1e-11}",0.5087303498394589
+general,COHORT,P40,arousal,face,gnb,5,5,7,"{""classifier__var_smoothing"": 1e-11}",0.4895971808854034
+general,COHORT,P42,arousal,face,gnb,5,5,8,"{""classifier__var_smoothing"": 1e-11}",0.4958778875463737
+general,COHORT,P43,arousal,face,gnb,5,5,9,"{""classifier__var_smoothing"": 1e-11}",0.4880605453124039
+general,COHORT,P45,arousal,face,gnb,5,5,10,"{""classifier__var_smoothing"": 1e-11}",0.4802045890937725
+general,COHORT,P10,arousal,face,gnb,10,10,1,"{""classifier__var_smoothing"": 1e-11}",0.49120535398202136
+general,COHORT,P11,arousal,face,gnb,10,10,2,"{""classifier__var_smoothing"": 1e-11}",0.49041041856071865
+general,COHORT,P19,arousal,face,gnb,10,10,3,"{""classifier__var_smoothing"": 1e-11}",0.4911890614132825
+general,COHORT,P22,arousal,face,gnb,10,10,4,"{""classifier__var_smoothing"": 1e-11}",0.4639043220709045
+general,COHORT,P25,arousal,face,gnb,10,10,5,"{""classifier__var_smoothing"": 1e-11}",0.5199710221740513
+general,COHORT,P32,arousal,face,gnb,10,10,6,"{""classifier__var_smoothing"": 1e-11}",0.5116166849199695
+general,COHORT,P40,arousal,face,gnb,10,10,7,"{""classifier__var_smoothing"": 1e-11}",0.49510229302262704
+general,COHORT,P42,arousal,face,gnb,10,10,8,"{""classifier__var_smoothing"": 1e-11}",0.48571318608200276
+general,COHORT,P43,arousal,face,gnb,10,10,9,"{""classifier__var_smoothing"": 1e-11}",0.48865482888771233
+general,COHORT,P45,arousal,face,gnb,10,10,10,"{""classifier__var_smoothing"": 1e-11}",0.47144148754700177
+general,COHORT,P10,arousal,face,gnb,20,10,1,"{""classifier__var_smoothing"": 1e-11}",0.49120535398202136
+general,COHORT,P11,arousal,face,gnb,20,10,2,"{""classifier__var_smoothing"": 1e-11}",0.49041041856071865
+general,COHORT,P19,arousal,face,gnb,20,10,3,"{""classifier__var_smoothing"": 1e-11}",0.4911890614132825
+general,COHORT,P22,arousal,face,gnb,20,10,4,"{""classifier__var_smoothing"": 1e-11}",0.4639043220709045
+general,COHORT,P25,arousal,face,gnb,20,10,5,"{""classifier__var_smoothing"": 1e-11}",0.5199710221740513
+general,COHORT,P32,arousal,face,gnb,20,10,6,"{""classifier__var_smoothing"": 1e-11}",0.5116166849199695
+general,COHORT,P40,arousal,face,gnb,20,10,7,"{""classifier__var_smoothing"": 1e-11}",0.49510229302262704
+general,COHORT,P42,arousal,face,gnb,20,10,8,"{""classifier__var_smoothing"": 1e-11}",0.48571318608200276
+general,COHORT,P43,arousal,face,gnb,20,10,9,"{""classifier__var_smoothing"": 1e-11}",0.48865482888771233
+general,COHORT,P45,arousal,face,gnb,20,10,10,"{""classifier__var_smoothing"": 1e-11}",0.47144148754700177
+general,COHORT,P10,arousal,multimodal,knn,all,all,1,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5101396033898423
+general,COHORT,P11,arousal,multimodal,knn,all,all,2,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.5087745152446782
+general,COHORT,P19,arousal,multimodal,knn,all,all,3,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5164231523097921
+general,COHORT,P22,arousal,multimodal,knn,all,all,4,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.48407619112875466
+general,COHORT,P25,arousal,multimodal,knn,all,all,5,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5107736079129386
+general,COHORT,P32,arousal,multimodal,knn,all,all,6,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.5103408553341724
+general,COHORT,P40,arousal,multimodal,knn,all,all,7,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4785462169825253
+general,COHORT,P42,arousal,multimodal,knn,all,all,8,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.5016191040284983
+general,COHORT,P43,arousal,multimodal,knn,all,all,9,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5165639613660872
+general,COHORT,P45,arousal,multimodal,knn,all,all,10,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.4969824722756854
+general,COHORT,P10,arousal,multimodal,knn,5,5,1,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.46585431658944076
+general,COHORT,P11,arousal,multimodal,knn,5,5,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5194005675902322
+general,COHORT,P19,arousal,multimodal,knn,5,5,3,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""distance""}",0.5058213206231109
+general,COHORT,P22,arousal,multimodal,knn,5,5,4,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.49117954260274355
+general,COHORT,P25,arousal,multimodal,knn,5,5,5,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.5318737952558722
+general,COHORT,P32,arousal,multimodal,knn,5,5,6,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5198538642090905
+general,COHORT,P40,arousal,multimodal,knn,5,5,7,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""distance""}",0.5377169263248007
+general,COHORT,P42,arousal,multimodal,knn,5,5,8,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5323446821107604
+general,COHORT,P43,arousal,multimodal,knn,5,5,9,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""distance""}",0.5074092169007107
+general,COHORT,P45,arousal,multimodal,knn,5,5,10,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5318398150577366
+general,COHORT,P10,arousal,multimodal,knn,10,10,1,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.4713663166959308
+general,COHORT,P11,arousal,multimodal,knn,10,10,2,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5087433024261742
+general,COHORT,P19,arousal,multimodal,knn,10,10,3,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5110590550898764
+general,COHORT,P22,arousal,multimodal,knn,10,10,4,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.4998278866547311
+general,COHORT,P25,arousal,multimodal,knn,10,10,5,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5159008326742912
+general,COHORT,P32,arousal,multimodal,knn,10,10,6,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5116920329107367
+general,COHORT,P40,arousal,multimodal,knn,10,10,7,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5308613766817507
+general,COHORT,P42,arousal,multimodal,knn,10,10,8,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""distance""}",0.5282125021099509
+general,COHORT,P43,arousal,multimodal,knn,10,10,9,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.5104312982412852
+general,COHORT,P45,arousal,multimodal,knn,10,10,10,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.49925467094820225
+general,COHORT,P10,arousal,multimodal,knn,20,20,1,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""distance""}",0.5254935160602778
+general,COHORT,P11,arousal,multimodal,knn,20,20,2,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5334958023518397
+general,COHORT,P19,arousal,multimodal,knn,20,20,3,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.4915857368818889
+general,COHORT,P22,arousal,multimodal,knn,20,20,4,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.5094212960537011
+general,COHORT,P25,arousal,multimodal,knn,20,20,5,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.5321202968390958
+general,COHORT,P32,arousal,multimodal,knn,20,20,6,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}",0.47809792703547627
+general,COHORT,P40,arousal,multimodal,knn,20,20,7,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5116432732379468
+general,COHORT,P42,arousal,multimodal,knn,20,20,8,"{""classifier__n_neighbors"": 3, ""classifier__weights"": ""uniform""}",0.5174982664947421
+general,COHORT,P43,arousal,multimodal,knn,20,20,9,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}",0.5109777059608724
+general,COHORT,P45,arousal,multimodal,knn,20,20,10,"{""classifier__n_neighbors"": 11, ""classifier__weights"": ""uniform""}",0.4984454355302711
+general,COHORT,P10,arousal,multimodal,svm,all,all,1,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5128855945905968
+general,COHORT,P11,arousal,multimodal,svm,all,all,2,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5321948469878969
+general,COHORT,P19,arousal,multimodal,svm,all,all,3,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5359008456958062
+general,COHORT,P22,arousal,multimodal,svm,all,all,4,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P25,arousal,multimodal,svm,all,all,5,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5240903507769301
+general,COHORT,P32,arousal,multimodal,svm,all,all,6,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.502791767007029
+general,COHORT,P40,arousal,multimodal,svm,all,all,7,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P42,arousal,multimodal,svm,all,all,8,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5134758689847269
+general,COHORT,P43,arousal,multimodal,svm,all,all,9,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5209924358658522
+general,COHORT,P45,arousal,multimodal,svm,all,all,10,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5130959259692027
+general,COHORT,P10,arousal,multimodal,svm,5,5,1,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5046361741879851
+general,COHORT,P11,arousal,multimodal,svm,5,5,2,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",0.5383374406732748
+general,COHORT,P19,arousal,multimodal,svm,5,5,3,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5118040620398357
+general,COHORT,P22,arousal,multimodal,svm,5,5,4,"{""classifier__C"": 1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.503807012622721
+general,COHORT,P25,arousal,multimodal,svm,5,5,5,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5132594604042477
+general,COHORT,P32,arousal,multimodal,svm,5,5,6,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5197526805900906
+general,COHORT,P40,arousal,multimodal,svm,5,5,7,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.4982558139534884
+general,COHORT,P42,arousal,multimodal,svm,5,5,8,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5081268225449811
+general,COHORT,P43,arousal,multimodal,svm,5,5,9,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5031870428422153
+general,COHORT,P45,arousal,multimodal,svm,5,5,10,"{""classifier__C"": 10, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5302442447749977
+general,COHORT,P10,arousal,multimodal,svm,10,10,1,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P11,arousal,multimodal,svm,10,10,2,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",0.5256861566759155
+general,COHORT,P19,arousal,multimodal,svm,10,10,3,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5189346712004961
+general,COHORT,P22,arousal,multimodal,svm,10,10,4,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5065040713762936
+general,COHORT,P25,arousal,multimodal,svm,10,10,5,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}",0.5172754205524994
+general,COHORT,P32,arousal,multimodal,svm,10,10,6,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5063939420607659
+general,COHORT,P40,arousal,multimodal,svm,10,10,7,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5114099271709357
+general,COHORT,P42,arousal,multimodal,svm,10,10,8,"{""classifier__C"": 1, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.503693166832553
+general,COHORT,P43,arousal,multimodal,svm,10,10,9,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5311695876172481
+general,COHORT,P45,arousal,multimodal,svm,10,10,10,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5013888888888889
+general,COHORT,P10,arousal,multimodal,svm,20,20,1,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5161243987959413
+general,COHORT,P11,arousal,multimodal,svm,20,20,2,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5290837855230462
+general,COHORT,P19,arousal,multimodal,svm,20,20,3,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5208243722390142
+general,COHORT,P22,arousal,multimodal,svm,20,20,4,"{""classifier__C"": 0.1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5
+general,COHORT,P25,arousal,multimodal,svm,20,20,5,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5294255572643201
+general,COHORT,P32,arousal,multimodal,svm,20,20,6,"{""classifier__C"": 0.1, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}",0.5089041095890411
+general,COHORT,P40,arousal,multimodal,svm,20,20,7,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5029172134175607
+general,COHORT,P42,arousal,multimodal,svm,20,20,8,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}",0.5105692059406737
+general,COHORT,P43,arousal,multimodal,svm,20,20,9,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5217958334615791
+general,COHORT,P45,arousal,multimodal,svm,20,20,10,"{""classifier__C"": 1, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}",0.5035689380312922
+general,COHORT,P10,arousal,multimodal,gnb,all,all,1,"{""classifier__var_smoothing"": 1e-11}",0.5105592825806525
+general,COHORT,P11,arousal,multimodal,gnb,all,all,2,"{""classifier__var_smoothing"": 1e-11}",0.49994281830910314
+general,COHORT,P19,arousal,multimodal,gnb,all,all,3,"{""classifier__var_smoothing"": 1e-11}",0.5170234638501466
+general,COHORT,P22,arousal,multimodal,gnb,all,all,4,"{""classifier__var_smoothing"": 1e-11}",0.46114154633980886
+general,COHORT,P25,arousal,multimodal,gnb,all,all,5,"{""classifier__var_smoothing"": 1e-11}",0.49530726183888396
+general,COHORT,P32,arousal,multimodal,gnb,all,all,6,"{""classifier__var_smoothing"": 1e-11}",0.4874836766125898
+general,COHORT,P40,arousal,multimodal,gnb,all,all,7,"{""classifier__var_smoothing"": 1e-11}",0.44802160673437863
+general,COHORT,P42,arousal,multimodal,gnb,all,all,8,"{""classifier__var_smoothing"": 1e-11}",0.47218376223896785
+general,COHORT,P43,arousal,multimodal,gnb,all,all,9,"{""classifier__var_smoothing"": 1e-11}",0.48810083751199507
+general,COHORT,P45,arousal,multimodal,gnb,all,all,10,"{""classifier__var_smoothing"": 1e-11}",0.48100762804686453
+general,COHORT,P10,arousal,multimodal,gnb,5,5,1,"{""classifier__var_smoothing"": 1e-11}",0.51082388907444
+general,COHORT,P11,arousal,multimodal,gnb,5,5,2,"{""classifier__var_smoothing"": 1e-11}",0.518897603686457
+general,COHORT,P19,arousal,multimodal,gnb,5,5,3,"{""classifier__var_smoothing"": 1e-11}",0.5186870867642781
+general,COHORT,P22,arousal,multimodal,gnb,5,5,4,"{""classifier__var_smoothing"": 1e-11}",0.4915963374078075
+general,COHORT,P25,arousal,multimodal,gnb,5,5,5,"{""classifier__var_smoothing"": 1e-11}",0.5122706781659834
+general,COHORT,P32,arousal,multimodal,gnb,5,5,6,"{""classifier__var_smoothing"": 1e-11}",0.49558049040817875
+general,COHORT,P40,arousal,multimodal,gnb,5,5,7,"{""classifier__var_smoothing"": 1e-11}",0.48373635298189777
+general,COHORT,P42,arousal,multimodal,gnb,5,5,8,"{""classifier__var_smoothing"": 1e-11}",0.5128829044149361
+general,COHORT,P43,arousal,multimodal,gnb,5,5,9,"{""classifier__var_smoothing"": 1e-11}",0.5010372136298492
+general,COHORT,P45,arousal,multimodal,gnb,5,5,10,"{""classifier__var_smoothing"": 1e-11}",0.5167179642731075
+general,COHORT,P10,arousal,multimodal,gnb,10,10,1,"{""classifier__var_smoothing"": 1e-11}",0.49922526569729164
+general,COHORT,P11,arousal,multimodal,gnb,10,10,2,"{""classifier__var_smoothing"": 1e-11}",0.5112807658548008
+general,COHORT,P19,arousal,multimodal,gnb,10,10,3,"{""classifier__var_smoothing"": 1e-11}",0.5172234167202634
+general,COHORT,P22,arousal,multimodal,gnb,10,10,4,"{""classifier__var_smoothing"": 1e-11}",0.49934407077089027
+general,COHORT,P25,arousal,multimodal,gnb,10,10,5,"{""classifier__var_smoothing"": 1e-11}",0.5131397965041105
+general,COHORT,P32,arousal,multimodal,gnb,10,10,6,"{""classifier__var_smoothing"": 1e-11}",0.5018952094332967
+general,COHORT,P40,arousal,multimodal,gnb,10,10,7,"{""classifier__var_smoothing"": 1e-11}",0.4622145112030263
+general,COHORT,P42,arousal,multimodal,gnb,10,10,8,"{""classifier__var_smoothing"": 1e-11}",0.5049464063850253
+general,COHORT,P43,arousal,multimodal,gnb,10,10,9,"{""classifier__var_smoothing"": 1e-11}",0.4776165174980084
+general,COHORT,P45,arousal,multimodal,gnb,10,10,10,"{""classifier__var_smoothing"": 1e-11}",0.4883379627515364
+general,COHORT,P10,arousal,multimodal,gnb,20,20,1,"{""classifier__var_smoothing"": 1e-11}",0.5113929524482647
+general,COHORT,P11,arousal,multimodal,gnb,20,20,2,"{""classifier__var_smoothing"": 1e-11}",0.4978756702499404
+general,COHORT,P19,arousal,multimodal,gnb,20,20,3,"{""classifier__var_smoothing"": 1e-11}",0.5075106378789388
+general,COHORT,P22,arousal,multimodal,gnb,20,20,4,"{""classifier__var_smoothing"": 1e-11}",0.4960533851505103
+general,COHORT,P25,arousal,multimodal,gnb,20,20,5,"{""classifier__var_smoothing"": 1e-11}",0.5106770300800536
+general,COHORT,P32,arousal,multimodal,gnb,20,20,6,"{""classifier__var_smoothing"": 1e-11}",0.4958345738637938
+general,COHORT,P40,arousal,multimodal,gnb,20,20,7,"{""classifier__var_smoothing"": 1e-11}",0.4735251671807106
+general,COHORT,P42,arousal,multimodal,gnb,20,20,8,"{""classifier__var_smoothing"": 1e-11}",0.4847236064182917
+general,COHORT,P43,arousal,multimodal,gnb,20,20,9,"{""classifier__var_smoothing"": 1e-11}",0.4889791943736047
+general,COHORT,P45,arousal,multimodal,gnb,20,20,10,"{""classifier__var_smoothing"": 1e-11}",0.49393891987847455
