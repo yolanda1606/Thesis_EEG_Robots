@@ -1,0 +1,721 @@
+mode,participant,held_out_participant,target,modality,regressor,feature_count_request,feature_count_resolved,fold,best_parameters,inner_best_rmse
+general,COHORT,P10,valence,eeg,knn,all,all,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.836244925293676
+general,COHORT,P11,valence,eeg,knn,all,all,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8002802031248866
+general,COHORT,P19,valence,eeg,knn,all,all,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.878486097182226
+general,COHORT,P22,valence,eeg,knn,all,all,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7986571392530142
+general,COHORT,P25,valence,eeg,knn,all,all,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8306731058842374
+general,COHORT,P32,valence,eeg,knn,all,all,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8999852498169971
+general,COHORT,P40,valence,eeg,knn,all,all,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8231078139267651
+general,COHORT,P42,valence,eeg,knn,all,all,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9042275681756156
+general,COHORT,P43,valence,eeg,knn,all,all,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.9324278289953303
+general,COHORT,P45,valence,eeg,knn,all,all,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9197218827436124
+general,COHORT,P10,valence,eeg,knn,5,5,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8359026453287157
+general,COHORT,P11,valence,eeg,knn,5,5,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8495572509622697
+general,COHORT,P19,valence,eeg,knn,5,5,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.888274837142204
+general,COHORT,P22,valence,eeg,knn,5,5,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8112065813804386
+general,COHORT,P25,valence,eeg,knn,5,5,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8933387686798415
+general,COHORT,P32,valence,eeg,knn,5,5,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9223582865574027
+general,COHORT,P40,valence,eeg,knn,5,5,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8211902221551295
+general,COHORT,P42,valence,eeg,knn,5,5,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8915222990337128
+general,COHORT,P43,valence,eeg,knn,5,5,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8904680599553694
+general,COHORT,P45,valence,eeg,knn,5,5,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.891999271540588
+general,COHORT,P10,valence,eeg,knn,10,10,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8366526540301855
+general,COHORT,P11,valence,eeg,knn,10,10,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8477738310047367
+general,COHORT,P19,valence,eeg,knn,10,10,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8998561060220212
+general,COHORT,P22,valence,eeg,knn,10,10,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.805712873592387
+general,COHORT,P25,valence,eeg,knn,10,10,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8844655561817159
+general,COHORT,P32,valence,eeg,knn,10,10,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8942612590317949
+general,COHORT,P40,valence,eeg,knn,10,10,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.835916275311412
+general,COHORT,P42,valence,eeg,knn,10,10,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.934173706815057
+general,COHORT,P43,valence,eeg,knn,10,10,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9041426837622026
+general,COHORT,P45,valence,eeg,knn,10,10,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8945613464521582
+general,COHORT,P10,valence,eeg,knn,20,20,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8337660878338888
+general,COHORT,P11,valence,eeg,knn,20,20,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8205641955124723
+general,COHORT,P19,valence,eeg,knn,20,20,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8951155092796832
+general,COHORT,P22,valence,eeg,knn,20,20,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7919845443494409
+general,COHORT,P25,valence,eeg,knn,20,20,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8803713205556865
+general,COHORT,P32,valence,eeg,knn,20,20,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.885985352372478
+general,COHORT,P40,valence,eeg,knn,20,20,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8321769743480232
+general,COHORT,P42,valence,eeg,knn,20,20,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.9265699977769692
+general,COHORT,P43,valence,eeg,knn,20,20,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9552289322900627
+general,COHORT,P45,valence,eeg,knn,20,20,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8877081363167858
+general,COHORT,P10,valence,eeg,svr,all,all,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7312569008889926
+general,COHORT,P11,valence,eeg,svr,all,all,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7186263151501382
+general,COHORT,P19,valence,eeg,svr,all,all,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7796542433232165
+general,COHORT,P22,valence,eeg,svr,all,all,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7030830364885028
+general,COHORT,P25,valence,eeg,svr,all,all,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7540042564427154
+general,COHORT,P32,valence,eeg,svr,all,all,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": ""scale"", ""regressor__kernel"": ""rbf""}",1.817147945964356
+general,COHORT,P40,valence,eeg,svr,all,all,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7593956020414172
+general,COHORT,P42,valence,eeg,svr,all,all,8,"{""regressor__C"": 10, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.8224945688266943
+general,COHORT,P43,valence,eeg,svr,all,all,9,"{""regressor__C"": 10, ""regressor__epsilon"": 0.25, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.8320030542513308
+general,COHORT,P45,valence,eeg,svr,all,all,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": ""scale"", ""regressor__kernel"": ""rbf""}",1.8193426636413244
+general,COHORT,P10,valence,eeg,svr,5,5,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7369733349082601
+general,COHORT,P11,valence,eeg,svr,5,5,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7126208169609538
+general,COHORT,P19,valence,eeg,svr,5,5,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.776893305291387
+general,COHORT,P22,valence,eeg,svr,5,5,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7052611769884802
+general,COHORT,P25,valence,eeg,svr,5,5,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.760252079759022
+general,COHORT,P32,valence,eeg,svr,5,5,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__kernel"": ""linear""}",1.8113634843539157
+general,COHORT,P40,valence,eeg,svr,5,5,7,"{""regressor__C"": 1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7510057392516583
+general,COHORT,P42,valence,eeg,svr,5,5,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8197743973201361
+general,COHORT,P43,valence,eeg,svr,5,5,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8303417987066912
+general,COHORT,P45,valence,eeg,svr,5,5,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8151711964505868
+general,COHORT,P10,valence,eeg,svr,10,10,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.737904121232516
+general,COHORT,P11,valence,eeg,svr,10,10,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7119140857891175
+general,COHORT,P19,valence,eeg,svr,10,10,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7816011840003678
+general,COHORT,P22,valence,eeg,svr,10,10,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7042788446041013
+general,COHORT,P25,valence,eeg,svr,10,10,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": ""scale"", ""regressor__kernel"": ""rbf""}",1.7619460478772404
+general,COHORT,P32,valence,eeg,svr,10,10,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.810633319185301
+general,COHORT,P40,valence,eeg,svr,10,10,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.753920757201977
+general,COHORT,P42,valence,eeg,svr,10,10,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8191907476736386
+general,COHORT,P43,valence,eeg,svr,10,10,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8307315948971747
+general,COHORT,P45,valence,eeg,svr,10,10,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.814969618271301
+general,COHORT,P10,valence,eeg,svr,20,20,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7376579426296548
+general,COHORT,P11,valence,eeg,svr,20,20,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7133637085955065
+general,COHORT,P19,valence,eeg,svr,20,20,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7841731386363953
+general,COHORT,P22,valence,eeg,svr,20,20,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7037807928225817
+general,COHORT,P25,valence,eeg,svr,20,20,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7612589368952343
+general,COHORT,P32,valence,eeg,svr,20,20,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8134823491802254
+general,COHORT,P40,valence,eeg,svr,20,20,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": ""scale"", ""regressor__kernel"": ""rbf""}",1.7558473731002693
+general,COHORT,P42,valence,eeg,svr,20,20,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8235277361166673
+general,COHORT,P43,valence,eeg,svr,20,20,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.837210370676443
+general,COHORT,P45,valence,eeg,svr,20,20,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8155208732513366
+general,COHORT,P10,valence,eeg,ridge,all,all,1,"{""regressor__alpha"": 100}",1.8692540440147223
+general,COHORT,P11,valence,eeg,ridge,all,all,2,"{""regressor__alpha"": 100}",1.8993975227918187
+general,COHORT,P19,valence,eeg,ridge,all,all,3,"{""regressor__alpha"": 100}",1.9224127212396638
+general,COHORT,P22,valence,eeg,ridge,all,all,4,"{""regressor__alpha"": 100}",1.871256223876539
+general,COHORT,P25,valence,eeg,ridge,all,all,5,"{""regressor__alpha"": 100}",1.9669454348915842
+general,COHORT,P32,valence,eeg,ridge,all,all,6,"{""regressor__alpha"": 100}",1.9495577744125654
+general,COHORT,P40,valence,eeg,ridge,all,all,7,"{""regressor__alpha"": 100}",1.8845735694088996
+general,COHORT,P42,valence,eeg,ridge,all,all,8,"{""regressor__alpha"": 100}",1.9639618049645402
+general,COHORT,P43,valence,eeg,ridge,all,all,9,"{""regressor__alpha"": 100}",1.9659459863473796
+general,COHORT,P45,valence,eeg,ridge,all,all,10,"{""regressor__alpha"": 100}",1.941419606202658
+general,COHORT,P10,valence,eeg,ridge,5,5,1,"{""regressor__alpha"": 100}",1.7678744700673943
+general,COHORT,P11,valence,eeg,ridge,5,5,2,"{""regressor__alpha"": 100}",1.7246517689593381
+general,COHORT,P19,valence,eeg,ridge,5,5,3,"{""regressor__alpha"": 100}",1.7959087433734204
+general,COHORT,P22,valence,eeg,ridge,5,5,4,"{""regressor__alpha"": 100}",1.7441070474982419
+general,COHORT,P25,valence,eeg,ridge,5,5,5,"{""regressor__alpha"": 100}",1.816289514713733
+general,COHORT,P32,valence,eeg,ridge,5,5,6,"{""regressor__alpha"": 100}",1.8216150490840846
+general,COHORT,P40,valence,eeg,ridge,5,5,7,"{""regressor__alpha"": 100}",1.7599834944476307
+general,COHORT,P42,valence,eeg,ridge,5,5,8,"{""regressor__alpha"": 100}",1.8434052723216106
+general,COHORT,P43,valence,eeg,ridge,5,5,9,"{""regressor__alpha"": 100}",1.8526793701844397
+general,COHORT,P45,valence,eeg,ridge,5,5,10,"{""regressor__alpha"": 100}",1.8295853082724822
+general,COHORT,P10,valence,eeg,ridge,10,10,1,"{""regressor__alpha"": 100}",1.7702039190964303
+general,COHORT,P11,valence,eeg,ridge,10,10,2,"{""regressor__alpha"": 100}",1.7200468438875647
+general,COHORT,P19,valence,eeg,ridge,10,10,3,"{""regressor__alpha"": 100}",1.8208596800702792
+general,COHORT,P22,valence,eeg,ridge,10,10,4,"{""regressor__alpha"": 100}",1.7443890274374003
+general,COHORT,P25,valence,eeg,ridge,10,10,5,"{""regressor__alpha"": 100}",1.8155883288695964
+general,COHORT,P32,valence,eeg,ridge,10,10,6,"{""regressor__alpha"": 100}",1.8249181395992644
+general,COHORT,P40,valence,eeg,ridge,10,10,7,"{""regressor__alpha"": 100}",1.7681843544023237
+general,COHORT,P42,valence,eeg,ridge,10,10,8,"{""regressor__alpha"": 100}",1.8407612662809236
+general,COHORT,P43,valence,eeg,ridge,10,10,9,"{""regressor__alpha"": 100}",1.863649884207793
+general,COHORT,P45,valence,eeg,ridge,10,10,10,"{""regressor__alpha"": 100}",1.8273353250617557
+general,COHORT,P10,valence,eeg,ridge,20,20,1,"{""regressor__alpha"": 100}",1.7875758380336886
+general,COHORT,P11,valence,eeg,ridge,20,20,2,"{""regressor__alpha"": 100}",1.7466344203906776
+general,COHORT,P19,valence,eeg,ridge,20,20,3,"{""regressor__alpha"": 100}",1.8382382069968373
+general,COHORT,P22,valence,eeg,ridge,20,20,4,"{""regressor__alpha"": 100}",1.745831765375057
+general,COHORT,P25,valence,eeg,ridge,20,20,5,"{""regressor__alpha"": 100}",1.8189167968910804
+general,COHORT,P32,valence,eeg,ridge,20,20,6,"{""regressor__alpha"": 100}",1.8397699510053218
+general,COHORT,P40,valence,eeg,ridge,20,20,7,"{""regressor__alpha"": 100}",1.7902860750348886
+general,COHORT,P42,valence,eeg,ridge,20,20,8,"{""regressor__alpha"": 100}",1.8599475684432538
+general,COHORT,P43,valence,eeg,ridge,20,20,9,"{""regressor__alpha"": 100}",1.8820255602725688
+general,COHORT,P45,valence,eeg,ridge,20,20,10,"{""regressor__alpha"": 100}",1.8450342093983703
+general,COHORT,P10,valence,face,knn,all,all,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8339870674358063
+general,COHORT,P11,valence,face,knn,all,all,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8941900643408744
+general,COHORT,P19,valence,face,knn,all,all,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9433311000093454
+general,COHORT,P22,valence,face,knn,all,all,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8704642952556454
+general,COHORT,P25,valence,face,knn,all,all,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9538956128233007
+general,COHORT,P32,valence,face,knn,all,all,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9694373742350613
+general,COHORT,P40,valence,face,knn,all,all,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8961367982245676
+general,COHORT,P42,valence,face,knn,all,all,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9596965515721572
+general,COHORT,P43,valence,face,knn,all,all,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.976382462438427
+general,COHORT,P45,valence,face,knn,all,all,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9653332814707176
+general,COHORT,P10,valence,face,knn,5,5,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8034050611317543
+general,COHORT,P11,valence,face,knn,5,5,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8460588456725104
+general,COHORT,P19,valence,face,knn,5,5,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9127850237693742
+general,COHORT,P22,valence,face,knn,5,5,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.84933955246664
+general,COHORT,P25,valence,face,knn,5,5,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8738570559876855
+general,COHORT,P32,valence,face,knn,5,5,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.90269324879726
+general,COHORT,P40,valence,face,knn,5,5,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8082628419121627
+general,COHORT,P42,valence,face,knn,5,5,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8893339369809894
+general,COHORT,P43,valence,face,knn,5,5,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.88868678490085
+general,COHORT,P45,valence,face,knn,5,5,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8743119343252688
+general,COHORT,P10,valence,face,knn,10,10,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8339870674358063
+general,COHORT,P11,valence,face,knn,10,10,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8941900643408744
+general,COHORT,P19,valence,face,knn,10,10,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9433311000093454
+general,COHORT,P22,valence,face,knn,10,10,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8704642952556454
+general,COHORT,P25,valence,face,knn,10,10,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9538956128233007
+general,COHORT,P32,valence,face,knn,10,10,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9694373742350613
+general,COHORT,P40,valence,face,knn,10,10,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8961367982245676
+general,COHORT,P42,valence,face,knn,10,10,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9596965515721572
+general,COHORT,P43,valence,face,knn,10,10,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.976382462438427
+general,COHORT,P45,valence,face,knn,10,10,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9653332814707176
+general,COHORT,P10,valence,face,knn,20,10,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8339870674358063
+general,COHORT,P11,valence,face,knn,20,10,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8941900643408744
+general,COHORT,P19,valence,face,knn,20,10,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9433311000093454
+general,COHORT,P22,valence,face,knn,20,10,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8704642952556454
+general,COHORT,P25,valence,face,knn,20,10,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9538956128233007
+general,COHORT,P32,valence,face,knn,20,10,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9694373742350613
+general,COHORT,P40,valence,face,knn,20,10,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8961367982245676
+general,COHORT,P42,valence,face,knn,20,10,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9596965515721572
+general,COHORT,P43,valence,face,knn,20,10,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.976382462438427
+general,COHORT,P45,valence,face,knn,20,10,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9653332814707176
+general,COHORT,P10,valence,face,svr,all,all,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": ""scale"", ""regressor__kernel"": ""rbf""}",1.7253683336762784
+general,COHORT,P11,valence,face,svr,all,all,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7199740879512597
+general,COHORT,P19,valence,face,svr,all,all,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7825253826032323
+general,COHORT,P22,valence,face,svr,all,all,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.709144426758965
+general,COHORT,P25,valence,face,svr,all,all,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.755206582680195
+general,COHORT,P32,valence,face,svr,all,all,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8223208887782683
+general,COHORT,P40,valence,face,svr,all,all,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.761592430622914
+general,COHORT,P42,valence,face,svr,all,all,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8233579253665386
+general,COHORT,P43,valence,face,svr,all,all,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8315445712555634
+general,COHORT,P45,valence,face,svr,all,all,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8192198019513817
+general,COHORT,P10,valence,face,svr,5,5,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7315564581833953
+general,COHORT,P11,valence,face,svr,5,5,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7174056194355578
+general,COHORT,P19,valence,face,svr,5,5,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7830058277231597
+general,COHORT,P22,valence,face,svr,5,5,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.706083697166808
+general,COHORT,P25,valence,face,svr,5,5,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7546745321100041
+general,COHORT,P32,valence,face,svr,5,5,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8210308511673596
+general,COHORT,P40,valence,face,svr,5,5,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7594038029058463
+general,COHORT,P42,valence,face,svr,5,5,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.8133913173209497
+general,COHORT,P43,valence,face,svr,5,5,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.8272712512455154
+general,COHORT,P45,valence,face,svr,5,5,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.8173771463462678
+general,COHORT,P10,valence,face,svr,10,10,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": ""scale"", ""regressor__kernel"": ""rbf""}",1.7253683336762784
+general,COHORT,P11,valence,face,svr,10,10,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7199740879512597
+general,COHORT,P19,valence,face,svr,10,10,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7825253826032323
+general,COHORT,P22,valence,face,svr,10,10,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.709144426758965
+general,COHORT,P25,valence,face,svr,10,10,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.755206582680195
+general,COHORT,P32,valence,face,svr,10,10,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8223208887782683
+general,COHORT,P40,valence,face,svr,10,10,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.761592430622914
+general,COHORT,P42,valence,face,svr,10,10,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8233579253665386
+general,COHORT,P43,valence,face,svr,10,10,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8315445712555634
+general,COHORT,P45,valence,face,svr,10,10,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8192198019513817
+general,COHORT,P10,valence,face,svr,20,10,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": ""scale"", ""regressor__kernel"": ""rbf""}",1.7253683336762784
+general,COHORT,P11,valence,face,svr,20,10,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7199740879512597
+general,COHORT,P19,valence,face,svr,20,10,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7825253826032323
+general,COHORT,P22,valence,face,svr,20,10,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.709144426758965
+general,COHORT,P25,valence,face,svr,20,10,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.755206582680195
+general,COHORT,P32,valence,face,svr,20,10,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8223208887782683
+general,COHORT,P40,valence,face,svr,20,10,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.761592430622914
+general,COHORT,P42,valence,face,svr,20,10,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8233579253665386
+general,COHORT,P43,valence,face,svr,20,10,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8315445712555634
+general,COHORT,P45,valence,face,svr,20,10,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8192198019513817
+general,COHORT,P10,valence,face,ridge,all,all,1,"{""regressor__alpha"": 100}",1.7570871897166511
+general,COHORT,P11,valence,face,ridge,all,all,2,"{""regressor__alpha"": 100}",1.7695442201981049
+general,COHORT,P19,valence,face,ridge,all,all,3,"{""regressor__alpha"": 100}",1.8196469927785817
+general,COHORT,P22,valence,face,ridge,all,all,4,"{""regressor__alpha"": 100}",1.770457297891054
+general,COHORT,P25,valence,face,ridge,all,all,5,"{""regressor__alpha"": 100}",1.8095765318566586
+general,COHORT,P32,valence,face,ridge,all,all,6,"{""regressor__alpha"": 100}",1.8694796432801368
+general,COHORT,P40,valence,face,ridge,all,all,7,"{""regressor__alpha"": 100}",1.8131687319466365
+general,COHORT,P42,valence,face,ridge,all,all,8,"{""regressor__alpha"": 100}",1.8609349081940465
+general,COHORT,P43,valence,face,ridge,all,all,9,"{""regressor__alpha"": 100}",1.8738270169433793
+general,COHORT,P45,valence,face,ridge,all,all,10,"{""regressor__alpha"": 100}",1.8616013771035482
+general,COHORT,P10,valence,face,ridge,5,5,1,"{""regressor__alpha"": 100}",1.741300044955842
+general,COHORT,P11,valence,face,ridge,5,5,2,"{""regressor__alpha"": 100}",1.7335625430191755
+general,COHORT,P19,valence,face,ridge,5,5,3,"{""regressor__alpha"": 100}",1.8114512398718603
+general,COHORT,P22,valence,face,ridge,5,5,4,"{""regressor__alpha"": 100}",1.7468365761208637
+general,COHORT,P25,valence,face,ridge,5,5,5,"{""regressor__alpha"": 100}",1.788582568496994
+general,COHORT,P32,valence,face,ridge,5,5,6,"{""regressor__alpha"": 100}",1.8466733801645703
+general,COHORT,P40,valence,face,ridge,5,5,7,"{""regressor__alpha"": 100}",1.7986803380813108
+general,COHORT,P42,valence,face,ridge,5,5,8,"{""regressor__alpha"": 100}",1.834981539292856
+general,COHORT,P43,valence,face,ridge,5,5,9,"{""regressor__alpha"": 100}",1.8419032928920465
+general,COHORT,P45,valence,face,ridge,5,5,10,"{""regressor__alpha"": 100}",1.830663371431956
+general,COHORT,P10,valence,face,ridge,10,10,1,"{""regressor__alpha"": 100}",1.7570871897166511
+general,COHORT,P11,valence,face,ridge,10,10,2,"{""regressor__alpha"": 100}",1.7695442201981049
+general,COHORT,P19,valence,face,ridge,10,10,3,"{""regressor__alpha"": 100}",1.8196469927785817
+general,COHORT,P22,valence,face,ridge,10,10,4,"{""regressor__alpha"": 100}",1.770457297891054
+general,COHORT,P25,valence,face,ridge,10,10,5,"{""regressor__alpha"": 100}",1.8095765318566586
+general,COHORT,P32,valence,face,ridge,10,10,6,"{""regressor__alpha"": 100}",1.8694796432801368
+general,COHORT,P40,valence,face,ridge,10,10,7,"{""regressor__alpha"": 100}",1.8131687319466365
+general,COHORT,P42,valence,face,ridge,10,10,8,"{""regressor__alpha"": 100}",1.8609349081940465
+general,COHORT,P43,valence,face,ridge,10,10,9,"{""regressor__alpha"": 100}",1.8738270169433793
+general,COHORT,P45,valence,face,ridge,10,10,10,"{""regressor__alpha"": 100}",1.8616013771035482
+general,COHORT,P10,valence,face,ridge,20,10,1,"{""regressor__alpha"": 100}",1.7570871897166511
+general,COHORT,P11,valence,face,ridge,20,10,2,"{""regressor__alpha"": 100}",1.7695442201981049
+general,COHORT,P19,valence,face,ridge,20,10,3,"{""regressor__alpha"": 100}",1.8196469927785817
+general,COHORT,P22,valence,face,ridge,20,10,4,"{""regressor__alpha"": 100}",1.770457297891054
+general,COHORT,P25,valence,face,ridge,20,10,5,"{""regressor__alpha"": 100}",1.8095765318566586
+general,COHORT,P32,valence,face,ridge,20,10,6,"{""regressor__alpha"": 100}",1.8694796432801368
+general,COHORT,P40,valence,face,ridge,20,10,7,"{""regressor__alpha"": 100}",1.8131687319466365
+general,COHORT,P42,valence,face,ridge,20,10,8,"{""regressor__alpha"": 100}",1.8609349081940465
+general,COHORT,P43,valence,face,ridge,20,10,9,"{""regressor__alpha"": 100}",1.8738270169433793
+general,COHORT,P45,valence,face,ridge,20,10,10,"{""regressor__alpha"": 100}",1.8616013771035482
+general,COHORT,P10,valence,multimodal,knn,all,all,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8360776423357101
+general,COHORT,P11,valence,multimodal,knn,all,all,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8104016210119844
+general,COHORT,P19,valence,multimodal,knn,all,all,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8938192439544053
+general,COHORT,P22,valence,multimodal,knn,all,all,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8291720368767055
+general,COHORT,P25,valence,multimodal,knn,all,all,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8596238052757326
+general,COHORT,P32,valence,multimodal,knn,all,all,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.910043878932671
+general,COHORT,P40,valence,multimodal,knn,all,all,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8291649227376987
+general,COHORT,P42,valence,multimodal,knn,all,all,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.916053811746616
+general,COHORT,P43,valence,multimodal,knn,all,all,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.9361098772694227
+general,COHORT,P45,valence,multimodal,knn,all,all,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9221508394296898
+general,COHORT,P10,valence,multimodal,knn,5,5,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8325078405145825
+general,COHORT,P11,valence,multimodal,knn,5,5,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8790955981137714
+general,COHORT,P19,valence,multimodal,knn,5,5,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.885020260356026
+general,COHORT,P22,valence,multimodal,knn,5,5,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.817513489557714
+general,COHORT,P25,valence,multimodal,knn,5,5,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9084673595053014
+general,COHORT,P32,valence,multimodal,knn,5,5,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.9088987569325664
+general,COHORT,P40,valence,multimodal,knn,5,5,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8229823064846056
+general,COHORT,P42,valence,multimodal,knn,5,5,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.900993719345252
+general,COHORT,P43,valence,multimodal,knn,5,5,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.907230759103257
+general,COHORT,P45,valence,multimodal,knn,5,5,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8950204462287463
+general,COHORT,P10,valence,multimodal,knn,10,10,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8373058321530262
+general,COHORT,P11,valence,multimodal,knn,10,10,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8168765528814501
+general,COHORT,P19,valence,multimodal,knn,10,10,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8795771146125932
+general,COHORT,P22,valence,multimodal,knn,10,10,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8000292644367843
+general,COHORT,P25,valence,multimodal,knn,10,10,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8562687121799826
+general,COHORT,P32,valence,multimodal,knn,10,10,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8794883596449914
+general,COHORT,P40,valence,multimodal,knn,10,10,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8358878000463146
+general,COHORT,P42,valence,multimodal,knn,10,10,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9528038115863555
+general,COHORT,P43,valence,multimodal,knn,10,10,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9135586351885236
+general,COHORT,P45,valence,multimodal,knn,10,10,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8937411321997668
+general,COHORT,P10,valence,multimodal,knn,20,20,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8383259438740662
+general,COHORT,P11,valence,multimodal,knn,20,20,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8310618243143542
+general,COHORT,P19,valence,multimodal,knn,20,20,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8941111611869932
+general,COHORT,P22,valence,multimodal,knn,20,20,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7975875844762814
+general,COHORT,P25,valence,multimodal,knn,20,20,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8848630114592795
+general,COHORT,P32,valence,multimodal,knn,20,20,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8931061628346124
+general,COHORT,P40,valence,multimodal,knn,20,20,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.833584536371245
+general,COHORT,P42,valence,multimodal,knn,20,20,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9177780366353148
+general,COHORT,P43,valence,multimodal,knn,20,20,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9244909143304956
+general,COHORT,P45,valence,multimodal,knn,20,20,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.9134132282947753
+general,COHORT,P10,valence,multimodal,svr,all,all,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7312499057626596
+general,COHORT,P11,valence,multimodal,svr,all,all,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7186275403684177
+general,COHORT,P19,valence,multimodal,svr,all,all,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7796457528441263
+general,COHORT,P22,valence,multimodal,svr,all,all,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7030790767699409
+general,COHORT,P25,valence,multimodal,svr,all,all,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7539944984014035
+general,COHORT,P32,valence,multimodal,svr,all,all,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.8176988887167949
+general,COHORT,P40,valence,multimodal,svr,all,all,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7593983253266732
+general,COHORT,P42,valence,multimodal,svr,all,all,8,"{""regressor__C"": 10, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.8228215866319861
+general,COHORT,P43,valence,multimodal,svr,all,all,9,"{""regressor__C"": 10, ""regressor__epsilon"": 0.25, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.8320919155261621
+general,COHORT,P45,valence,multimodal,svr,all,all,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": ""scale"", ""regressor__kernel"": ""rbf""}",1.821169135487591
+general,COHORT,P10,valence,multimodal,svr,5,5,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7377318403415831
+general,COHORT,P11,valence,multimodal,svr,5,5,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7128523807863278
+general,COHORT,P19,valence,multimodal,svr,5,5,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7797330529322948
+general,COHORT,P22,valence,multimodal,svr,5,5,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7074191016349385
+general,COHORT,P25,valence,multimodal,svr,5,5,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7600256848680331
+general,COHORT,P32,valence,multimodal,svr,5,5,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.8109569473172915
+general,COHORT,P40,valence,multimodal,svr,5,5,7,"{""regressor__C"": 1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7503226705373394
+general,COHORT,P42,valence,multimodal,svr,5,5,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8209481185080771
+general,COHORT,P43,valence,multimodal,svr,5,5,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8321295179866914
+general,COHORT,P45,valence,multimodal,svr,5,5,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8149960972204635
+general,COHORT,P10,valence,multimodal,svr,10,10,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.740857468879462
+general,COHORT,P11,valence,multimodal,svr,10,10,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7132417416456787
+general,COHORT,P19,valence,multimodal,svr,10,10,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7822941150292784
+general,COHORT,P22,valence,multimodal,svr,10,10,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7066949386168964
+general,COHORT,P25,valence,multimodal,svr,10,10,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.767592590040979
+general,COHORT,P32,valence,multimodal,svr,10,10,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8156719603610707
+general,COHORT,P40,valence,multimodal,svr,10,10,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7563655148733708
+general,COHORT,P42,valence,multimodal,svr,10,10,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8190889917178599
+general,COHORT,P43,valence,multimodal,svr,10,10,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8311003480345884
+general,COHORT,P45,valence,multimodal,svr,10,10,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8139082530655266
+general,COHORT,P10,valence,multimodal,svr,20,20,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7388028855451285
+general,COHORT,P11,valence,multimodal,svr,20,20,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7142214508687388
+general,COHORT,P19,valence,multimodal,svr,20,20,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7847848308491634
+general,COHORT,P22,valence,multimodal,svr,20,20,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.709589247969518
+general,COHORT,P25,valence,multimodal,svr,20,20,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7650270542858504
+general,COHORT,P32,valence,multimodal,svr,20,20,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.816332707295032
+general,COHORT,P40,valence,multimodal,svr,20,20,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": ""scale"", ""regressor__kernel"": ""rbf""}",1.7556879393790559
+general,COHORT,P42,valence,multimodal,svr,20,20,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8236314658964918
+general,COHORT,P43,valence,multimodal,svr,20,20,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.834026319205878
+general,COHORT,P45,valence,multimodal,svr,20,20,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8152104581902009
+general,COHORT,P10,valence,multimodal,ridge,all,all,1,"{""regressor__alpha"": 100}",1.8945942155742557
+general,COHORT,P11,valence,multimodal,ridge,all,all,2,"{""regressor__alpha"": 100}",1.8750844560314122
+general,COHORT,P19,valence,multimodal,ridge,all,all,3,"{""regressor__alpha"": 100}",1.9359420870106265
+general,COHORT,P22,valence,multimodal,ridge,all,all,4,"{""regressor__alpha"": 100}",1.8743805972167487
+general,COHORT,P25,valence,multimodal,ridge,all,all,5,"{""regressor__alpha"": 100}",1.9822096145856425
+general,COHORT,P32,valence,multimodal,ridge,all,all,6,"{""regressor__alpha"": 100}",1.9756716810480683
+general,COHORT,P40,valence,multimodal,ridge,all,all,7,"{""regressor__alpha"": 100}",1.8653054485761893
+general,COHORT,P42,valence,multimodal,ridge,all,all,8,"{""regressor__alpha"": 100}",1.9356292136380386
+general,COHORT,P43,valence,multimodal,ridge,all,all,9,"{""regressor__alpha"": 100}",2.0068422317612025
+general,COHORT,P45,valence,multimodal,ridge,all,all,10,"{""regressor__alpha"": 100}",1.9907186379542274
+general,COHORT,P10,valence,multimodal,ridge,5,5,1,"{""regressor__alpha"": 100}",1.7719525262737659
+general,COHORT,P11,valence,multimodal,ridge,5,5,2,"{""regressor__alpha"": 100}",1.7258316620506005
+general,COHORT,P19,valence,multimodal,ridge,5,5,3,"{""regressor__alpha"": 100}",1.8046002277209923
+general,COHORT,P22,valence,multimodal,ridge,5,5,4,"{""regressor__alpha"": 100}",1.7640560712513662
+general,COHORT,P25,valence,multimodal,ridge,5,5,5,"{""regressor__alpha"": 100}",1.8194792786073322
+general,COHORT,P32,valence,multimodal,ridge,5,5,6,"{""regressor__alpha"": 100}",1.8275793535901645
+general,COHORT,P40,valence,multimodal,ridge,5,5,7,"{""regressor__alpha"": 100}",1.7597315799769266
+general,COHORT,P42,valence,multimodal,ridge,5,5,8,"{""regressor__alpha"": 100}",1.8419220605179043
+general,COHORT,P43,valence,multimodal,ridge,5,5,9,"{""regressor__alpha"": 100}",1.852851367619349
+general,COHORT,P45,valence,multimodal,ridge,5,5,10,"{""regressor__alpha"": 100}",1.8293113653011275
+general,COHORT,P10,valence,multimodal,ridge,10,10,1,"{""regressor__alpha"": 100}",1.7909253993289092
+general,COHORT,P11,valence,multimodal,ridge,10,10,2,"{""regressor__alpha"": 100}",1.724355837123975
+general,COHORT,P19,valence,multimodal,ridge,10,10,3,"{""regressor__alpha"": 100}",1.8242272107198503
+general,COHORT,P22,valence,multimodal,ridge,10,10,4,"{""regressor__alpha"": 100}",1.7614230450437751
+general,COHORT,P25,valence,multimodal,ridge,10,10,5,"{""regressor__alpha"": 100}",1.8286060904438337
+general,COHORT,P32,valence,multimodal,ridge,10,10,6,"{""regressor__alpha"": 100}",1.847759091715826
+general,COHORT,P40,valence,multimodal,ridge,10,10,7,"{""regressor__alpha"": 100}",1.7809386596195693
+general,COHORT,P42,valence,multimodal,ridge,10,10,8,"{""regressor__alpha"": 100}",1.8406184287836092
+general,COHORT,P43,valence,multimodal,ridge,10,10,9,"{""regressor__alpha"": 100}",1.8658307081347636
+general,COHORT,P45,valence,multimodal,ridge,10,10,10,"{""regressor__alpha"": 100}",1.8257568517449005
+general,COHORT,P10,valence,multimodal,ridge,20,20,1,"{""regressor__alpha"": 100}",1.8006218366196158
+general,COHORT,P11,valence,multimodal,ridge,20,20,2,"{""regressor__alpha"": 100}",1.7422543168293239
+general,COHORT,P19,valence,multimodal,ridge,20,20,3,"{""regressor__alpha"": 100}",1.8285385502944849
+general,COHORT,P22,valence,multimodal,ridge,20,20,4,"{""regressor__alpha"": 100}",1.7918129456594394
+general,COHORT,P25,valence,multimodal,ridge,20,20,5,"{""regressor__alpha"": 100}",1.8278014809350929
+general,COHORT,P32,valence,multimodal,ridge,20,20,6,"{""regressor__alpha"": 100}",1.8401438424906504
+general,COHORT,P40,valence,multimodal,ridge,20,20,7,"{""regressor__alpha"": 100}",1.7876135016011603
+general,COHORT,P42,valence,multimodal,ridge,20,20,8,"{""regressor__alpha"": 100}",1.853925610648067
+general,COHORT,P43,valence,multimodal,ridge,20,20,9,"{""regressor__alpha"": 100}",1.8732914849724587
+general,COHORT,P45,valence,multimodal,ridge,20,20,10,"{""regressor__alpha"": 100}",1.8422080663259117
+general,COHORT,P10,arousal,eeg,knn,all,all,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.786949680844741
+general,COHORT,P11,arousal,eeg,knn,all,all,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.7834827208725126
+general,COHORT,P19,arousal,eeg,knn,all,all,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8143732181053274
+general,COHORT,P22,arousal,eeg,knn,all,all,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.711086023064422
+general,COHORT,P25,arousal,eeg,knn,all,all,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8322658190148615
+general,COHORT,P32,arousal,eeg,knn,all,all,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8873163693967605
+general,COHORT,P40,arousal,eeg,knn,all,all,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8145864498153579
+general,COHORT,P42,arousal,eeg,knn,all,all,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.828151670652116
+general,COHORT,P43,arousal,eeg,knn,all,all,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8650912142992477
+general,COHORT,P45,arousal,eeg,knn,all,all,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.797651578810978
+general,COHORT,P10,arousal,eeg,knn,5,5,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.761863746893671
+general,COHORT,P11,arousal,eeg,knn,5,5,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.728751852334229
+general,COHORT,P19,arousal,eeg,knn,5,5,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.726485911533434
+general,COHORT,P22,arousal,eeg,knn,5,5,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.677487543536336
+general,COHORT,P25,arousal,eeg,knn,5,5,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8037159549366493
+general,COHORT,P32,arousal,eeg,knn,5,5,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8765206685453255
+general,COHORT,P40,arousal,eeg,knn,5,5,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7694804628280245
+general,COHORT,P42,arousal,eeg,knn,5,5,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8216151579241142
+general,COHORT,P43,arousal,eeg,knn,5,5,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.869803223031956
+general,COHORT,P45,arousal,eeg,knn,5,5,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.7835285945127979
+general,COHORT,P10,arousal,eeg,knn,10,10,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7453047777065873
+general,COHORT,P11,arousal,eeg,knn,10,10,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.758333922612693
+general,COHORT,P19,arousal,eeg,knn,10,10,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.7622488431382866
+general,COHORT,P22,arousal,eeg,knn,10,10,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.6672852246804193
+general,COHORT,P25,arousal,eeg,knn,10,10,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.784273160492172
+general,COHORT,P32,arousal,eeg,knn,10,10,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8618319498842884
+general,COHORT,P40,arousal,eeg,knn,10,10,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.7867115658514336
+general,COHORT,P42,arousal,eeg,knn,10,10,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8427566678085558
+general,COHORT,P43,arousal,eeg,knn,10,10,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8685548120208406
+general,COHORT,P45,arousal,eeg,knn,10,10,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8031981138275355
+general,COHORT,P10,arousal,eeg,knn,20,20,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7702569859109851
+general,COHORT,P11,arousal,eeg,knn,20,20,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.746943222768131
+general,COHORT,P19,arousal,eeg,knn,20,20,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7575143100660036
+general,COHORT,P22,arousal,eeg,knn,20,20,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.6772880360542075
+general,COHORT,P25,arousal,eeg,knn,20,20,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8163555146276333
+general,COHORT,P32,arousal,eeg,knn,20,20,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.870489282702366
+general,COHORT,P40,arousal,eeg,knn,20,20,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8128423641663383
+general,COHORT,P42,arousal,eeg,knn,20,20,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.799629372937589
+general,COHORT,P43,arousal,eeg,knn,20,20,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8334190658672884
+general,COHORT,P45,arousal,eeg,knn,20,20,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8057666511540056
+general,COHORT,P10,arousal,eeg,svr,all,all,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.6572475298202682
+general,COHORT,P11,arousal,eeg,svr,all,all,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.6302230342979924
+general,COHORT,P19,arousal,eeg,svr,all,all,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.652996815575639
+general,COHORT,P22,arousal,eeg,svr,all,all,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.5741907773786785
+general,COHORT,P25,arousal,eeg,svr,all,all,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.652192255389771
+general,COHORT,P32,arousal,eeg,svr,all,all,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.25, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7467066223174252
+general,COHORT,P40,arousal,eeg,svr,all,all,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.25, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.6625410469565907
+general,COHORT,P42,arousal,eeg,svr,all,all,8,"{""regressor__C"": 10, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7114783536092155
+general,COHORT,P43,arousal,eeg,svr,all,all,9,"{""regressor__C"": 10, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7475739692721732
+general,COHORT,P45,arousal,eeg,svr,all,all,10,"{""regressor__C"": 10, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7003924534066766
+general,COHORT,P10,arousal,eeg,svr,5,5,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6632490539453824
+general,COHORT,P11,arousal,eeg,svr,5,5,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6552677972373675
+general,COHORT,P19,arousal,eeg,svr,5,5,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.658869648954673
+general,COHORT,P22,arousal,eeg,svr,5,5,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.57787639245532
+general,COHORT,P25,arousal,eeg,svr,5,5,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6783627643573908
+general,COHORT,P32,arousal,eeg,svr,5,5,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7899153816702966
+general,COHORT,P40,arousal,eeg,svr,5,5,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6866632642649708
+general,COHORT,P42,arousal,eeg,svr,5,5,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7365020169294678
+general,COHORT,P43,arousal,eeg,svr,5,5,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7633590760139959
+general,COHORT,P45,arousal,eeg,svr,5,5,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7191718784324632
+general,COHORT,P10,arousal,eeg,svr,10,10,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.670681971688018
+general,COHORT,P11,arousal,eeg,svr,10,10,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6735166565941317
+general,COHORT,P19,arousal,eeg,svr,10,10,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6615521447249963
+general,COHORT,P22,arousal,eeg,svr,10,10,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.583522045285935
+general,COHORT,P25,arousal,eeg,svr,10,10,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6841249054196585
+general,COHORT,P32,arousal,eeg,svr,10,10,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.804123575387416
+general,COHORT,P40,arousal,eeg,svr,10,10,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6903185638185285
+general,COHORT,P42,arousal,eeg,svr,10,10,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.748475628776984
+general,COHORT,P43,arousal,eeg,svr,10,10,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7757225818007367
+general,COHORT,P45,arousal,eeg,svr,10,10,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7240460504511215
+general,COHORT,P10,arousal,eeg,svr,20,20,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6760373035097635
+general,COHORT,P11,arousal,eeg,svr,20,20,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.675570756139234
+general,COHORT,P19,arousal,eeg,svr,20,20,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6703115251867076
+general,COHORT,P22,arousal,eeg,svr,20,20,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.589168583133757
+general,COHORT,P25,arousal,eeg,svr,20,20,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6980859338489274
+general,COHORT,P32,arousal,eeg,svr,20,20,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7938185832590912
+general,COHORT,P40,arousal,eeg,svr,20,20,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7098241592348846
+general,COHORT,P42,arousal,eeg,svr,20,20,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7582741004087956
+general,COHORT,P43,arousal,eeg,svr,20,20,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.790232160989715
+general,COHORT,P45,arousal,eeg,svr,20,20,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7382107390411157
+general,COHORT,P10,arousal,eeg,ridge,all,all,1,"{""regressor__alpha"": 100}",1.8752310615079857
+general,COHORT,P11,arousal,eeg,ridge,all,all,2,"{""regressor__alpha"": 100}",1.829908371108635
+general,COHORT,P19,arousal,eeg,ridge,all,all,3,"{""regressor__alpha"": 100}",1.76950441015133
+general,COHORT,P22,arousal,eeg,ridge,all,all,4,"{""regressor__alpha"": 100}",1.781028375506161
+general,COHORT,P25,arousal,eeg,ridge,all,all,5,"{""regressor__alpha"": 100}",1.9608646849300837
+general,COHORT,P32,arousal,eeg,ridge,all,all,6,"{""regressor__alpha"": 100}",1.9841766058879204
+general,COHORT,P40,arousal,eeg,ridge,all,all,7,"{""regressor__alpha"": 100}",1.8509816487392179
+general,COHORT,P42,arousal,eeg,ridge,all,all,8,"{""regressor__alpha"": 100}",1.914898792744531
+general,COHORT,P43,arousal,eeg,ridge,all,all,9,"{""regressor__alpha"": 100}",1.9631544050629592
+general,COHORT,P45,arousal,eeg,ridge,all,all,10,"{""regressor__alpha"": 100}",1.8751030951607912
+general,COHORT,P10,arousal,eeg,ridge,5,5,1,"{""regressor__alpha"": 100}",1.7046620787872684
+general,COHORT,P11,arousal,eeg,ridge,5,5,2,"{""regressor__alpha"": 100}",1.6722215025230365
+general,COHORT,P19,arousal,eeg,ridge,5,5,3,"{""regressor__alpha"": 100}",1.6852696983165258
+general,COHORT,P22,arousal,eeg,ridge,5,5,4,"{""regressor__alpha"": 100}",1.593506626481883
+general,COHORT,P25,arousal,eeg,ridge,5,5,5,"{""regressor__alpha"": 100}",1.7262853256770085
+general,COHORT,P32,arousal,eeg,ridge,5,5,6,"{""regressor__alpha"": 100}",1.8049789164779362
+general,COHORT,P40,arousal,eeg,ridge,5,5,7,"{""regressor__alpha"": 0.01}",1.70321038726595
+general,COHORT,P42,arousal,eeg,ridge,5,5,8,"{""regressor__alpha"": 100}",1.7625420272718533
+general,COHORT,P43,arousal,eeg,ridge,5,5,9,"{""regressor__alpha"": 100}",1.7966093677732846
+general,COHORT,P45,arousal,eeg,ridge,5,5,10,"{""regressor__alpha"": 100}",1.7380108809100043
+general,COHORT,P10,arousal,eeg,ridge,10,10,1,"{""regressor__alpha"": 100}",1.7842949435196958
+general,COHORT,P11,arousal,eeg,ridge,10,10,2,"{""regressor__alpha"": 100}",1.6967259245510085
+general,COHORT,P19,arousal,eeg,ridge,10,10,3,"{""regressor__alpha"": 100}",1.7195070174617526
+general,COHORT,P22,arousal,eeg,ridge,10,10,4,"{""regressor__alpha"": 100}",1.5931475662563006
+general,COHORT,P25,arousal,eeg,ridge,10,10,5,"{""regressor__alpha"": 0.01}",1.7253731051164665
+general,COHORT,P32,arousal,eeg,ridge,10,10,6,"{""regressor__alpha"": 100}",1.8519062878564676
+general,COHORT,P40,arousal,eeg,ridge,10,10,7,"{""regressor__alpha"": 100}",1.718937989931267
+general,COHORT,P42,arousal,eeg,ridge,10,10,8,"{""regressor__alpha"": 100}",1.7881417745374322
+general,COHORT,P43,arousal,eeg,ridge,10,10,9,"{""regressor__alpha"": 100}",1.8563276074315798
+general,COHORT,P45,arousal,eeg,ridge,10,10,10,"{""regressor__alpha"": 100}",1.7409218836187406
+general,COHORT,P10,arousal,eeg,ridge,20,20,1,"{""regressor__alpha"": 100}",1.874122291257392
+general,COHORT,P11,arousal,eeg,ridge,20,20,2,"{""regressor__alpha"": 100}",1.70729894151569
+general,COHORT,P19,arousal,eeg,ridge,20,20,3,"{""regressor__alpha"": 100}",1.7421617291759766
+general,COHORT,P22,arousal,eeg,ridge,20,20,4,"{""regressor__alpha"": 100}",1.6186685903637659
+general,COHORT,P25,arousal,eeg,ridge,20,20,5,"{""regressor__alpha"": 100}",1.740348569585981
+general,COHORT,P32,arousal,eeg,ridge,20,20,6,"{""regressor__alpha"": 100}",1.8776068631328875
+general,COHORT,P40,arousal,eeg,ridge,20,20,7,"{""regressor__alpha"": 100}",1.7698489353763605
+general,COHORT,P42,arousal,eeg,ridge,20,20,8,"{""regressor__alpha"": 100}",1.8040387632294936
+general,COHORT,P43,arousal,eeg,ridge,20,20,9,"{""regressor__alpha"": 100}",1.8659991251326686
+general,COHORT,P45,arousal,eeg,ridge,20,20,10,"{""regressor__alpha"": 100}",1.7575193606497705
+general,COHORT,P10,arousal,face,knn,all,all,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.77042784488759
+general,COHORT,P11,arousal,face,knn,all,all,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8377679249059757
+general,COHORT,P19,arousal,face,knn,all,all,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8695578819306236
+general,COHORT,P22,arousal,face,knn,all,all,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8023072237424393
+general,COHORT,P25,arousal,face,knn,all,all,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8810293777367324
+general,COHORT,P32,arousal,face,knn,all,all,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9488247535136547
+general,COHORT,P40,arousal,face,knn,all,all,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8319035393928573
+general,COHORT,P42,arousal,face,knn,all,all,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.931024482847833
+general,COHORT,P43,arousal,face,knn,all,all,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9623381251218337
+general,COHORT,P45,arousal,face,knn,all,all,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.90655825907901
+general,COHORT,P10,arousal,face,knn,5,5,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.709265197210048
+general,COHORT,P11,arousal,face,knn,5,5,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.7654029940548803
+general,COHORT,P19,arousal,face,knn,5,5,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7854000557228424
+general,COHORT,P22,arousal,face,knn,5,5,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.728728955279117
+general,COHORT,P25,arousal,face,knn,5,5,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8210109157636079
+general,COHORT,P32,arousal,face,knn,5,5,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9155443747280472
+general,COHORT,P40,arousal,face,knn,5,5,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.777450691745131
+general,COHORT,P42,arousal,face,knn,5,5,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.7988765380139842
+general,COHORT,P43,arousal,face,knn,5,5,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8636441278313973
+general,COHORT,P45,arousal,face,knn,5,5,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8128068251520655
+general,COHORT,P10,arousal,face,knn,10,10,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.77042784488759
+general,COHORT,P11,arousal,face,knn,10,10,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8377679249059757
+general,COHORT,P19,arousal,face,knn,10,10,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8695578819306236
+general,COHORT,P22,arousal,face,knn,10,10,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8023072237424393
+general,COHORT,P25,arousal,face,knn,10,10,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8810293777367324
+general,COHORT,P32,arousal,face,knn,10,10,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9488247535136547
+general,COHORT,P40,arousal,face,knn,10,10,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8319035393928573
+general,COHORT,P42,arousal,face,knn,10,10,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.931024482847833
+general,COHORT,P43,arousal,face,knn,10,10,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9623381251218337
+general,COHORT,P45,arousal,face,knn,10,10,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.90655825907901
+general,COHORT,P10,arousal,face,knn,20,10,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.77042784488759
+general,COHORT,P11,arousal,face,knn,20,10,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8377679249059757
+general,COHORT,P19,arousal,face,knn,20,10,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8695578819306236
+general,COHORT,P22,arousal,face,knn,20,10,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8023072237424393
+general,COHORT,P25,arousal,face,knn,20,10,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8810293777367324
+general,COHORT,P32,arousal,face,knn,20,10,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9488247535136547
+general,COHORT,P40,arousal,face,knn,20,10,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8319035393928573
+general,COHORT,P42,arousal,face,knn,20,10,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.931024482847833
+general,COHORT,P43,arousal,face,knn,20,10,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9623381251218337
+general,COHORT,P45,arousal,face,knn,20,10,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.90655825907901
+general,COHORT,P10,arousal,face,svr,all,all,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6713989870173194
+general,COHORT,P11,arousal,face,svr,all,all,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6647923264839517
+general,COHORT,P19,arousal,face,svr,all,all,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6887736184007864
+general,COHORT,P22,arousal,face,svr,all,all,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.5867701019903042
+general,COHORT,P25,arousal,face,svr,all,all,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7101201533537087
+general,COHORT,P32,arousal,face,svr,all,all,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.25, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7923627613715123
+general,COHORT,P40,arousal,face,svr,all,all,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7156032538247175
+general,COHORT,P42,arousal,face,svr,all,all,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7486176633536097
+general,COHORT,P43,arousal,face,svr,all,all,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7818545003542923
+general,COHORT,P45,arousal,face,svr,all,all,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7318670268508338
+general,COHORT,P10,arousal,face,svr,5,5,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6715673702991782
+general,COHORT,P11,arousal,face,svr,5,5,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6460348304971895
+general,COHORT,P19,arousal,face,svr,5,5,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6877905284290473
+general,COHORT,P22,arousal,face,svr,5,5,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.5882964172752536
+general,COHORT,P25,arousal,face,svr,5,5,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7054164580813933
+general,COHORT,P32,arousal,face,svr,5,5,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.25, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7857279929434846
+general,COHORT,P40,arousal,face,svr,5,5,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7023427867966103
+general,COHORT,P42,arousal,face,svr,5,5,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7395815500277212
+general,COHORT,P43,arousal,face,svr,5,5,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7759063140250817
+general,COHORT,P45,arousal,face,svr,5,5,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7246198829127952
+general,COHORT,P10,arousal,face,svr,10,10,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6713989870173194
+general,COHORT,P11,arousal,face,svr,10,10,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6647923264839517
+general,COHORT,P19,arousal,face,svr,10,10,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6887736184007864
+general,COHORT,P22,arousal,face,svr,10,10,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.5867701019903042
+general,COHORT,P25,arousal,face,svr,10,10,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7101201533537087
+general,COHORT,P32,arousal,face,svr,10,10,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.25, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7923627613715123
+general,COHORT,P40,arousal,face,svr,10,10,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7156032538247175
+general,COHORT,P42,arousal,face,svr,10,10,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7486176633536097
+general,COHORT,P43,arousal,face,svr,10,10,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7818545003542923
+general,COHORT,P45,arousal,face,svr,10,10,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7318670268508338
+general,COHORT,P10,arousal,face,svr,20,10,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6713989870173194
+general,COHORT,P11,arousal,face,svr,20,10,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6647923264839517
+general,COHORT,P19,arousal,face,svr,20,10,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6887736184007864
+general,COHORT,P22,arousal,face,svr,20,10,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.5867701019903042
+general,COHORT,P25,arousal,face,svr,20,10,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7101201533537087
+general,COHORT,P32,arousal,face,svr,20,10,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.25, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7923627613715123
+general,COHORT,P40,arousal,face,svr,20,10,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7156032538247175
+general,COHORT,P42,arousal,face,svr,20,10,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7486176633536097
+general,COHORT,P43,arousal,face,svr,20,10,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7818545003542923
+general,COHORT,P45,arousal,face,svr,20,10,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7318670268508338
+general,COHORT,P10,arousal,face,ridge,all,all,1,"{""regressor__alpha"": 100}",1.6871670023536258
+general,COHORT,P11,arousal,face,ridge,all,all,2,"{""regressor__alpha"": 100}",1.741622708231271
+general,COHORT,P19,arousal,face,ridge,all,all,3,"{""regressor__alpha"": 100}",1.7241140348242645
+general,COHORT,P22,arousal,face,ridge,all,all,4,"{""regressor__alpha"": 100}",1.6531261539558666
+general,COHORT,P25,arousal,face,ridge,all,all,5,"{""regressor__alpha"": 100}",1.7845097917153274
+general,COHORT,P32,arousal,face,ridge,all,all,6,"{""regressor__alpha"": 100}",1.8739183470096967
+general,COHORT,P40,arousal,face,ridge,all,all,7,"{""regressor__alpha"": 100}",1.7978105872645216
+general,COHORT,P42,arousal,face,ridge,all,all,8,"{""regressor__alpha"": 100}",1.813132776199171
+general,COHORT,P43,arousal,face,ridge,all,all,9,"{""regressor__alpha"": 100}",1.7976888747956212
+general,COHORT,P45,arousal,face,ridge,all,all,10,"{""regressor__alpha"": 100}",1.7588417588552694
+general,COHORT,P10,arousal,face,ridge,5,5,1,"{""regressor__alpha"": 100}",1.680900183577942
+general,COHORT,P11,arousal,face,ridge,5,5,2,"{""regressor__alpha"": 100}",1.6965993839461944
+general,COHORT,P19,arousal,face,ridge,5,5,3,"{""regressor__alpha"": 100}",1.6893287058867414
+general,COHORT,P22,arousal,face,ridge,5,5,4,"{""regressor__alpha"": 100}",1.6179820197800283
+general,COHORT,P25,arousal,face,ridge,5,5,5,"{""regressor__alpha"": 100}",1.7282039501659479
+general,COHORT,P32,arousal,face,ridge,5,5,6,"{""regressor__alpha"": 100}",1.832831768551332
+general,COHORT,P40,arousal,face,ridge,5,5,7,"{""regressor__alpha"": 100}",1.7531830381932607
+general,COHORT,P42,arousal,face,ridge,5,5,8,"{""regressor__alpha"": 100}",1.772451592287689
+general,COHORT,P43,arousal,face,ridge,5,5,9,"{""regressor__alpha"": 100}",1.7831727255041456
+general,COHORT,P45,arousal,face,ridge,5,5,10,"{""regressor__alpha"": 100}",1.7425239609487406
+general,COHORT,P10,arousal,face,ridge,10,10,1,"{""regressor__alpha"": 100}",1.6871670023536258
+general,COHORT,P11,arousal,face,ridge,10,10,2,"{""regressor__alpha"": 100}",1.741622708231271
+general,COHORT,P19,arousal,face,ridge,10,10,3,"{""regressor__alpha"": 100}",1.7241140348242645
+general,COHORT,P22,arousal,face,ridge,10,10,4,"{""regressor__alpha"": 100}",1.6531261539558666
+general,COHORT,P25,arousal,face,ridge,10,10,5,"{""regressor__alpha"": 100}",1.7845097917153274
+general,COHORT,P32,arousal,face,ridge,10,10,6,"{""regressor__alpha"": 100}",1.8739183470096967
+general,COHORT,P40,arousal,face,ridge,10,10,7,"{""regressor__alpha"": 100}",1.7978105872645216
+general,COHORT,P42,arousal,face,ridge,10,10,8,"{""regressor__alpha"": 100}",1.813132776199171
+general,COHORT,P43,arousal,face,ridge,10,10,9,"{""regressor__alpha"": 100}",1.7976888747956212
+general,COHORT,P45,arousal,face,ridge,10,10,10,"{""regressor__alpha"": 100}",1.7588417588552694
+general,COHORT,P10,arousal,face,ridge,20,10,1,"{""regressor__alpha"": 100}",1.6871670023536258
+general,COHORT,P11,arousal,face,ridge,20,10,2,"{""regressor__alpha"": 100}",1.741622708231271
+general,COHORT,P19,arousal,face,ridge,20,10,3,"{""regressor__alpha"": 100}",1.7241140348242645
+general,COHORT,P22,arousal,face,ridge,20,10,4,"{""regressor__alpha"": 100}",1.6531261539558666
+general,COHORT,P25,arousal,face,ridge,20,10,5,"{""regressor__alpha"": 100}",1.7845097917153274
+general,COHORT,P32,arousal,face,ridge,20,10,6,"{""regressor__alpha"": 100}",1.8739183470096967
+general,COHORT,P40,arousal,face,ridge,20,10,7,"{""regressor__alpha"": 100}",1.7978105872645216
+general,COHORT,P42,arousal,face,ridge,20,10,8,"{""regressor__alpha"": 100}",1.813132776199171
+general,COHORT,P43,arousal,face,ridge,20,10,9,"{""regressor__alpha"": 100}",1.7976888747956212
+general,COHORT,P45,arousal,face,ridge,20,10,10,"{""regressor__alpha"": 100}",1.7588417588552694
+general,COHORT,P10,arousal,multimodal,knn,all,all,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7864249947526047
+general,COHORT,P11,arousal,multimodal,knn,all,all,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7806153245021172
+general,COHORT,P19,arousal,multimodal,knn,all,all,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8232231698165406
+general,COHORT,P22,arousal,multimodal,knn,all,all,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7206734194995306
+general,COHORT,P25,arousal,multimodal,knn,all,all,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8591431030810905
+general,COHORT,P32,arousal,multimodal,knn,all,all,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8784660257310857
+general,COHORT,P40,arousal,multimodal,knn,all,all,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8088904683198497
+general,COHORT,P42,arousal,multimodal,knn,all,all,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8215778351632257
+general,COHORT,P43,arousal,multimodal,knn,all,all,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8660571283070315
+general,COHORT,P45,arousal,multimodal,knn,all,all,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7961069340008478
+general,COHORT,P10,arousal,multimodal,knn,5,5,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7672595639369344
+general,COHORT,P11,arousal,multimodal,knn,5,5,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7207111564188515
+general,COHORT,P19,arousal,multimodal,knn,5,5,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7512089645658968
+general,COHORT,P22,arousal,multimodal,knn,5,5,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.6911048514432223
+general,COHORT,P25,arousal,multimodal,knn,5,5,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8038029204190007
+general,COHORT,P32,arousal,multimodal,knn,5,5,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.8765206685453255
+general,COHORT,P40,arousal,multimodal,knn,5,5,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7694804628280245
+general,COHORT,P42,arousal,multimodal,knn,5,5,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8216151579241142
+general,COHORT,P43,arousal,multimodal,knn,5,5,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8568140662426753
+general,COHORT,P45,arousal,multimodal,knn,5,5,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.7978785983279888
+general,COHORT,P10,arousal,multimodal,knn,10,10,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7736806838738417
+general,COHORT,P11,arousal,multimodal,knn,10,10,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7690863525732508
+general,COHORT,P19,arousal,multimodal,knn,10,10,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7785582780975127
+general,COHORT,P22,arousal,multimodal,knn,10,10,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.6779258392603722
+general,COHORT,P25,arousal,multimodal,knn,10,10,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8024576909533274
+general,COHORT,P32,arousal,multimodal,knn,10,10,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8470326762933262
+general,COHORT,P40,arousal,multimodal,knn,10,10,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.782901393751851
+general,COHORT,P42,arousal,multimodal,knn,10,10,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8390508580551213
+general,COHORT,P43,arousal,multimodal,knn,10,10,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.863337688642451
+general,COHORT,P45,arousal,multimodal,knn,10,10,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8161648747035648
+general,COHORT,P10,arousal,multimodal,knn,20,20,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7702225951818744
+general,COHORT,P11,arousal,multimodal,knn,20,20,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.7581810285837876
+general,COHORT,P19,arousal,multimodal,knn,20,20,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.7968262725596715
+general,COHORT,P22,arousal,multimodal,knn,20,20,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.6825994190099347
+general,COHORT,P25,arousal,multimodal,knn,20,20,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7920979673219404
+general,COHORT,P32,arousal,multimodal,knn,20,20,6,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8635733444811167
+general,COHORT,P40,arousal,multimodal,knn,20,20,7,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8201380938256135
+general,COHORT,P42,arousal,multimodal,knn,20,20,8,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.798376288343879
+general,COHORT,P43,arousal,multimodal,knn,20,20,9,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.8450059247523367
+general,COHORT,P45,arousal,multimodal,knn,20,20,10,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.7893788720345367
+general,COHORT,P10,arousal,multimodal,svr,all,all,1,"{""regressor__C"": 1, ""regressor__epsilon"": 0.25, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.6568131569945934
+general,COHORT,P11,arousal,multimodal,svr,all,all,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.6302011808474366
+general,COHORT,P19,arousal,multimodal,svr,all,all,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.6529102160217921
+general,COHORT,P22,arousal,multimodal,svr,all,all,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.5740996567574468
+general,COHORT,P25,arousal,multimodal,svr,all,all,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.6521180955035881
+general,COHORT,P32,arousal,multimodal,svr,all,all,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.25, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.746661021080353
+general,COHORT,P40,arousal,multimodal,svr,all,all,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.25, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.662469162256063
+general,COHORT,P42,arousal,multimodal,svr,all,all,8,"{""regressor__C"": 10, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7105453091231926
+general,COHORT,P43,arousal,multimodal,svr,all,all,9,"{""regressor__C"": 10, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7475572313960868
+general,COHORT,P45,arousal,multimodal,svr,all,all,10,"{""regressor__C"": 10, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7005961883972365
+general,COHORT,P10,arousal,multimodal,svr,5,5,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6603440254135815
+general,COHORT,P11,arousal,multimodal,svr,5,5,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6551983831045742
+general,COHORT,P19,arousal,multimodal,svr,5,5,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6621700651904998
+general,COHORT,P22,arousal,multimodal,svr,5,5,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.5767219222508007
+general,COHORT,P25,arousal,multimodal,svr,5,5,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.680738651886849
+general,COHORT,P32,arousal,multimodal,svr,5,5,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7899153816702966
+general,COHORT,P40,arousal,multimodal,svr,5,5,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6866632642649708
+general,COHORT,P42,arousal,multimodal,svr,5,5,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7365020169294678
+general,COHORT,P43,arousal,multimodal,svr,5,5,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7716332842888067
+general,COHORT,P45,arousal,multimodal,svr,5,5,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.720056939986577
+general,COHORT,P10,arousal,multimodal,svr,10,10,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.668882278094517
+general,COHORT,P11,arousal,multimodal,svr,10,10,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6715443941581014
+general,COHORT,P19,arousal,multimodal,svr,10,10,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6642935803223597
+general,COHORT,P22,arousal,multimodal,svr,10,10,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.5828244600226289
+general,COHORT,P25,arousal,multimodal,svr,10,10,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6863189205169973
+general,COHORT,P32,arousal,multimodal,svr,10,10,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.8087879326535554
+general,COHORT,P40,arousal,multimodal,svr,10,10,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6965282244068471
+general,COHORT,P42,arousal,multimodal,svr,10,10,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7501681583992599
+general,COHORT,P43,arousal,multimodal,svr,10,10,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7807650948965026
+general,COHORT,P45,arousal,multimodal,svr,10,10,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7292568134705846
+general,COHORT,P10,arousal,multimodal,svr,20,20,1,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.6776117928735885
+general,COHORT,P11,arousal,multimodal,svr,20,20,2,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6804084296802038
+general,COHORT,P19,arousal,multimodal,svr,20,20,3,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.6730295712010352
+general,COHORT,P22,arousal,multimodal,svr,20,20,4,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.5897486760173394
+general,COHORT,P25,arousal,multimodal,svr,20,20,5,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7011495218485266
+general,COHORT,P32,arousal,multimodal,svr,20,20,6,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.1, ""regressor__kernel"": ""rbf""}",1.7975319133630001
+general,COHORT,P40,arousal,multimodal,svr,20,20,7,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7075091744903328
+general,COHORT,P42,arousal,multimodal,svr,20,20,8,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7609932834284403
+general,COHORT,P43,arousal,multimodal,svr,20,20,9,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7934581019641442
+general,COHORT,P45,arousal,multimodal,svr,20,20,10,"{""regressor__C"": 0.1, ""regressor__epsilon"": 0.1, ""regressor__gamma"": 0.01, ""regressor__kernel"": ""rbf""}",1.7342707979319212
+general,COHORT,P10,arousal,multimodal,ridge,all,all,1,"{""regressor__alpha"": 100}",1.9388321229921295
+general,COHORT,P11,arousal,multimodal,ridge,all,all,2,"{""regressor__alpha"": 100}",1.8224599495809486
+general,COHORT,P19,arousal,multimodal,ridge,all,all,3,"{""regressor__alpha"": 100}",1.8065827954807598
+general,COHORT,P22,arousal,multimodal,ridge,all,all,4,"{""regressor__alpha"": 100}",1.7338690695853245
+general,COHORT,P25,arousal,multimodal,ridge,all,all,5,"{""regressor__alpha"": 100}",1.8899677863324567
+general,COHORT,P32,arousal,multimodal,ridge,all,all,6,"{""regressor__alpha"": 100}",2.0662111990628187
+general,COHORT,P40,arousal,multimodal,ridge,all,all,7,"{""regressor__alpha"": 100}",1.8999256927969548
+general,COHORT,P42,arousal,multimodal,ridge,all,all,8,"{""regressor__alpha"": 100}",1.9589745994873269
+general,COHORT,P43,arousal,multimodal,ridge,all,all,9,"{""regressor__alpha"": 100}",1.9911448969852117
+general,COHORT,P45,arousal,multimodal,ridge,all,all,10,"{""regressor__alpha"": 100}",1.9199161264912257
+general,COHORT,P10,arousal,multimodal,ridge,5,5,1,"{""regressor__alpha"": 100}",1.7112768428585834
+general,COHORT,P11,arousal,multimodal,ridge,5,5,2,"{""regressor__alpha"": 100}",1.671915233297344
+general,COHORT,P19,arousal,multimodal,ridge,5,5,3,"{""regressor__alpha"": 100}",1.6931716311236993
+general,COHORT,P22,arousal,multimodal,ridge,5,5,4,"{""regressor__alpha"": 100}",1.5945205772092497
+general,COHORT,P25,arousal,multimodal,ridge,5,5,5,"{""regressor__alpha"": 100}",1.7375862725062554
+general,COHORT,P32,arousal,multimodal,ridge,5,5,6,"{""regressor__alpha"": 100}",1.8049789164779362
+general,COHORT,P40,arousal,multimodal,ridge,5,5,7,"{""regressor__alpha"": 0.01}",1.70321038726595
+general,COHORT,P42,arousal,multimodal,ridge,5,5,8,"{""regressor__alpha"": 100}",1.7625420272718533
+general,COHORT,P43,arousal,multimodal,ridge,5,5,9,"{""regressor__alpha"": 100}",1.8027125016015693
+general,COHORT,P45,arousal,multimodal,ridge,5,5,10,"{""regressor__alpha"": 100}",1.7450612540232069
+general,COHORT,P10,arousal,multimodal,ridge,10,10,1,"{""regressor__alpha"": 100}",1.7874402841186483
+general,COHORT,P11,arousal,multimodal,ridge,10,10,2,"{""regressor__alpha"": 100}",1.705087242580505
+general,COHORT,P19,arousal,multimodal,ridge,10,10,3,"{""regressor__alpha"": 100}",1.7290171462734876
+general,COHORT,P22,arousal,multimodal,ridge,10,10,4,"{""regressor__alpha"": 100}",1.59493674771907
+general,COHORT,P25,arousal,multimodal,ridge,10,10,5,"{""regressor__alpha"": 0.01}",1.7249672463227566
+general,COHORT,P32,arousal,multimodal,ridge,10,10,6,"{""regressor__alpha"": 100}",1.8637020843519445
+general,COHORT,P40,arousal,multimodal,ridge,10,10,7,"{""regressor__alpha"": 100}",1.746535474762674
+general,COHORT,P42,arousal,multimodal,ridge,10,10,8,"{""regressor__alpha"": 100}",1.7910765682705274
+general,COHORT,P43,arousal,multimodal,ridge,10,10,9,"{""regressor__alpha"": 100}",1.8510869020302305
+general,COHORT,P45,arousal,multimodal,ridge,10,10,10,"{""regressor__alpha"": 100}",1.761934711066734
+general,COHORT,P10,arousal,multimodal,ridge,20,20,1,"{""regressor__alpha"": 100}",1.895869573909107
+general,COHORT,P11,arousal,multimodal,ridge,20,20,2,"{""regressor__alpha"": 100}",1.7338991364451304
+general,COHORT,P19,arousal,multimodal,ridge,20,20,3,"{""regressor__alpha"": 100}",1.7259987861443769
+general,COHORT,P22,arousal,multimodal,ridge,20,20,4,"{""regressor__alpha"": 100}",1.619190915186406
+general,COHORT,P25,arousal,multimodal,ridge,20,20,5,"{""regressor__alpha"": 100}",1.7533550041668793
+general,COHORT,P32,arousal,multimodal,ridge,20,20,6,"{""regressor__alpha"": 100}",1.888538611316664
+general,COHORT,P40,arousal,multimodal,ridge,20,20,7,"{""regressor__alpha"": 100}",1.7878619136860394
+general,COHORT,P42,arousal,multimodal,ridge,20,20,8,"{""regressor__alpha"": 100}",1.8137136350350995
+general,COHORT,P43,arousal,multimodal,ridge,20,20,9,"{""regressor__alpha"": 100}",1.8703542718898185
+general,COHORT,P45,arousal,multimodal,ridge,20,20,10,"{""regressor__alpha"": 100}",1.7604161642925007

@@ -1,0 +1,74 @@
+{
+  "created_utc": "2026-08-14T13:58:50.325122+00:00",
+  "git_commit": "ed76fdbd26a0d04e3adbb2781818bea1166fe3f4",
+  "python": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/bin/python",
+  "python_version": "3.10.12 (main, Jun 22 2026, 18:55:27) [GCC 11.4.0]",
+  "platform": "Linux-5.15.0-1078-realtime-x86_64-with-glibc2.35",
+  "numpy": "2.2.6",
+  "scipy": "1.15.3",
+  "pandas": "2.3.3",
+  "sklearn": "1.7.2",
+  "seed": 42,
+  "mode": "general",
+  "target": [
+    "valence",
+    "arousal"
+  ],
+  "modalities": [
+    "eeg",
+    "face",
+    "multimodal"
+  ],
+  "models": [
+    "knn",
+    "svr",
+    "ridge"
+  ],
+  "feature_counts": [
+    "all",
+    "5",
+    "10",
+    "20"
+  ],
+  "resolved_participants": [
+    "P10",
+    "P11",
+    "P19",
+    "P22",
+    "P25",
+    "P32",
+    "P40",
+    "P42",
+    "P43",
+    "P45"
+  ],
+  "cohort_source": "QC group",
+  "stage_a_participants": [
+    "P10",
+    "P11",
+    "P19",
+    "P22",
+    "P25",
+    "P32",
+    "P40",
+    "P42",
+    "P43",
+    "P45"
+  ],
+  "source_merged_tables": {
+    "P10": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P10/Image_Experiment/runs/p10_final/merged/p10_image_trial_dataset.csv",
+    "P11": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P11/Image_Experiment/runs/p11_final/merged/p11_image_trial_dataset.csv",
+    "P19": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P19/Image_Experiment/runs/p19_final/merged/p19_image_trial_dataset.csv",
+    "P22": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P22/Image_Experiment/runs/p22_final/merged/p22_image_trial_dataset.csv",
+    "P25": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P25/Image_Experiment/runs/p25_final/merged/p25_image_trial_dataset.csv",
+    "P32": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P32/Image_Experiment/runs/p32_final/merged/p32_image_trial_dataset.csv",
+    "P40": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P40/Image_Experiment/runs/p40_final/merged/p40_image_trial_dataset.csv",
+    "P42": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P42/Image_Experiment/runs/p42_final/merged/p42_image_trial_dataset.csv",
+    "P43": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P43/Image_Experiment/runs/p43_final/merged/p43_image_trial_dataset.csv",
+    "P45": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P45/Image_Experiment/runs/p45_final/merged/p45_image_trial_dataset.csv"
+  },
+  "target_definition": "Original continuous ratings; primary predictions are unconstrained.",
+  "cv_strategy": "LeaveOneGroupOut outer CV; GroupKFold inner CV",
+  "inner_selection_metric": "neg_root_mean_squared_error; sklearn negates RMSE because greater scores are better",
+  "feature_selection": "SelectKBest(f_regression) inside Pipeline"
+}

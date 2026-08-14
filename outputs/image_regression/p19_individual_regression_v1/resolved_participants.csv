@@ -1,0 +1,2 @@
+participant,eeg_usable_trials,face_usable_trials,valence_multimodal_usable_trials,arousal_multimodal_usable_trials,eeg_retention_percent,face_detection_percent,motion_correction_percent,missing_valence,missing_arousal,qc_group,reason
+P19,120,120,120,120,100.0,100.0,27.5,0,0,Very clean,No AutoReject epoch losses.

@@ -1,0 +1,11 @@
+mode,participant,held_out_participant,target,modality,regressor,feature_count_request,feature_count_resolved,fold,best_parameters,inner_best_rmse
+individual,P19,P19,arousal,eeg,knn,5,5,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.6380909855295434
+individual,P19,P19,arousal,eeg,knn,5,5,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.797895451256843
+individual,P19,P19,arousal,eeg,knn,5,5,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.771556757083973
+individual,P19,P19,arousal,eeg,knn,5,5,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.6785689428615036
+individual,P19,P19,arousal,eeg,knn,5,5,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9044850571694003
+individual,P19,P19,arousal,eeg,knn,10,10,1,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.6379234645463294
+individual,P19,P19,arousal,eeg,knn,10,10,2,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.74882369028134
+individual,P19,P19,arousal,eeg,knn,10,10,3,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""distance""}",1.7415054901394365
+individual,P19,P19,arousal,eeg,knn,10,10,4,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.627993776142805
+individual,P19,P19,arousal,eeg,knn,10,10,5,"{""regressor__n_neighbors"": 11, ""regressor__weights"": ""uniform""}",1.9134304037391479
