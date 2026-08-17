@@ -1,0 +1,92 @@
+participant: P05
+raw_participant_dir: D:\Thesis\data\P05_2026-05-29
+canonical_group: B
+ratings_file: D:\Thesis\data\Robot Ratings - Robot Ratings.csv
+video_settings:
+  crop:
+    reviewed: false
+    x: 110
+    y: 25
+    width: 250
+    height: 340
+  face_detection:
+    crop_validated: false
+    notes: Tentative shared crop proposed from one-time visual review; manual approval required.
+tasks:
+  pick_place:
+    category: observation
+    condition:
+      planned: control
+      actual: control
+      speed_planned: fast
+      speed_actual: fast
+    eeg: D:\Thesis\data\P05_2026-05-29\Pick and Place\EEG\UnicornRecorder_29_05_2026_10_11_06.bdf
+    video: D:\Thesis\data\P05_2026-05-29\Pick and Place\vision_video_10-11-37_PnP_CONTROL_FAST.avi
+    vision_log: D:\Thesis\data\P05_2026-05-29\Pick and Place\vision_log_10-11-37_PnP_CONTROL_FAST.csv
+    robot_metrics: D:\Thesis\data\P05_2026-05-29\Pick and Place\robot_metrics_10-11-54_PnP_CONTROL_FAST.csv
+    rating:
+      valence: 4.0
+      arousal: 3.0
+  shape_sorter_observation:
+    category: observation
+    condition:
+      planned: faulty
+      actual: faulty
+      speed_planned: fast
+      speed_actual: fast
+    eeg: D:\Thesis\data\P05_2026-05-29\Shape Sorter Observation\EEG\UnicornRecorder_29_05_2026_10_13_05.bdf
+    video: D:\Thesis\data\P05_2026-05-29\Shape Sorter Observation\vision_video_10-13-11_SHAPE_FAULTY_FAST.avi
+    vision_log: D:\Thesis\data\P05_2026-05-29\Shape Sorter Observation\vision_log_10-13-11_SHAPE_FAULTY_FAST.csv
+    robot_metrics: D:\Thesis\data\P05_2026-05-29\Shape Sorter Observation\robot_metrics_10-14-05_SHAPE_FAULTY_FAST.csv
+    rating:
+      valence: 3.0
+      arousal: 5.0
+  stack:
+    category: observation
+    condition:
+      planned: control
+      actual: control
+      speed_planned: slow
+      speed_actual: slow
+    eeg: D:\Thesis\data\P05_2026-05-29\Stack\EEG\UnicornRecorder_29_05_2026_10_15_06.bdf
+    video: D:\Thesis\data\P05_2026-05-29\Stack\vision_video_10-15-12_STACK_CONTROL_SLOW.avi
+    vision_log: D:\Thesis\data\P05_2026-05-29\Stack\vision_log_10-15-12_STACK_CONTROL_SLOW.csv
+    robot_metrics: D:\Thesis\data\P05_2026-05-29\Stack\robot_metrics_10-17-07_STACK_CONTROL_SLOW.csv
+    rating:
+      valence: 5.0
+      arousal: 5.0
+  sisyphus:
+    category: interaction
+    eeg: D:\Thesis\data\P05_2026-05-29\Sisyphus\EEG\UnicornRecorder_29_05_2026_10_18_25.bdf
+    video: D:\Thesis\data\P05_2026-05-29\Sisyphus\vision_video_10-18-31_SISYPHUS_INTERACTION.avi
+    vision_log: D:\Thesis\data\P05_2026-05-29\Sisyphus\vision_log_10-18-31_SISYPHUS_INTERACTION.csv
+    robot_metrics: D:\Thesis\data\P05_2026-05-29\Sisyphus\robot_metrics_10-19-57_SISYPHUS_INTERACTION.csv
+    rating:
+      valence: 3.0
+      arousal: 6.0
+  shape_sorter_interaction:
+    category: interaction
+    eeg: D:\Thesis\data\P05_2026-05-29\Shape Sorter Interaction\EEG\UnicornRecorder_29_05_2026_10_21_46.bdf
+    video: D:\Thesis\data\P05_2026-05-29\Shape Sorter Interaction\vision_video_10-22-06_HRI_INTERACTION.avi
+    vision_log: D:\Thesis\data\P05_2026-05-29\Shape Sorter Interaction\vision_log_10-22-06_HRI_INTERACTION.csv
+    robot_metrics: D:\Thesis\data\P05_2026-05-29\Shape Sorter Interaction\robot_metrics_10-23-17_HRI_INTERACTION.csv
+    rating:
+      valence: 5.0
+      arousal: 6.0
+  shape_sorter_alone:
+    category: alone
+    eeg:
+      file: D:\Thesis\data\P05_2026-05-29\Shape Sorter Alone\EGG\UnicornRecorder_29_05_2026_10_24_08.bdf
+      status_triggers_available: false
+      alignment: non_bdf_timing_required
+    video:
+      file: D:\Thesis\data\P05_2026-05-29\Shape Sorter Alone\vision_video_10-24-22_SHAPE_ALONE.avi
+      unusable: true
+      reason: zero-frame artifact; EEG-video alignment requires non-BDF timing evidence
+    vision_log: D:\Thesis\data\P05_2026-05-29\Shape Sorter Alone\vision_log_10-24-22_SHAPE_ALONE.csv
+    robot_metrics:
+      unavailable: true
+      reason: no robot metrics/configuration file found (not required for this task)
+    rating:
+      valence: 4.0
+      arousal: 3.0
