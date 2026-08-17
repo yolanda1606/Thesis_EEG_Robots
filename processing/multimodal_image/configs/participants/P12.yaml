@@ -15,13 +15,13 @@ eeg:
 
 video:
   crop:
-    left: 220
-    top: 80
-    right: 530
-    bottom: 460
-    scale: 1.0
-    approved: false
-    approval_note: "No face detected."
+    left: 280
+    top: 120
+    right: 500
+    bottom: 380
+    scale: 2.0
+    approved: true
+    approval_note: "Approved"
 
 synchronization:
   offset_override_s: null
