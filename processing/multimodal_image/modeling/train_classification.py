@@ -11,6 +11,7 @@ import json
 import platform
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
@@ -61,6 +62,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--append", action="store_true", help="Append a non-overlapping configuration segment to an interrupted run.")
+    parser.add_argument("--progress", action="store_true", help="Show concise experiment progress.")
+    parser.add_argument("--verbose", action="store_true", help="Show detailed progress diagnostics (implies --progress).")
     args = parser.parse_args(argv)
     args.models = parse_csv_option(args.models)
     args.feature_counts = parse_csv_option(args.feature_counts)
@@ -70,6 +73,26 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     if not args.feature_counts or invalid_counts: parser.error(f"Invalid --feature-counts: {sorted(invalid_counts)}")
     if "/" in args.run_name or "\\" in args.run_name or args.run_name in {"", ".", ".."}: parser.error("--run-name must be a simple directory name")
     return args
+
+
+class ProgressReporter:
+    """Print flushed, opt-in terminal progress without affecting experiment results."""
+
+    def __init__(self, progress: bool, verbose: bool) -> None:
+        self.progress_enabled = progress or verbose
+        self.verbose_enabled = verbose
+
+    def progress(self, message: str) -> None:
+        if self.progress_enabled:
+            print(message, flush=True)
+
+    def verbose(self, message: str) -> None:
+        if self.verbose_enabled:
+            print(message, flush=True)
+
+    @staticmethod
+    def candidate_count(grid: list[dict[str, list[Any]]]) -> int:
+        return sum(int(np.prod([len(values) for values in candidate.values()])) for candidate in grid)
 
 
 def label_ratings(ratings: pd.Series) -> pd.Series:
@@ -189,19 +212,34 @@ def fit_outer_fold(x_train: pd.DataFrame, y_train: pd.Series, x_test: pd.DataFra
     return search.best_estimator_, search.best_params_, float(search.best_score_), search.predict(x_test)
 
 
-def evaluate_individual(participant: str, x: pd.DataFrame, y: pd.Series, target: str, modality: str, model: str, request: str, seed: int) -> tuple[list[dict], list[dict], list[dict]]:
+def evaluate_individual(participant: str, x: pd.DataFrame, y: pd.Series, target: str, modality: str, model: str, request: str, seed: int, reporter: ProgressReporter | None = None) -> tuple[list[dict], list[dict], list[dict]]:
+    reporter = reporter or ProgressReporter(False, False)
     folds = valid_stratified_splits(y, 5, f"{participant} {target} {modality}")
     outer = StratifiedKFold(n_splits=folds, shuffle=True, random_state=seed)
     feature_count = resolved_feature_count(request, x.shape[1]); results=[]; selected=[]; params=[]
     for fold, (train, test) in enumerate(outer.split(x, y), 1):
-        y_train, y_test = y.iloc[train].reset_index(drop=True), y.iloc[test].reset_index(drop=True)
-        inner_folds = valid_stratified_splits(y_train, min(3, folds), f"{participant} fold {fold} inner CV")
-        inner = list(StratifiedKFold(n_splits=inner_folds, shuffle=True, random_state=seed + fold).split(x.iloc[train], y_train))
-        fitted, best, inner_score, predicted = fit_outer_fold(x.iloc[train], y_train, x.iloc[test], model=model, feature_count=feature_count, inner_splits=inner, seed=seed)
-        common = {"mode":"individual", "participant":participant, "held_out_participant":participant, "target":target, "modality":modality, "classifier":model, "feature_count_request":request, "feature_count_resolved":feature_count, "fold":fold}
-        results.append({**common, "training_participants":participant, "sample_size":len(y), "train_size":len(train), "test_size":len(test), "low_count":int((y==0).sum()), "high_count":int((y==1).sum()), **metric_row(y_test, predicted)})
-        selected.extend(selected_feature_rows(fitted, list(x.columns), common))
-        params.append({**common, "best_parameters":json.dumps(best, sort_keys=True), "inner_best_balanced_accuracy":inner_score})
+        context = f"participant={participant} | target={target} | modality={modality} | model={model} | features={request} | outer fold {fold}/{folds}"
+        started = time.perf_counter()
+        try:
+            reporter.progress(f"  outer fold {fold}/{folds} ...")
+            y_train, y_test = y.iloc[train].reset_index(drop=True), y.iloc[test].reset_index(drop=True)
+            inner_folds = valid_stratified_splits(y_train, min(3, folds), f"{participant} fold {fold} inner CV")
+            inner = list(StratifiedKFold(n_splits=inner_folds, shuffle=True, random_state=seed + fold).split(x.iloc[train], y_train))
+            _, grid = make_pipeline(model, feature_count, seed)
+            reporter.verbose(f"    train rows: {len(train)}; test rows: {len(test)}; predictors: {x.shape[1]}")
+            reporter.verbose(f"    tuning {model} ({ProgressReporter.candidate_count(grid)} candidates)...")
+            fitted, best, inner_score, predicted = fit_outer_fold(x.iloc[train], y_train, x.iloc[test], model=model, feature_count=feature_count, inner_splits=inner, seed=seed)
+            metrics = metric_row(y_test, predicted)
+            reporter.verbose("    inner tuning complete")
+            reporter.verbose(f"    best params: {json.dumps(best, sort_keys=True)}")
+            reporter.verbose(f"    balanced accuracy: {metrics['balanced_accuracy']:.3f}; elapsed: {time.perf_counter() - started:.1f} s")
+            common = {"mode":"individual", "participant":participant, "held_out_participant":participant, "target":target, "modality":modality, "classifier":model, "feature_count_request":request, "feature_count_resolved":feature_count, "fold":fold}
+            results.append({**common, "training_participants":participant, "sample_size":len(y), "train_size":len(train), "test_size":len(test), "low_count":int((y==0).sum()), "high_count":int((y==1).sum()), **metrics})
+            selected.extend(selected_feature_rows(fitted, list(x.columns), common))
+            params.append({**common, "best_parameters":json.dumps(best, sort_keys=True), "inner_best_balanced_accuracy":inner_score})
+        except Exception:
+            print(f"ERROR during {context}", file=sys.stderr, flush=True)
+            raise
     return results, selected, params
 
 
@@ -219,17 +257,33 @@ def grouped_inner_splits(x: pd.DataFrame, y: pd.Series, groups: pd.Series, seed:
     return splits
 
 
-def evaluate_general(data: pd.DataFrame, target: str, modality: str, model: str, request: str, seed: int) -> tuple[list[dict], list[dict], list[dict]]:
+def evaluate_general(data: pd.DataFrame, target: str, modality: str, model: str, request: str, seed: int, reporter: ProgressReporter | None = None) -> tuple[list[dict], list[dict], list[dict]]:
+    reporter = reporter or ProgressReporter(False, False)
     columns = modality_columns(modality); feature_count=resolved_feature_count(request, len(columns)); results=[]; selected=[]; params=[]
-    for fold, (train, test) in enumerate(general_outer_splits(data.participant), 1):
+    outer_splits = general_outer_splits(data.participant)
+    for fold, (train, test) in enumerate(outer_splits, 1):
         train_data, test_data = data.iloc[train], data.iloc[test]
-        x_train, y_train = train_data[columns], train_data.label
-        x_test, y_test = test_data[columns], test_data.label
-        inner = grouped_inner_splits(x_train, y_train, train_data.participant.reset_index(drop=True), seed + fold)
-        fitted, best, inner_score, predicted = fit_outer_fold(x_train, y_train, x_test, model=model, feature_count=feature_count, inner_splits=inner, seed=seed)
         held = str(test_data.participant.iloc[0]); common={"mode":"general", "participant":"COHORT", "held_out_participant":held, "target":target, "modality":modality, "classifier":model, "feature_count_request":request, "feature_count_resolved":feature_count, "fold":fold}
-        results.append({**common, "training_participants":";".join(sorted(train_data.participant.unique())), "sample_size":len(data), "train_size":len(train), "test_size":len(test), "low_count":int((data.label==0).sum()), "high_count":int((data.label==1).sum()), **metric_row(y_test, predicted)})
-        selected.extend(selected_feature_rows(fitted, columns, common)); params.append({**common, "best_parameters":json.dumps(best, sort_keys=True), "inner_best_balanced_accuracy":inner_score})
+        context = f"target={target} | modality={modality} | model={model} | features={request} | outer fold {fold}/{len(outer_splits)} | held out={held}"
+        started = time.perf_counter()
+        try:
+            reporter.progress(f"  outer fold {fold}/{len(outer_splits)} | held out: {held} ...")
+            x_train, y_train = train_data[columns], train_data.label
+            x_test, y_test = test_data[columns], test_data.label
+            inner = grouped_inner_splits(x_train, y_train, train_data.participant.reset_index(drop=True), seed + fold)
+            _, grid = make_pipeline(model, feature_count, seed)
+            reporter.verbose(f"    train rows: {len(train)}; test rows: {len(test)}; training participants: {', '.join(sorted(train_data.participant.unique()))}")
+            reporter.verbose(f"    tuning {model} ({ProgressReporter.candidate_count(grid)} candidates)...")
+            fitted, best, inner_score, predicted = fit_outer_fold(x_train, y_train, x_test, model=model, feature_count=feature_count, inner_splits=inner, seed=seed)
+            metrics = metric_row(y_test, predicted)
+            reporter.verbose("    inner tuning complete")
+            reporter.verbose(f"    best params: {json.dumps(best, sort_keys=True)}")
+            reporter.verbose(f"    balanced accuracy: {metrics['balanced_accuracy']:.3f}; elapsed: {time.perf_counter() - started:.1f} s")
+            results.append({**common, "training_participants":";".join(sorted(train_data.participant.unique())), "sample_size":len(data), "train_size":len(train), "test_size":len(test), "low_count":int((data.label==0).sum()), "high_count":int((data.label==1).sum()), **metrics})
+            selected.extend(selected_feature_rows(fitted, columns, common)); params.append({**common, "best_parameters":json.dumps(best, sort_keys=True), "inner_best_balanced_accuracy":inner_score})
+        except Exception:
+            print(f"ERROR during {context}", file=sys.stderr, flush=True)
+            raise
     return results, selected, params
 
 
@@ -257,6 +311,8 @@ def git_commit() -> str | None:
 
 
 def run(args: argparse.Namespace) -> dict[str, Any]:
+    started = time.perf_counter()
+    reporter = ProgressReporter(args.progress, args.verbose)
     readiness_path=(PROJECT_ROOT/args.readiness_csv).resolve() if not args.readiness_csv.is_absolute() else args.readiness_csv
     derived_root=(PROJECT_ROOT/args.derived_root).resolve() if not args.derived_root.is_absolute() else args.derived_root
     output_root=(PROJECT_ROOT/args.output_root).resolve() if not args.output_root.is_absolute() else args.output_root
@@ -270,17 +326,20 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             for modality in modalities:
                 x,y,columns=prepare_modality_data(table,participant,target,modality)
                 prepared.append({"participant":participant,"target":target,"modality":modality,"rows":len(y),"low":int((y==0).sum()),"high":int((y==1).sum()),"predictors":";".join(columns)})
-    print("Resolved participants ("+source+"): "+", ".join(participants))
-    for row in prepared: print(f"{row['participant']} {row['target']} {row['modality']}: usable={row['rows']}, low={row['low']}, high={row['high']}, predictors={row['predictors']}")
+    reporter.progress("Resolved participants ("+source+"): "+", ".join(participants))
+    for row in prepared: reporter.verbose(f"{row['participant']} {row['target']} {row['modality']}: usable={row['rows']}, low={row['low']}, high={row['high']}, predictors={row['predictors']}")
     if args.dry_run: return {"dry_run":True,"participants":participants,"prepared":prepared}
     out=output_root/args.run_name
     if out.exists() and not args.append: raise FileExistsError(f"Refusing to overwrite existing run directory: {out}")
     if args.append and not out.is_dir(): raise FileNotFoundError(f"Cannot append: run directory does not exist: {out}")
     out.mkdir(parents=True, exist_ok=args.append)
+    reporter.progress(f"Output: {out}")
     manifest={"created_utc":datetime.now(timezone.utc).isoformat(),"git_commit":git_commit(),"python":sys.executable,"python_version":sys.version,"platform":platform.platform(),"numpy":np.__version__,"scipy":scipy.__version__,"pandas":pd.__version__,"sklearn":sklearn.__version__,"seed":args.seed,"mode":args.mode,"target":targets,"modalities":modalities,"models":args.models,"feature_counts":args.feature_counts,"resolved_participants":participants,"cohort_source":source,"source_merged_tables":{p:str(v) for p,v in source_tables.items()},"label_definition":"LOW: rating < 4; HIGH: rating >= 4","cv_strategy":"StratifiedKFold nested CV" if args.mode=="individual" else "LeaveOneGroupOut outer CV; StratifiedGroupKFold inner CV","hyperparameter_grids":{"knn":{"n_neighbors":[3,5,7,11],"weights":["uniform","distance"]},"svm":{"kernel":["linear","rbf"],"C":[0.1,1,10],"rbf_gamma":["scale",0.01,0.1]},"gnb":{"var_smoothing":[1e-11,1e-9,1e-7]}}}
     if not args.append:
         (out/"run_manifest.json").write_text(json.dumps(manifest,indent=2)+"\n",encoding="utf-8"); resolved.to_csv(out/"resolved_participants.csv",index=False)
     result_rows=[]; selected_rows=[]; parameter_rows=[]
+    configurations = len(targets) * len(modalities) * len(args.models) * len(args.feature_counts) * (len(participants) if args.mode == "individual" else 1)
+    completed = 0
     for target in targets:
         for modality in modalities:
             if args.mode=="general":
@@ -291,10 +350,22 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             for model in args.models:
                 for request in args.feature_counts:
                     if args.mode=="individual":
-                        for participant, table in tables.items():
-                            x,y,_=prepare_modality_data(table,participant,target,modality); a,b,c=evaluate_individual(participant,x,y,target,modality,model,request,args.seed); result_rows+=a; selected_rows+=b; parameter_rows+=c
+                        for participant_index, (participant, table) in enumerate(tables.items(), 1):
+                            completed += 1; configuration_started = time.perf_counter()
+                            reporter.progress(f"Participant {participant} ({participant_index}/{len(participants)})")
+                            x,y,_=prepare_modality_data(table,participant,target,modality)
+                            actual = resolved_feature_count(request, x.shape[1])
+                            reporter.progress(f"[{completed}/{configurations}] {target} | {modality} | {model} | features={actual}")
+                            reporter.verbose(f"  usable rows: {len(y)}; predictors: {x.shape[1]}; requested features: {request}; resolved features: {actual}")
+                            a,b,c=evaluate_individual(participant,x,y,target,modality,model,request,args.seed,reporter); result_rows+=a; selected_rows+=b; parameter_rows+=c
+                            reporter.progress(f"  completed in {time.perf_counter() - configuration_started:.1f} s; mean BA: {pd.DataFrame(a).balanced_accuracy.mean():.3f}")
                     else:
-                        a,b,c=evaluate_general(cohort,target,modality,model,request,args.seed); result_rows+=a; selected_rows+=b; parameter_rows+=c
+                        completed += 1; configuration_started = time.perf_counter()
+                        actual = resolved_feature_count(request, len(modality_columns(modality)))
+                        reporter.progress(f"[{completed}/{configurations}] {target} | {modality} | {model} | features={actual}")
+                        reporter.verbose(f"  usable rows: {len(cohort)}; predictors: {len(modality_columns(modality))}; requested features: {request}; resolved features: {actual}")
+                        a,b,c=evaluate_general(cohort,target,modality,model,request,args.seed,reporter); result_rows+=a; selected_rows+=b; parameter_rows+=c
+                        reporter.progress(f"  completed in {time.perf_counter() - configuration_started:.1f} s; mean BA: {pd.DataFrame(a).balanced_accuracy.mean():.3f}")
     results=pd.DataFrame(result_rows); selected=pd.DataFrame(selected_rows); parameters=pd.DataFrame(parameter_rows)
     if args.append:
         for frame, filename in ((results, "fold_results.csv"), (selected, "selected_features_by_fold.csv"), (parameters, "best_hyperparameters.csv")):
@@ -309,6 +380,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     results[["mode","participant","held_out_participant","target","modality","classifier","feature_count_request","fold","tn","fp","fn","tp"]].to_csv(out/"confusion_matrices.csv",index=False)
     (out/"README.md").write_text("# Image classification experiment\n\nExperimental, leakage-safe binary classification. `all` means **No feature selection**. See `run_manifest.json` for the resolved cohort and design.\n",encoding="utf-8")
     write_plots(summary,frequency,out)
+    reporter.progress(f"Completed successfully\nConfigurations: {completed}\nOuter folds evaluated: {len(result_rows)}\nTotal elapsed time: {time.perf_counter() - started:.1f} s\nOutput: {out}")
     return {"dry_run":False,"output":out,"summary":summary,"prepared":prepared}
 
 

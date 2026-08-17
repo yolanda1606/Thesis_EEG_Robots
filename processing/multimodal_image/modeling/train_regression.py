@@ -7,6 +7,7 @@ import json
 import platform
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
@@ -54,12 +55,34 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--append", action="store_true")
+    parser.add_argument("--progress", action="store_true", help="Show concise experiment progress.")
+    parser.add_argument("--verbose", action="store_true", help="Show detailed progress diagnostics (implies --progress).")
     args = parser.parse_args(argv)
     args.models, args.feature_counts = parse_csv_option(args.models), parse_csv_option(args.feature_counts)
     if not args.models or set(args.models).difference({"knn", "svr", "ridge"}): parser.error("Invalid --models")
     if not args.feature_counts or set(args.feature_counts).difference({"all", "5", "10", "20"}): parser.error("Invalid --feature-counts")
     if "/" in args.run_name or "\\" in args.run_name or args.run_name in {"", ".", ".."}: parser.error("--run-name must be a simple directory name")
     return args
+
+
+class ProgressReporter:
+    """Print flushed, opt-in terminal progress without affecting experiment results."""
+
+    def __init__(self, progress: bool, verbose: bool) -> None:
+        self.progress_enabled = progress or verbose
+        self.verbose_enabled = verbose
+
+    def progress(self, message: str) -> None:
+        if self.progress_enabled:
+            print(message, flush=True)
+
+    def verbose(self, message: str) -> None:
+        if self.verbose_enabled:
+            print(message, flush=True)
+
+    @staticmethod
+    def candidate_count(grid: list[dict[str, list[Any]]]) -> int:
+        return sum(int(np.prod([len(values) for values in candidate.values()])) for candidate in grid)
 
 
 def modality_columns(modality: str) -> list[str]:
@@ -157,18 +180,33 @@ def fit_outer_fold(x_train: pd.DataFrame, y_train: pd.Series, x_test: pd.DataFra
     return search.best_estimator_, search.best_params_, float(-search.best_score_), search.predict(x_test)
 
 
-def evaluate_individual(participant: str, x: pd.DataFrame, y: pd.Series, target: str, modality: str, model: str, request: str, seed: int) -> tuple[list[dict], list[dict], list[dict], list[dict]]:
+def evaluate_individual(participant: str, x: pd.DataFrame, y: pd.Series, target: str, modality: str, model: str, request: str, seed: int, reporter: ProgressReporter | None = None) -> tuple[list[dict], list[dict], list[dict], list[dict]]:
+    reporter = reporter or ProgressReporter(False, False)
     folds, count = valid_kfold_splits(len(y), 5, participant), resolved_feature_count(request, x.shape[1])
     rows: list[dict] = []; selected: list[dict] = []; parameters: list[dict] = []; predictions: list[dict] = []
     for fold, (train, test) in enumerate(KFold(folds, shuffle=True, random_state=seed).split(x), 1):
-        inner_count = valid_kfold_splits(len(train), min(3, folds), f"{participant} fold {fold}")
-        inner = list(KFold(inner_count, shuffle=True, random_state=seed + fold).split(x.iloc[train]))
-        fitted, best, inner_rmse, predicted = fit_outer_fold(x.iloc[train], y.iloc[train], x.iloc[test], model, count, inner, seed)
-        common = {"mode": "individual", "participant": participant, "held_out_participant": participant, "target": target, "modality": modality, "regressor": model, "feature_count_request": request, "feature_count_resolved": count, "fold": fold}
-        rows.append({**common, "training_participants": participant, "sample_size": len(y), "train_size": len(train), "test_size": len(test), **metric_row(y.iloc[test], predicted)})
-        selected += selected_feature_rows(fitted, list(x.columns), common)
-        parameters.append({**common, "best_parameters": json.dumps(best, sort_keys=True), "inner_best_rmse": inner_rmse})
-        predictions += [{**common, "true_rating": float(actual), "predicted_rating": float(estimate)} for actual, estimate in zip(y.iloc[test], predicted)]
+        context = f"participant={participant} | target={target} | modality={modality} | model={model} | features={request} | outer fold {fold}/{folds}"
+        started = time.perf_counter()
+        try:
+            reporter.progress(f"  outer fold {fold}/{folds} ...")
+            inner_count = valid_kfold_splits(len(train), min(3, folds), f"{participant} fold {fold}")
+            inner = list(KFold(inner_count, shuffle=True, random_state=seed + fold).split(x.iloc[train]))
+            _, grid = make_pipeline(model, count, seed)
+            reporter.verbose(f"    train rows: {len(train)}; test rows: {len(test)}; predictors: {x.shape[1]}")
+            reporter.verbose(f"    tuning {model} ({ProgressReporter.candidate_count(grid)} candidates)...")
+            fitted, best, inner_rmse, predicted = fit_outer_fold(x.iloc[train], y.iloc[train], x.iloc[test], model, count, inner, seed)
+            metrics = metric_row(y.iloc[test], predicted)
+            reporter.verbose("    inner tuning complete")
+            reporter.verbose(f"    best params: {json.dumps(best, sort_keys=True)}")
+            reporter.verbose(f"    RMSE: {metrics['rmse']:.2f}; R2: {metrics['r2']:.2f}; elapsed: {time.perf_counter() - started:.1f} s")
+            common = {"mode": "individual", "participant": participant, "held_out_participant": participant, "target": target, "modality": modality, "regressor": model, "feature_count_request": request, "feature_count_resolved": count, "fold": fold}
+            rows.append({**common, "training_participants": participant, "sample_size": len(y), "train_size": len(train), "test_size": len(test), **metrics})
+            selected += selected_feature_rows(fitted, list(x.columns), common)
+            parameters.append({**common, "best_parameters": json.dumps(best, sort_keys=True), "inner_best_rmse": inner_rmse})
+            predictions += [{**common, "true_rating": float(actual), "predicted_rating": float(estimate)} for actual, estimate in zip(y.iloc[test], predicted)]
+        except Exception:
+            print(f"ERROR during {context}", file=sys.stderr, flush=True)
+            raise
     return rows, selected, parameters, predictions
 
 
@@ -179,19 +217,35 @@ def grouped_inner_splits(x: pd.DataFrame, groups: pd.Series) -> list[tuple[np.nd
     return splits
 
 
-def evaluate_general(data: pd.DataFrame, target: str, modality: str, model: str, request: str, seed: int) -> tuple[list[dict], list[dict], list[dict], list[dict]]:
+def evaluate_general(data: pd.DataFrame, target: str, modality: str, model: str, request: str, seed: int, reporter: ProgressReporter | None = None) -> tuple[list[dict], list[dict], list[dict], list[dict]]:
+    reporter = reporter or ProgressReporter(False, False)
     columns, count = modality_columns(modality), resolved_feature_count(request, len(modality_columns(modality)))
     rows: list[dict] = []; selected: list[dict] = []; parameters: list[dict] = []; predictions: list[dict] = []
-    for fold, (train, test) in enumerate(LeaveOneGroupOut().split(data, groups=data.participant), 1):
+    outer_splits = list(LeaveOneGroupOut().split(data, groups=data.participant))
+    for fold, (train, test) in enumerate(outer_splits, 1):
         training, heldout = data.iloc[train], data.iloc[test]
-        inner = grouped_inner_splits(training[columns], training.participant.reset_index(drop=True))
-        fitted, best, inner_rmse, predicted = fit_outer_fold(training[columns], training.rating, heldout[columns], model, count, inner, seed)
         held = str(heldout.participant.iloc[0])
         common = {"mode": "general", "participant": "COHORT", "held_out_participant": held, "target": target, "modality": modality, "regressor": model, "feature_count_request": request, "feature_count_resolved": count, "fold": fold}
-        rows.append({**common, "training_participants": ";".join(sorted(training.participant.unique())), "sample_size": len(data), "train_size": len(train), "test_size": len(test), **metric_row(heldout.rating, predicted)})
-        selected += selected_feature_rows(fitted, columns, common)
-        parameters.append({**common, "best_parameters": json.dumps(best, sort_keys=True), "inner_best_rmse": inner_rmse})
-        predictions += [{**common, "true_rating": float(actual), "predicted_rating": float(estimate)} for actual, estimate in zip(heldout.rating, predicted)]
+        context = f"target={target} | modality={modality} | model={model} | features={request} | outer fold {fold}/{len(outer_splits)} | held out={held}"
+        started = time.perf_counter()
+        try:
+            reporter.progress(f"  outer fold {fold}/{len(outer_splits)} | held out: {held} ...")
+            inner = grouped_inner_splits(training[columns], training.participant.reset_index(drop=True))
+            _, grid = make_pipeline(model, count, seed)
+            reporter.verbose(f"    train rows: {len(train)}; test rows: {len(test)}; training participants: {', '.join(sorted(training.participant.unique()))}")
+            reporter.verbose(f"    tuning {model} ({ProgressReporter.candidate_count(grid)} candidates)...")
+            fitted, best, inner_rmse, predicted = fit_outer_fold(training[columns], training.rating, heldout[columns], model, count, inner, seed)
+            metrics = metric_row(heldout.rating, predicted)
+            reporter.verbose("    inner tuning complete")
+            reporter.verbose(f"    best params: {json.dumps(best, sort_keys=True)}")
+            reporter.verbose(f"    RMSE: {metrics['rmse']:.2f}; R2: {metrics['r2']:.2f}; elapsed: {time.perf_counter() - started:.1f} s")
+            rows.append({**common, "training_participants": ";".join(sorted(training.participant.unique())), "sample_size": len(data), "train_size": len(train), "test_size": len(test), **metrics})
+            selected += selected_feature_rows(fitted, columns, common)
+            parameters.append({**common, "best_parameters": json.dumps(best, sort_keys=True), "inner_best_rmse": inner_rmse})
+            predictions += [{**common, "true_rating": float(actual), "predicted_rating": float(estimate)} for actual, estimate in zip(heldout.rating, predicted)]
+        except Exception:
+            print(f"ERROR during {context}", file=sys.stderr, flush=True)
+            raise
     return rows, selected, parameters, predictions
 
 
@@ -209,6 +263,8 @@ def feature_frequency(selected: pd.DataFrame) -> pd.DataFrame:
 
 
 def run(args: argparse.Namespace) -> dict[str, Any]:
+    started = time.perf_counter()
+    reporter = ProgressReporter(args.progress, args.verbose)
     readiness = (PROJECT_ROOT / args.readiness_csv).resolve() if not args.readiness_csv.is_absolute() else args.readiness_csv
     derived = (PROJECT_ROOT / args.derived_root).resolve() if not args.derived_root.is_absolute() else args.derived_root
     root = (PROJECT_ROOT / args.output_root).resolve() if not args.output_root.is_absolute() else args.output_root
@@ -222,18 +278,21 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             for modality in modalities:
                 x, y, columns = prepare_modality_data(table, participant, target, modality)
                 prepared.append({"participant": participant, "target": target, "modality": modality, "rows": len(y), "predictors": ";".join(columns)})
-    print("Resolved participants (" + source + "): " + ", ".join(participants))
-    for item in prepared: print(f"{item['participant']} {item['target']} {item['modality']}: usable={item['rows']}")
+    reporter.progress("Resolved participants (" + source + "): " + ", ".join(participants))
+    for item in prepared: reporter.verbose(f"{item['participant']} {item['target']} {item['modality']}: usable={item['rows']}, predictors={len(item['predictors'].split(';'))}")
     if args.dry_run: return {"dry_run": True, "participants": participants, "prepared": prepared}
     out = root / args.run_name
     if out.exists() and not args.append: raise FileExistsError(f"Refusing to overwrite existing run directory: {out}")
     if args.append and not out.is_dir(): raise FileNotFoundError(f"Cannot append: run directory does not exist: {out}")
     out.mkdir(parents=True, exist_ok=args.append)
+    reporter.progress(f"Output: {out}")
     manifest = {"created_utc": datetime.now(timezone.utc).isoformat(), "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=PROJECT_ROOT, text=True).strip(), "python": sys.executable, "python_version": sys.version, "platform": platform.platform(), "numpy": np.__version__, "scipy": scipy.__version__, "pandas": pd.__version__, "sklearn": sklearn.__version__, "seed": args.seed, "mode": args.mode, "target": targets, "modalities": modalities, "models": args.models, "feature_counts": args.feature_counts, "resolved_participants": participants, "cohort_source": source, "stage_a_participants": list(STAGE_A_PARTICIPANTS), "source_merged_tables": {key: str(value) for key, value in sources.items()}, "target_definition": "Original continuous ratings; primary predictions are unconstrained.", "cv_strategy": "Nested shuffled KFold" if args.mode == "individual" else "LeaveOneGroupOut outer CV; GroupKFold inner CV", "inner_selection_metric": "neg_root_mean_squared_error; sklearn negates RMSE because greater scores are better", "feature_selection": "SelectKBest(f_regression) inside Pipeline"}
     if not args.append:
         (out / "run_manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
         resolved.to_csv(out / "resolved_participants.csv", index=False)
     results: list[dict] = []; selected: list[dict] = []; parameters: list[dict] = []; predictions: list[dict] = []
+    configurations = len(targets) * len(modalities) * len(args.models) * len(args.feature_counts) * (len(participants) if args.mode == "individual" else 1)
+    completed = 0
     for target in targets:
         for modality in modalities:
             if args.mode == "general":
@@ -245,13 +304,24 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             for model in args.models:
                 for request in args.feature_counts:
                     if args.mode == "individual":
-                        for participant, table in tables.items():
+                        for participant_index, (participant, table) in enumerate(tables.items(), 1):
+                            completed += 1; configuration_started = time.perf_counter()
+                            reporter.progress(f"Participant {participant} ({participant_index}/{len(participants)})")
                             x, y, _ = prepare_modality_data(table, participant, target, modality)
-                            a, b, c, d = evaluate_individual(participant, x, y, target, modality, model, request, args.seed)
+                            actual = resolved_feature_count(request, x.shape[1])
+                            reporter.progress(f"[{completed}/{configurations}] {target} | {modality} | {model} | features={actual}")
+                            reporter.verbose(f"  usable rows: {len(y)}; predictors: {x.shape[1]}; requested features: {request}; resolved features: {actual}")
+                            a, b, c, d = evaluate_individual(participant, x, y, target, modality, model, request, args.seed, reporter)
                             results += a; selected += b; parameters += c; predictions += d
+                            reporter.progress(f"  completed in {time.perf_counter() - configuration_started:.1f} s; mean RMSE: {pd.DataFrame(a).rmse.mean():.2f}")
                     else:
-                        a, b, c, d = evaluate_general(cohort, target, modality, model, request, args.seed)
+                        completed += 1; configuration_started = time.perf_counter()
+                        actual = resolved_feature_count(request, len(modality_columns(modality)))
+                        reporter.progress(f"[{completed}/{configurations}] {target} | {modality} | {model} | features={actual}")
+                        reporter.verbose(f"  usable rows: {len(cohort)}; predictors: {len(modality_columns(modality))}; requested features: {request}; resolved features: {actual}")
+                        a, b, c, d = evaluate_general(cohort, target, modality, model, request, args.seed, reporter)
                         results += a; selected += b; parameters += c; predictions += d
+                        reporter.progress(f"  completed in {time.perf_counter() - configuration_started:.1f} s; mean RMSE: {pd.DataFrame(a).rmse.mean():.2f}")
     result_frame, selected_frame, parameter_frame, prediction_frame = pd.DataFrame(results), pd.DataFrame(selected), pd.DataFrame(parameters), pd.DataFrame(predictions)
     if args.append:
         for frame, filename in ((result_frame, "fold_results.csv"), (selected_frame, "selected_features_by_fold.csv"), (parameter_frame, "best_hyperparameters.csv"), (prediction_frame, "predictions.csv")):
@@ -266,6 +336,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     for frame, filename in ((result_frame, "fold_results.csv"), (prediction_frame, "predictions.csv"), (parameter_frame, "best_hyperparameters.csv"), (selected_frame, "selected_features_by_fold.csv"), (frequency, "feature_selection_frequency.csv"), (summary, "results_summary.csv")): frame.to_csv(out / filename, index=False)
     lines = ["# Image regression experiment", "", "Continuous unconstrained-rating prediction. Inner selection uses neg_root_mean_squared_error, which sklearn negates for its greater-is-better convention.", "", "See results_summary.csv for fold-aggregated RMSE, MAE, R2, and explained-variance metrics."]
     (out / "README.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    reporter.progress(f"Completed successfully\nConfigurations: {completed}\nOuter folds evaluated: {len(results)}\nTotal elapsed time: {time.perf_counter() - started:.1f} s\nOutput: {out}")
     return {"dry_run": False, "output": out, "summary": summary, "prepared": prepared}
 
 

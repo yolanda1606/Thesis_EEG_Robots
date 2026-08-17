@@ -24,6 +24,15 @@ def synthetic_table(rows: int = 20) -> pd.DataFrame:
 
 
 class TestTrainRegression(unittest.TestCase):
+    def test_progress_and_verbose_flags_are_accepted(self):
+        base = ["--mode", "individual", "--target", "valence", "--modality", "face", "--run-name", "flags"]
+        self.assertTrue(tr.parse_args(base + ["--progress"]).progress)
+        args = tr.parse_args(base + ["--verbose"])
+        self.assertTrue(args.verbose)
+        reporter = tr.ProgressReporter(args.progress, args.verbose)
+        self.assertTrue(reporter.progress_enabled)
+        self.assertTrue(reporter.verbose_enabled)
+
     def test_continuous_targets_are_preserved_without_labels(self):
         _, ratings, _ = tr.prepare_modality_data(synthetic_table(), "P19", "valence", "face")
         self.assertEqual(ratings.iloc[[0, -1]].tolist(), [1.0, 7.0])

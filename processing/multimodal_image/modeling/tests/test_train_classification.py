@@ -25,6 +25,15 @@ def synthetic_table(rows: int = 12) -> pd.DataFrame:
 
 
 class TestTrainClassification(unittest.TestCase):
+    def test_progress_and_verbose_flags_are_accepted(self):
+        base = ["--mode", "individual", "--target", "valence", "--modality", "face", "--run-name", "flags"]
+        self.assertTrue(tc.parse_args(base + ["--progress"]).progress)
+        args = tc.parse_args(base + ["--verbose"])
+        self.assertTrue(args.verbose)
+        reporter = tc.ProgressReporter(args.progress, args.verbose)
+        self.assertTrue(reporter.progress_enabled)
+        self.assertTrue(reporter.verbose_enabled)
+
     def test_label_definition(self):
         self.assertEqual(tc.label_ratings(pd.Series([1, 3.9, 4, 7])).tolist(), [0, 0, 1, 1])
 
