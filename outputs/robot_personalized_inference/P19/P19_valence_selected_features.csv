@@ -1,0 +1,6 @@
+feature,f_classif_score,selected
+eeg_se__PO8,11.89297487361937,True
+eeg_hc__PO8,11.585577669923955,True
+eeg_mf_hz__PO8,11.4521089011144,True
+eeg_mf_hz__Fz,9.209035881978886,True
+eeg_bp_delta__Fz,9.114935405906238,True

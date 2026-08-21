@@ -1,0 +1,34 @@
+{
+  "participant": "P19",
+  "comparison": "canonical_with_ICA_vs_experimental_no_ICA",
+  "runs": {
+    "with_ICA": "derived/P19/Image_Experiment/runs/p19_final",
+    "no_ICA": "derived/P19/Image_Experiment/runs/p19_no_ica"
+  },
+  "modality": "eeg",
+  "models": [
+    "knn",
+    "svm",
+    "gnb"
+  ],
+  "feature_counts": [
+    "all",
+    "5",
+    "10",
+    "20"
+  ],
+  "nested_cv": "validated evaluate_individual: StratifiedKFold outer up to 5; inner up to 3",
+  "scoring": "balanced_accuracy",
+  "seed": 42,
+  "robot_data_used": false,
+  "comparability_audit": [
+    "Canonical retained EEG rows: 960; no-ICA retained EEG rows: 960.",
+    "Canonical retained triggers: 120; no-ICA retained triggers: 120.",
+    "EEG feature column names identical: True; count canonical/no-ICA: 15/15.",
+    "Channel set identical: True; participant/trial keys identical: True.",
+    "Target/rating rows identical: True; merged row count canonical/no-ICA: 120/120.",
+    "Non-feature EEG metadata identical: True. Numeric EEG feature values are intentionally permitted to differ because ICA is disabled.",
+    "Resolved preprocessing configuration differs only at ICA enabled state and installation-specific resource_root path.",
+    "Video/face artifacts are absent from p19_no_ica by design; this wrapper evaluates EEG only."
+  ]
+}

@@ -1,0 +1,32 @@
+# Experiment C-style Image calibration branch. This mirrors image_experiment.yaml
+# and differs only by explicitly disabling the existing ICA stage.
+experiment: image
+
+inputs:
+  experiment_dir: Image Experiment
+
+events:
+  image_ranges:
+    HAHV: [101, 130]
+    HALV: [201, 230]
+    LAHV: [301, 330]
+    LALV: [401, 430]
+
+ratings:
+  required_columns:
+    [stim_id, category, trigger_sent, valence_rating, arousal_rating]
+  rating_columns:
+    valence: valence_rating
+    arousal: arousal_rating
+  missing_tokens: ["", "None", "NA", "N/A"]
+
+trials:
+  expected_image_trials: 120
+  event_locked: true
+
+eeg:
+  ica:
+    enabled: false
+
+video:
+  analysis_window_s: 2.0

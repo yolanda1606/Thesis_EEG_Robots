@@ -1,0 +1,61 @@
+{
+  "experiment": "B_cross_context_feature_ablation",
+  "participant": "P19",
+  "strict_transfer_artifacts_unchanged": true,
+  "robot_data_used_only_after_image_only_freeze": true,
+  "robot_data_not_used_for_tuning_scaling_selection_or_fitting": true,
+  "candidates": {
+    "V1_remove_delta_Fz": {
+      "target": "valence",
+      "classifier": "gnb",
+      "remove": [
+        "eeg_bp_delta__Fz"
+      ],
+      "rationale": "Pre-specified from completed audit: delta power at Fz dominated GaussianNB LOW-vs-HIGH likelihood in 95\u2013100% of four shifted tasks.",
+      "fixed_features": [
+        "eeg_se__PO8",
+        "eeg_hc__PO8",
+        "eeg_mf_hz__PO8",
+        "eeg_mf_hz__Fz"
+      ]
+    },
+    "A1_remove_hc_Fz": {
+      "target": "arousal",
+      "classifier": "knn",
+      "remove": [
+        "eeg_hc__Fz"
+      ],
+      "rationale": "Pre-specified from completed audit: Hjorth complexity at Fz was the dominant nearest-Image distance contributor in the four problematic tasks.",
+      "fixed_features": [
+        "eeg_bp_beta__PO8",
+        "eeg_bp_beta__Fz",
+        "eeg_hm__Fz",
+        "eeg_se__Fz",
+        "eeg_hc__PO8",
+        "eeg_mf_hz__Fz",
+        "eeg_hm__PO8",
+        "eeg_mf_hz__PO8",
+        "eeg_bp_beta__Pz"
+      ]
+    },
+    "A2_remove_hc_and_se_Fz": {
+      "target": "arousal",
+      "classifier": "knn",
+      "remove": [
+        "eeg_hc__Fz",
+        "eeg_se__Fz"
+      ],
+      "rationale": "A2 is pre-specified solely from existing audit: after Hjorth complexity at Fz, spectral entropy at Fz was the only repeated secondary nearest-neighbour distance contributor across Pick & Place, Observation, Stack, and Sisyphus (median fraction about 14\u201320%).",
+      "fixed_features": [
+        "eeg_bp_beta__PO8",
+        "eeg_bp_beta__Fz",
+        "eeg_hm__Fz",
+        "eeg_hc__PO8",
+        "eeg_mf_hz__Fz",
+        "eeg_hm__PO8",
+        "eeg_mf_hz__PO8",
+        "eeg_bp_beta__Pz"
+      ]
+    }
+  }
+}

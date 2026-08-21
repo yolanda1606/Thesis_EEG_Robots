@@ -1,0 +1,56 @@
+{
+  "experiment": "C_preprocessing_harmonization",
+  "participant": "P19",
+  "branch": "C0_reproducible_harmonized_no_ICA",
+  "C1_status": "IMAGE_EQUIVALENT_ICA_NOT_REPRODUCIBLE_FOR_CONTINUOUS_ROBOT_DATA",
+  "raw_bdf_inputs": {
+    "pick_place": {
+      "path": "data/P19_2026-06-11/Pick and Place/EEG/UnicornRecorder_11_06_2026_15_57_27.bdf",
+      "sha256": "9123c8c702bdfa8fe9f5fd964d99337b2ef960386b44214a230fc7aa36569f8c"
+    },
+    "shape_sorter_observation": {
+      "path": "data/P19_2026-06-11/Shape Sorter Observation/EEG/UnicornRecorder_11_06_2026_15_59_11.bdf",
+      "sha256": "7d8bc70c486a3ea8e02044f642f4fd3ab5ddc31b3f1532ba90b93110de6fdbf3"
+    },
+    "stack": {
+      "path": "data/P19_2026-06-11/Stack/EEG/UnicornRecorder_11_06_2026_16_01_33.bdf",
+      "sha256": "fbbf6fff4ec727f2fbc4eab69b6d0360deb397ca1123c20e517e000ea8f13c40"
+    },
+    "sisyphus": {
+      "path": "data/P19_2026-06-11/Sisyphus/EEG/UnicornRecorder_11_06_2026_16_04_38.bdf",
+      "sha256": "92c5591bdcfac807199e03bc49859a649083eadff0c460095c8b817631a47209"
+    },
+    "shape_sorter_interaction": {
+      "path": "data/P19_2026-06-11/Shape Sorter Interaction/EEG/UnicornRecorder_11_06_2026_16_08_11.bdf",
+      "sha256": "028a1d1b88f1ba2572e84d93353b690a0aec24b8f4ae3649d5ac4176adcc13e7"
+    }
+  },
+  "image_config_source": "derived/P19/Image_Experiment/runs/p19_final/config/resolved_configuration.yaml",
+  "robot_config_source": "derived/P19/Robot_Experiment/runs/p19_robot_continuous/resolved_participant.yaml",
+  "alignment_source": "derived/P19/Robot_Experiment/runs/p19_robot_continuous/alignment/alignment_metadata.json",
+  "existing_robot_features_read_only": "derived/P19/Robot_Experiment/runs/p19_robot_continuous/features/eeg_window_features.csv",
+  "frozen_models_read_only": [
+    "outputs/robot_personalized_inference/P19/P19_valence_image_calibration_model.joblib",
+    "outputs/robot_personalized_inference/P19/P19_arousal_image_calibration_model.joblib"
+  ],
+  "settings": {
+    "sampling_hz": 250,
+    "channels": [
+      "Fz",
+      "C3",
+      "Cz",
+      "C4",
+      "Pz",
+      "PO7",
+      "Oz",
+      "PO8"
+    ],
+    "reference": "CAR",
+    "filter": "Butterworth IIR order 4, 1.0\u201340.0 Hz",
+    "ica": "not applied",
+    "window_samples": 500,
+    "window_length_s": 2.0,
+    "step_samples": 250,
+    "step_s": 1.0
+  }
+}

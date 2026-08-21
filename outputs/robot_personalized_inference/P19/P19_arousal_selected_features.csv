@@ -1,0 +1,11 @@
+feature,f_classif_score,selected
+eeg_bp_beta__PO8,23.112345313550847,True
+eeg_bp_beta__Fz,18.04122239968493,True
+eeg_hc__Fz,17.494945729052603,True
+eeg_hm__Fz,14.4623158145931,True
+eeg_se__Fz,14.218312178414998,True
+eeg_hc__PO8,12.639260861524589,True
+eeg_mf_hz__Fz,12.236522637171786,True
+eeg_hm__PO8,11.54524628548458,True
+eeg_mf_hz__PO8,11.350376907687219,True
+eeg_bp_beta__Pz,10.290046483990679,True

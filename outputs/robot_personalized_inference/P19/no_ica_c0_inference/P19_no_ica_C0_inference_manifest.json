@@ -1,0 +1,53 @@
+{
+  "participant": "P19",
+  "calibration_run": "derived/P19/Image_Experiment/runs/p19_no_ica",
+  "robot_representation": "outputs/robot_personalized_inference/P19/preprocessing_harmonization/P19_C0_harmonized_window_features.csv",
+  "source_comparison_best": "outputs/image_classification/P19_ica_comparison/P19_ica_vs_no_ica_best_per_target.csv",
+  "recipes": {
+    "valence": {
+      "internal_cv_folds": 3,
+      "internal_cv_balanced_accuracy": 0.5409279609279609,
+      "final_hyperparameters": {
+        "classifier__var_smoothing": 1e-11
+      },
+      "selected_features": [
+        "eeg_se__Fz",
+        "eeg_se__PO8",
+        "eeg_hm__PO8",
+        "eeg_hc__Fz",
+        "eeg_hc__PO8",
+        "eeg_mf_hz__Fz",
+        "eeg_mf_hz__PO8",
+        "eeg_bp_delta__Fz",
+        "eeg_bp_delta__PO8",
+        "eeg_se_gamma__PO7"
+      ]
+    },
+    "arousal": {
+      "internal_cv_folds": 3,
+      "internal_cv_balanced_accuracy": 0.6486734513050302,
+      "final_hyperparameters": {
+        "classifier__n_neighbors": 5,
+        "classifier__weights": "uniform"
+      },
+      "selected_features": [
+        "eeg_se__Fz",
+        "eeg_se__PO8",
+        "eeg_hm__Fz",
+        "eeg_hm__PO8",
+        "eeg_hc__Fz",
+        "eeg_hc__PO8",
+        "eeg_mf_hz__Fz",
+        "eeg_bp_beta__Fz",
+        "eeg_bp_beta__PO8",
+        "eeg_bp_beta__Pz"
+      ]
+    }
+  },
+  "robot_data_used_for_fit_scale_selection_or_tuning": false,
+  "source_hashes": {
+    "derived/P19/Image_Experiment/runs/p19_no_ica/merged/p19_image_trial_dataset.csv": "436524334d698be60d86893ac3d62a8be4adb643e6232d2b7da465d4770646ae",
+    "outputs/robot_personalized_inference/P19/preprocessing_harmonization/P19_C0_harmonized_window_features.csv": "b18880e2600477c146329397a347864b6e9ceea6072b983cf8e2093281d672a3",
+    "outputs/image_classification/P19_ica_comparison/P19_ica_vs_no_ica_best_per_target.csv": "ba05c322f61ad3b54addb8bd5ed1a6fff2cf93b8c4394b81f42b67c5423231f5"
+  }
+}

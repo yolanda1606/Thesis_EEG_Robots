@@ -1,0 +1,11 @@
+feature
+eeg_se__Fz
+eeg_se__PO8
+eeg_hm__Fz
+eeg_hm__PO8
+eeg_hc__Fz
+eeg_hc__PO8
+eeg_mf_hz__Fz
+eeg_bp_beta__Fz
+eeg_bp_beta__PO8
+eeg_bp_beta__Pz

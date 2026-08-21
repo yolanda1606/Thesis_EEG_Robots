@@ -1,0 +1,19 @@
+{
+  "created_utc": "2026-08-21T12:04:38.823569+00:00",
+  "participant": "P19",
+  "source_files": {
+    "robot_features": "derived/P19/Robot_Experiment/runs/p19_robot_continuous/features/eeg_window_features.csv",
+    "inference_dir": "outputs/robot_personalized_inference/P19",
+    "image_run": "derived/P19/Image_Experiment/runs/p19_final"
+  },
+  "read_only_frozen_artifacts": true,
+  "software_versions": {
+    "python": "3.10.12 (main, Jun 22 2026, 18:55:27) [GCC 11.4.0]",
+    "platform": "Linux-5.15.0-1078-realtime-x86_64-with-glibc2.35",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "scipy": "1.15.3",
+    "scikit_learn": "1.7.2",
+    "joblib": "1.5.3"
+  }
+}

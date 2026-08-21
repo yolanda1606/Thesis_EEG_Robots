@@ -1,0 +1,126 @@
+participant,target,task,task_label,feature,geometry,median_contribution,p95_contribution,largest_contributor_pct,median_abs_contribution,median_signed_contribution,direction,dominant_contributor_pct
+P19,arousal,pick_place,Pick and Place,eeg_se__Fz,nearest_image_neighbor,0.19810418641434296,0.42541950690669045,9.523809523809524,,,,
+P19,arousal,pick_place,Pick and Place,eeg_se__Fz,mean_of_11_image_neighbors,0.2530772090903283,0.4523151408781979,19.047619047619047,,,,
+P19,arousal,pick_place,Pick and Place,eeg_hm__Fz,nearest_image_neighbor,0.04286959286535705,0.0673111566155461,0.0,,,,
+P19,arousal,pick_place,Pick and Place,eeg_hm__Fz,mean_of_11_image_neighbors,0.044009770723883165,0.05861177073332772,0.0,,,,
+P19,arousal,pick_place,Pick and Place,eeg_hm__PO8,nearest_image_neighbor,0.010179041973716418,0.09175530989619951,0.0,,,,
+P19,arousal,pick_place,Pick and Place,eeg_hm__PO8,mean_of_11_image_neighbors,0.016648814466360157,0.03482957466040652,0.0,,,,
+P19,arousal,pick_place,Pick and Place,eeg_hc__Fz,nearest_image_neighbor,0.5104807199606629,0.6393644142426405,80.95238095238095,,,,
+P19,arousal,pick_place,Pick and Place,eeg_hc__Fz,mean_of_11_image_neighbors,0.4273946422656209,0.5784717856300555,73.80952380952381,,,,
+P19,arousal,pick_place,Pick and Place,eeg_hc__PO8,nearest_image_neighbor,0.08981197825075851,0.25134437711948576,0.0,,,,
+P19,arousal,pick_place,Pick and Place,eeg_hc__PO8,mean_of_11_image_neighbors,0.09374102162065925,0.23485622238577414,0.0,,,,
+P19,arousal,pick_place,Pick and Place,eeg_mf_hz__Fz,nearest_image_neighbor,0.0013235334980952946,0.005332748718169183,0.0,,,,
+P19,arousal,pick_place,Pick and Place,eeg_mf_hz__Fz,mean_of_11_image_neighbors,0.00441288150300658,0.013728076308645323,0.0,,,,
+P19,arousal,pick_place,Pick and Place,eeg_mf_hz__PO8,nearest_image_neighbor,0.014547175797503507,0.08843688789159651,0.0,,,,
+P19,arousal,pick_place,Pick and Place,eeg_mf_hz__PO8,mean_of_11_image_neighbors,0.018428216237895943,0.053202923047171814,0.0,,,,
+P19,arousal,pick_place,Pick and Place,eeg_bp_beta__Fz,nearest_image_neighbor,0.0035840000876944675,0.06891508184317446,0.0,,,,
+P19,arousal,pick_place,Pick and Place,eeg_bp_beta__Fz,mean_of_11_image_neighbors,0.00309143206640608,0.03269480657773005,0.0,,,,
+P19,arousal,pick_place,Pick and Place,eeg_bp_beta__PO8,nearest_image_neighbor,0.07166314585528583,0.30274487427145924,7.142857142857142,,,,
+P19,arousal,pick_place,Pick and Place,eeg_bp_beta__PO8,mean_of_11_image_neighbors,0.08072117756754917,0.25321946603639583,4.761904761904762,,,,
+P19,arousal,pick_place,Pick and Place,eeg_bp_beta__Pz,nearest_image_neighbor,0.0017134674928965562,0.12618672449035173,2.380952380952381,,,,
+P19,arousal,pick_place,Pick and Place,eeg_bp_beta__Pz,mean_of_11_image_neighbors,0.005387555135705989,0.09869650592825074,2.380952380952381,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_se__Fz,nearest_image_neighbor,0.15707822596825527,0.39505365820713,5.084745762711865,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_se__Fz,mean_of_11_image_neighbors,0.203679955794886,0.38380169061491004,6.779661016949152,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_hm__Fz,nearest_image_neighbor,0.040631255019194575,0.0692971460114232,0.0,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_hm__Fz,mean_of_11_image_neighbors,0.042182083477550945,0.06750504561773915,0.0,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_hm__PO8,nearest_image_neighbor,0.014419653020274313,0.08437074487838248,0.0,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_hm__PO8,mean_of_11_image_neighbors,0.016897331739087067,0.04753910794799957,1.694915254237288,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_hc__Fz,nearest_image_neighbor,0.6236787422225336,0.754781548084614,84.7457627118644,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_hc__Fz,mean_of_11_image_neighbors,0.5613270845218992,0.6712347017452999,83.05084745762711,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_hc__PO8,nearest_image_neighbor,0.06305215423426187,0.2346190511812008,3.389830508474576,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_hc__PO8,mean_of_11_image_neighbors,0.07459916735873912,0.2224027687359825,3.389830508474576,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_mf_hz__Fz,nearest_image_neighbor,0.0010037187719713638,0.009860374940997101,0.0,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_mf_hz__Fz,mean_of_11_image_neighbors,0.0034196349271145977,0.019366640827385442,0.0,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_mf_hz__PO8,nearest_image_neighbor,0.008161268579677522,0.047152881895946394,0.0,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_mf_hz__PO8,mean_of_11_image_neighbors,0.010151485832728931,0.054788777769740324,0.0,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_bp_beta__Fz,nearest_image_neighbor,0.0007780336056891494,0.05805600871876806,0.0,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_bp_beta__Fz,mean_of_11_image_neighbors,0.002234744043301072,0.028803818690981087,0.0,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_bp_beta__PO8,nearest_image_neighbor,0.01844279233669816,0.40509801827585373,6.779661016949152,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_bp_beta__PO8,mean_of_11_image_neighbors,0.028652062003658996,0.2845282998194908,5.084745762711865,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_bp_beta__Pz,nearest_image_neighbor,0.0020840014630838506,0.035404030465959836,0.0,,,,
+P19,arousal,shape_sorter_observation,Shape Sorter Observation,eeg_bp_beta__Pz,mean_of_11_image_neighbors,0.002839512272942595,0.043902592023639844,0.0,,,,
+P19,arousal,stack,Stack,eeg_se__Fz,nearest_image_neighbor,0.16683435735779137,0.27174176659728255,1.4705882352941175,,,,
+P19,arousal,stack,Stack,eeg_se__Fz,mean_of_11_image_neighbors,0.2244880088179046,0.33774761632262573,4.411764705882353,,,,
+P19,arousal,stack,Stack,eeg_hm__Fz,nearest_image_neighbor,0.035693865252522564,0.05045821072959744,0.0,,,,
+P19,arousal,stack,Stack,eeg_hm__Fz,mean_of_11_image_neighbors,0.036527260840805716,0.05124149574435644,0.0,,,,
+P19,arousal,stack,Stack,eeg_hm__PO8,nearest_image_neighbor,0.004544072311790085,0.1037841690891482,1.4705882352941175,,,,
+P19,arousal,stack,Stack,eeg_hm__PO8,mean_of_11_image_neighbors,0.00851215815530771,0.042662280866736395,0.0,,,,
+P19,arousal,stack,Stack,eeg_hc__Fz,nearest_image_neighbor,0.6608953058828728,0.786836095325076,86.76470588235294,,,,
+P19,arousal,stack,Stack,eeg_hc__Fz,mean_of_11_image_neighbors,0.575534119666123,0.74071273877241,88.23529411764706,,,,
+P19,arousal,stack,Stack,eeg_hc__PO8,nearest_image_neighbor,0.024783298888552352,0.09805972245390422,0.0,,,,
+P19,arousal,stack,Stack,eeg_hc__PO8,mean_of_11_image_neighbors,0.03430796082311126,0.11227252319915026,0.0,,,,
+P19,arousal,stack,Stack,eeg_mf_hz__Fz,nearest_image_neighbor,0.0011052597753796985,0.004434916730351319,0.0,,,,
+P19,arousal,stack,Stack,eeg_mf_hz__Fz,mean_of_11_image_neighbors,0.002917658678919226,0.011093222039223827,0.0,,,,
+P19,arousal,stack,Stack,eeg_mf_hz__PO8,nearest_image_neighbor,0.005661614898996328,0.02031394688517937,0.0,,,,
+P19,arousal,stack,Stack,eeg_mf_hz__PO8,mean_of_11_image_neighbors,0.007733264165043114,0.0379414701522602,0.0,,,,
+P19,arousal,stack,Stack,eeg_bp_beta__Fz,nearest_image_neighbor,0.0015868384463832686,0.05519789671857433,0.0,,,,
+P19,arousal,stack,Stack,eeg_bp_beta__Fz,mean_of_11_image_neighbors,0.0020859200453631176,0.029926196653373913,0.0,,,,
+P19,arousal,stack,Stack,eeg_bp_beta__PO8,nearest_image_neighbor,0.055425695402917426,0.3947300051564225,10.294117647058822,,,,
+P19,arousal,stack,Stack,eeg_bp_beta__PO8,mean_of_11_image_neighbors,0.06768726919411988,0.3082558507132878,7.352941176470589,,,,
+P19,arousal,stack,Stack,eeg_bp_beta__Pz,nearest_image_neighbor,0.0017942408564291063,0.032687190247778004,0.0,,,,
+P19,arousal,stack,Stack,eeg_bp_beta__Pz,mean_of_11_image_neighbors,0.0034934285827183387,0.033886234335896825,0.0,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_se__Fz,nearest_image_neighbor,0.13699452213903077,0.23974195303627632,2.197802197802198,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_se__Fz,mean_of_11_image_neighbors,0.18584167935337573,0.29150633330223197,2.197802197802198,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_hm__Fz,nearest_image_neighbor,0.03120083092032672,0.04383813511435555,0.0,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_hm__Fz,mean_of_11_image_neighbors,0.033402337210798196,0.0463024485029321,0.0,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_hm__PO8,nearest_image_neighbor,0.004081904206880667,0.07856305820678612,0.0,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_hm__PO8,mean_of_11_image_neighbors,0.00533831220312018,0.0370892567071746,0.0,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_hc__Fz,nearest_image_neighbor,0.5560747675015261,0.8024476914724332,73.62637362637363,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_hc__Fz,mean_of_11_image_neighbors,0.504596116613747,0.7423826182127344,80.21978021978022,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_hc__PO8,nearest_image_neighbor,0.009054287840335323,0.14791902903455179,1.098901098901099,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_hc__PO8,mean_of_11_image_neighbors,0.012708769745198432,0.15832605132467367,1.098901098901099,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_mf_hz__Fz,nearest_image_neighbor,0.0009286544058766385,0.003874529318883719,0.0,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_mf_hz__Fz,mean_of_11_image_neighbors,0.0026761412583269795,0.012097587294149604,0.0,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_mf_hz__PO8,nearest_image_neighbor,0.0040101086971074075,0.021713886707414178,0.0,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_mf_hz__PO8,mean_of_11_image_neighbors,0.006545946296927453,0.02390305511401075,0.0,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_bp_beta__Fz,nearest_image_neighbor,0.001523697025554432,0.046615994787342956,0.0,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_bp_beta__Fz,mean_of_11_image_neighbors,0.002104774367053105,0.023468992324798085,0.0,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_bp_beta__PO8,nearest_image_neighbor,0.1643410587451425,0.6097583213403399,23.076923076923077,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_bp_beta__PO8,mean_of_11_image_neighbors,0.15775504435365323,0.47295212200353653,16.483516483516482,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_bp_beta__Pz,nearest_image_neighbor,0.0015711251909271149,0.015075069275411999,0.0,,,,
+P19,arousal,sisyphus,Sisyphus,eeg_bp_beta__Pz,mean_of_11_image_neighbors,0.0024902056451571643,0.01177904108936914,0.0,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_se__Fz,nearest_image_neighbor,0.030249876949375303,0.17088011528388966,2.5974025974025974,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_se__Fz,mean_of_11_image_neighbors,0.04144893170637918,0.18357532233712126,3.896103896103896,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_hm__Fz,nearest_image_neighbor,0.020377051279140992,0.11030395069657586,1.2987012987012987,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_hm__Fz,mean_of_11_image_neighbors,0.027106549635470403,0.060210494093313,0.0,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_hm__PO8,nearest_image_neighbor,0.026365769540866356,0.16952773161405751,0.0,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_hm__PO8,mean_of_11_image_neighbors,0.045916724234452026,0.15437632967456633,1.2987012987012987,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_hc__Fz,nearest_image_neighbor,0.06505537982248472,0.29000165843518744,3.896103896103896,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_hc__Fz,mean_of_11_image_neighbors,0.06333233808958628,0.2429106215850205,2.5974025974025974,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_hc__PO8,nearest_image_neighbor,0.009172113921811066,0.16885667753138506,0.0,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_hc__PO8,mean_of_11_image_neighbors,0.013506431943882668,0.04215708367705958,0.0,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_mf_hz__Fz,nearest_image_neighbor,0.024128512902375478,0.24184760966464883,5.194805194805195,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_mf_hz__Fz,mean_of_11_image_neighbors,0.02599640561939104,0.057791507704720885,0.0,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_mf_hz__PO8,nearest_image_neighbor,0.05020386276344857,0.24111513986217084,3.896103896103896,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_mf_hz__PO8,mean_of_11_image_neighbors,0.03895523284966731,0.11276371692628476,0.0,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_bp_beta__Fz,nearest_image_neighbor,0.027096027824737134,0.2558578670483022,3.896103896103896,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_bp_beta__Fz,mean_of_11_image_neighbors,0.025204718886709124,0.07438110440962957,0.0,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_bp_beta__PO8,nearest_image_neighbor,0.5067107758580744,0.8548943347617788,79.22077922077922,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_bp_beta__PO8,mean_of_11_image_neighbors,0.5963923663344741,0.7826736130800543,92.20779220779221,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_bp_beta__Pz,nearest_image_neighbor,0.027419214958602865,0.15116606350579573,0.0,,,,
+P19,arousal,shape_sorter_interaction,Shape Sorter Interaction,eeg_bp_beta__Pz,mean_of_11_image_neighbors,0.04809330349525727,0.11663821587891944,0.0,,,,
+P19,valence,pick_place,Pick and Place,eeg_se__PO8,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,5.471874914318682,-5.471874914318682,toward_LOW,0.0
+P19,valence,pick_place,Pick and Place,eeg_hc__PO8,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,10.863557207598431,-10.863557207598431,toward_LOW,0.0
+P19,valence,pick_place,Pick and Place,eeg_mf_hz__Fz,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,0.6224539964529772,-0.6224539964529772,toward_LOW,0.0
+P19,valence,pick_place,Pick and Place,eeg_mf_hz__PO8,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,1.1193570691098138,-1.1193570691098138,toward_LOW,0.0
+P19,valence,pick_place,Pick and Place,eeg_bp_delta__Fz,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,157.7040146341611,-157.7040146341611,toward_LOW,100.0
+P19,valence,shape_sorter_observation,Shape Sorter Observation,eeg_se__PO8,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,5.0647883992598235,-5.0647883992598235,toward_LOW,0.0
+P19,valence,shape_sorter_observation,Shape Sorter Observation,eeg_hc__PO8,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,14.621713803842873,-14.621713803842873,toward_LOW,5.084745762711865
+P19,valence,shape_sorter_observation,Shape Sorter Observation,eeg_mf_hz__Fz,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,0.5568320238823747,-0.5568320238823747,toward_LOW,0.0
+P19,valence,shape_sorter_observation,Shape Sorter Observation,eeg_mf_hz__PO8,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,1.1193570691098138,-1.1193570691098138,toward_LOW,0.0
+P19,valence,shape_sorter_observation,Shape Sorter Observation,eeg_bp_delta__Fz,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,172.21614039486408,-172.21614039486408,toward_LOW,94.91525423728814
+P19,valence,stack,Stack,eeg_se__PO8,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,3.4839094401504758,-3.4839094401504758,toward_LOW,0.0
+P19,valence,stack,Stack,eeg_hc__PO8,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,7.998167037449823,-7.998167037449823,toward_LOW,0.0
+P19,valence,stack,Stack,eeg_mf_hz__Fz,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,0.5568320238823747,-0.5568320238823747,toward_LOW,0.0
+P19,valence,stack,Stack,eeg_mf_hz__PO8,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,1.1193570691098138,-1.1193570691098138,toward_LOW,0.0
+P19,valence,stack,Stack,eeg_bp_delta__Fz,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,334.40019007226465,-334.40019007226465,toward_LOW,100.0
+P19,valence,sisyphus,Sisyphus,eeg_se__PO8,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,1.5579672997679936,-1.5579672997679936,toward_LOW,0.0
+P19,valence,sisyphus,Sisyphus,eeg_hc__PO8,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,3.634614596295293,-3.634614596295293,toward_LOW,0.0
+P19,valence,sisyphus,Sisyphus,eeg_mf_hz__Fz,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,0.5568320238823747,-0.5568320238823747,toward_LOW,0.0
+P19,valence,sisyphus,Sisyphus,eeg_mf_hz__PO8,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,1.1193570691098138,-0.9117385205712618,toward_LOW,0.0
+P19,valence,sisyphus,Sisyphus,eeg_bp_delta__Fz,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,344.40372981612614,-344.40372981612614,toward_LOW,100.0
+P19,valence,shape_sorter_interaction,Shape Sorter Interaction,eeg_se__PO8,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,0.7111658299020682,0.6974893156837991,toward_HIGH,3.896103896103896
+P19,valence,shape_sorter_interaction,Shape Sorter Interaction,eeg_hc__PO8,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,0.5959870248445995,0.5887857999152475,toward_HIGH,6.493506493506493
+P19,valence,shape_sorter_interaction,Shape Sorter Interaction,eeg_mf_hz__Fz,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,0.6224539964529772,-0.6224539964529772,toward_LOW,3.896103896103896
+P19,valence,shape_sorter_interaction,Shape Sorter Interaction,eeg_mf_hz__PO8,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,1.1785787677229251,0.6202187039838982,toward_HIGH,46.75324675324675
+P19,valence,shape_sorter_interaction,Shape Sorter Interaction,eeg_bp_delta__Fz,GaussianNB_HIGH_minus_LOW_log_likelihood,,,,0.5637262463739194,-0.5068404273329505,toward_LOW,38.961038961038966
