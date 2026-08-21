@@ -1,0 +1,60 @@
+{
+  "created_utc": "2026-08-21T09:31:58.136131+00:00",
+  "git_commit": "37b9908b84613bee203c35b3224dc7293629ea14",
+  "python": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/bin/python",
+  "python_version": "3.10.12 (main, Jun 22 2026, 18:55:27) [GCC 11.4.0]",
+  "platform": "Linux-5.15.0-1078-realtime-x86_64-with-glibc2.35",
+  "numpy": "2.2.6",
+  "scipy": "1.15.3",
+  "pandas": "2.3.3",
+  "sklearn": "1.7.2",
+  "run_command": "processing/multimodal_image/modeling/train_multiclass_classification.py --run-name p19_three_class_v1 --target arousal --modality multimodal --append --n-jobs 1",
+  "participant": "P19",
+  "mode": "individual",
+  "targets": [
+    "valence",
+    "arousal"
+  ],
+  "modalities": [
+    "eeg",
+    "face",
+    "multimodal"
+  ],
+  "models": [
+    "knn",
+    "svm",
+    "gnb"
+  ],
+  "feature_counts": [
+    "all",
+    "5",
+    "10",
+    "20"
+  ],
+  "random_state": 42,
+  "outer_cv": "StratifiedKFold, up to 5 splits",
+  "inner_cv": "StratifiedKFold, up to 3 splits",
+  "scoring": "balanced_accuracy",
+  "label_definition": "LOW: ratings 1-2; NEUTRAL: ratings 3-5; HIGH: ratings 6-7",
+  "source_merged_table": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P19/Image_Experiment/runs/p19_final/merged/p19_image_trial_dataset.csv",
+  "observed_class_counts": {
+    "valence": {
+      "LOW": 22,
+      "NEUTRAL": 75,
+      "HIGH": 23
+    },
+    "arousal": {
+      "LOW": 31,
+      "NEUTRAL": 73,
+      "HIGH": 16
+    }
+  },
+  "completed_target_modality_segments": [
+    "arousal:eeg",
+    "arousal:face",
+    "arousal:multimodal",
+    "valence:eeg",
+    "valence:face",
+    "valence:multimodal"
+  ]
+}

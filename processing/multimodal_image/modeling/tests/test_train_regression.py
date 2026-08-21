@@ -1,6 +1,7 @@
 """Synthetic checks for the Image Experiment continuous-rating trainer."""
 from __future__ import annotations
 
+import json
 import sys
 import tempfile
 import unittest
@@ -24,6 +25,12 @@ def synthetic_table(rows: int = 20) -> pd.DataFrame:
 
 
 class TestTrainRegression(unittest.TestCase):
+    @staticmethod
+    def run_args(root: Path, run_name: str, *extra: str):
+        readiness = root / "readiness.csv"
+        pd.DataFrame({"participant": ["P19"], "qc_group": ["Very clean"]}).to_csv(readiness, index=False)
+        return tr.parse_args(["--mode", "individual", "--target", "valence", "--modality", "face", "--models", "ridge", "--feature-counts", "all,5", "--participants", "P19", "--run-name", run_name, "--readiness-csv", str(readiness), "--output-root", str(root / "out"), *extra])
+
     def test_progress_and_verbose_flags_are_accepted(self):
         base = ["--mode", "individual", "--target", "valence", "--modality", "face", "--run-name", "flags"]
         self.assertTrue(tr.parse_args(base + ["--progress"]).progress)
@@ -32,6 +39,53 @@ class TestTrainRegression(unittest.TestCase):
         reporter = tr.ProgressReporter(args.progress, args.verbose)
         self.assertTrue(reporter.progress_enabled)
         self.assertTrue(reporter.verbose_enabled)
+
+    def test_n_jobs_is_accepted_and_reaches_grid_search(self):
+        base = ["--mode", "individual", "--target", "valence", "--modality", "face", "--run-name", "workers"]
+        self.assertEqual(tr.parse_args(base + ["--n-jobs", "2"]).n_jobs, 2)
+        x = pd.DataFrame({"x": np.arange(12), "y": np.arange(12)[::-1]})
+        with patch.object(tr, "GridSearchCV", wraps=tr.GridSearchCV) as search:
+            tr.fit_outer_fold(x.iloc[:8], pd.Series(np.arange(8, dtype=float)), x.iloc[8:], "ridge", "all", list(tr.KFold(2).split(x.iloc[:8])), 42, n_jobs=2)
+        self.assertEqual(search.call_args.kwargs["n_jobs"], 2)
+
+    def test_worker_counts_do_not_change_scientific_results(self):
+        x, y, _ = tr.prepare_modality_data(synthetic_table(), "P19", "valence", "face")
+        serial = pd.DataFrame(tr.evaluate_individual("P19", x, y, "valence", "face", "ridge", "5", 42, n_jobs=1)[0]).sort_index(axis=1)
+        parallel = pd.DataFrame(tr.evaluate_individual("P19", x, y, "valence", "face", "ridge", "5", 42, n_jobs=2)[0]).sort_index(axis=1)
+        pd.testing.assert_frame_equal(serial, parallel)
+
+    def test_checkpoint_resume_skips_completed_work_and_matches_clean_run(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); interrupted = self.run_args(root, "interrupted")
+            original = tr.evaluate_individual
+            def fail_on_second(*args, **kwargs):
+                if args[6] == "5": raise RuntimeError("simulated interruption")
+                return original(*args, **kwargs)
+            with patch.object(tr, "load_participant_table", return_value=(synthetic_table(), root / "table.csv")), patch.object(tr, "evaluate_individual", side_effect=fail_on_second):
+                with self.assertRaises(RuntimeError): tr.run(interrupted)
+            state = json.loads((root / "out" / "interrupted" / tr.CHECKPOINT_STATE_FILE).read_text())
+            self.assertEqual(len(state["completed_configurations"]), 1)
+            resumed = self.run_args(root, "interrupted", "--resume")
+            with patch.object(tr, "load_participant_table", return_value=(synthetic_table(), root / "table.csv")), patch.object(tr, "evaluate_individual", wraps=original) as resumed_evaluation:
+                tr.run(resumed)
+            self.assertEqual(resumed_evaluation.call_count, 1)
+            clean = self.run_args(root, "clean")
+            with patch.object(tr, "load_participant_table", return_value=(synthetic_table(), root / "table.csv")):
+                tr.run(clean)
+            for filename in ("fold_results.csv", "predictions.csv", "best_hyperparameters.csv", "selected_features_by_fold.csv", "results_summary.csv"):
+                left = pd.read_csv(root / "out" / "interrupted" / filename).sort_index(axis=1)
+                right = pd.read_csv(root / "out" / "clean" / filename).sort_index(axis=1)
+                pd.testing.assert_frame_equal(left, right)
+
+    def test_resume_rejects_incompatible_settings_and_normal_run_refuses_overwrite(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); args = self.run_args(root, "saved")
+            with patch.object(tr, "load_participant_table", return_value=(synthetic_table(), root / "table.csv")): tr.run(args)
+            with patch.object(tr, "load_participant_table", return_value=(synthetic_table(), root / "table.csv")):
+                with self.assertRaises(FileExistsError): tr.run(args)
+            incompatible = self.run_args(root, "saved", "--resume", "--seed", "99")
+            with patch.object(tr, "load_participant_table", return_value=(synthetic_table(), root / "table.csv")):
+                with self.assertRaises(ValueError): tr.run(incompatible)
 
     def test_continuous_targets_are_preserved_without_labels(self):
         _, ratings, _ = tr.prepare_modality_data(synthetic_table(), "P19", "valence", "face")
