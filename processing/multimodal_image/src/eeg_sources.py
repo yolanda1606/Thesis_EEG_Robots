@@ -47,7 +47,9 @@ def load_eeg_session(paths: dict[str, Any], config: dict[str, Any], *, preload: 
         fragment_missing = sorted(required.difference(raw.ch_names))
         if fragment_missing:
             raise ValueError(f"EEG fragment is missing required channels: {path}: {fragment_missing}")
-        events = mne.find_events(raw, stim_channel=config["channels"]["stim_channel"], verbose=False)
+        events = mne.find_events(raw, stim_channel=config["channels"]["stim_channel"],
+                                 shortest_event=1 if config.get("allow_single_sample_status") else 2,
+                                 verbose=False)
         image_ids = [int(event[2]) for event in events if int(event[2]) in expected]
         overlap = sorted(seen.intersection(image_ids))
         if overlap:

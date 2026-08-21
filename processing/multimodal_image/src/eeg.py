@@ -35,6 +35,46 @@ def _prepare_raw(paths, config: dict[str, Any]):
     return raw, all_events, source_metadata
 
 
+def continuous_ica_motion_edit(raw, eeg_names: list[str], logger, config: dict[str, Any]) -> dict[str, Any]:
+    """Apply the frozen ICA/ACC source edit to one contiguous Raw segment.
+
+    This is intentionally before robot windowing.  It preserves the image
+    pipeline's FastICA, rank calculation, ACC correlation criterion and 3-Hz
+    source high-pass edit, but assesses correlation over the whole segment.
+    """
+    if not config["eeg"]["ica"]["enabled"]: return {"enabled": False, "corrected_source_count": 0}
+    eeg = raw.copy().pick(eeg_names)
+    motion_names = [name for name in ("ACC X", "ACC Y", "ACC Z") if name in raw.ch_names]
+    if len(motion_names) != 3: raise ValueError(f"ICA requires ACC X/Y/Z motion references; found {motion_names}")
+    data = eeg.get_data().copy(); rank = int(np.linalg.matrix_rank(data))
+    if rank < 1: raise RuntimeError("ICA cannot be fitted: post-CAR EEG rank is zero")
+    cfg = config["eeg"]["ica"]
+    ica = mne.preprocessing.ICA(n_components=rank, method=cfg["method"], random_state=cfg["random_seed"], verbose=False)
+    with warnings.catch_warnings(record=True) as fit_warnings:
+        warnings.simplefilter("always"); ica.fit(eeg, verbose=False)
+    if any(issubclass(item.category, ConvergenceWarning) for item in fit_warnings):
+        raise RuntimeError("Rank-aware continuous ICA did not converge; preprocessing stopped")
+    if any("unstable mixing matrix" in str(item.message) for item in fit_warnings):
+        raise RuntimeError("Rank-aware continuous ICA reported an unstable mixing matrix; preprocessing stopped")
+    sources = ica.get_sources(eeg).get_data(); motion = raw.copy().pick(motion_names).get_data()
+    correlations = np.full((ica.n_components_, 3), np.nan)
+    for axis in range(3):
+        for component in range(ica.n_components_):
+            r, _ = pearsonr(sources[component], motion[axis]); correlations[component, axis] = r if np.isfinite(r) else np.nan
+    means = np.nanmean(correlations, axis=0); stds = np.nanstd(correlations, axis=0)
+    highpass_sos = butter(4, 3.0, btype="highpass", fs=float(raw.info["sfreq"]), output="sos")
+    selected = []
+    for component in range(ica.n_components_):
+        axes = [motion_names[i] for i in range(3) if np.isfinite(correlations[component, i]) and correlations[component, i] > means[i] + 2.0 * stds[i]]
+        if axes:
+            sources[component] = sosfiltfilt(highpass_sos, sources[component]); selected.append({"component": component, "axes": axes})
+    prewhitened = ica.pca_components_[:ica.n_components_].T @ (ica.mixing_matrix_ @ sources)
+    if ica.pca_mean_ is not None: prewhitened += ica.pca_mean_[:, None]
+    reconstructed = prewhitened * ica.pre_whitener_ if ica.noise_cov is None else np.linalg.pinv(ica.pre_whitener_, rcond=1e-14) @ prewhitened
+    raw._data[[raw.ch_names.index(name) for name in eeg_names]] = reconstructed
+    return {"enabled": True, "detected_eeg_rank": rank, "fitted_ica_components": int(ica.n_components_), "corrected_source_count": len(selected), "motion_related_components": selected}
+
+
 def preprocess_eeg(paths, config: dict[str, Any], logger) -> tuple[mne.Epochs, dict[str, Any], pd.DataFrame, Any | None, np.ndarray]:
     """Apply the approved CAR, IIR, epoch, ICA, AutoReject, and interpolation stages."""
     raw, all_events, source_metadata = _prepare_raw(paths, config)

@@ -14,6 +14,8 @@ import mne
 import numpy as np
 import yaml
 
+from continuous import alignment_for_task, extract_task
+
 HERE = Path(__file__).resolve().parent
 TASKS = ("pick_place", "shape_sorter_observation", "stack", "sisyphus", "shape_sorter_interaction", "shape_sorter_alone")
 
@@ -30,6 +32,8 @@ def args() -> argparse.Namespace:
     mode.add_argument("--validate-only", action="store_true")
     mode.add_argument("--health-check-only", action="store_true")
     mode.add_argument("--crop-preview-only", action="store_true")
+    mode.add_argument("--validate-alignment-only", action="store_true")
+    mode.add_argument("--continuous-features", action="store_true")
     p.add_argument("--crop", nargs=4, type=int, metavar=("X", "Y", "WIDTH", "HEIGHT"), help="Temporary shared crop candidate; does not change YAML.")
     p.add_argument("--save-crop", action="store_true", help="Save --crop to participant-level YAML after crop preview; remains unreviewed unless --approve-crop is supplied.")
     p.add_argument("--approve-crop", action="store_true", help="Explicitly approve a --save-crop candidate after preview.")
@@ -285,6 +289,45 @@ def crop_preview(config: dict[str, Any], resource_root: Path, destination: Path,
     return {"crop": crop, "representative_tasks": rows, "skipped_tasks": skipped, "sampled_frame_count": len(rows), "face_detection_count": sum(row["face_detections"] for row in rows), "image": str(image_path), "face_validation_image": str(face_path) if face_path else None, "automatic_approval": False}
 
 
+def continuous_run(config: dict[str, Any], participant: str, resource_root: Path, run: Path, extract: bool) -> dict[str, Any]:
+    """Validate all robot timelines, then optionally extract supported tasks."""
+    alignment_rows: list[dict[str, Any]] = []; qcs: list[dict[str, Any]] = []
+    eeg_tables = []; video_tables = []; merged_tables = []
+    for task_id, task in config["tasks"].items():
+        qc, pairs, raws = alignment_for_task(task, task_id, str(config.get("raw_participant_dir", "")))
+        qcs.append(qc); alignment_rows.extend(pairs)
+        print(f"{task_id}: EEG={qc['eeg_duration_s']:.3f}s, video={qc['video_duration_s']:.3f}s, Status={qc['status_event_count']}, anchors={qc['matched_anchor_count']}, model={qc['method']}, offset={qc['offset_s']}, drift={qc['drift_s_per_s']}, RMSE={qc['rmse_s']}, max={qc['max_residual_s']}, overlap={qc['aligned_overlap_s']:.3f}s")
+        if extract and not qc["method"].startswith("unsupported"):
+            prepared = dict(task); prepared["_crop"] = config["video_settings"]["crop"]
+            eeg, video, merged = extract_task(participant, task_id, prepared, qc, raws, resource_root)
+            if len(eeg): eeg_tables.append(eeg)
+            if len(video): video_tables.append(video)
+            if len(merged): merged_tables.append(merged)
+    align_dir = run / "alignment"; align_dir.mkdir(parents=True, exist_ok=False)
+    (align_dir / "alignment_metadata.json").write_text(json.dumps({"tasks": qcs}, indent=2), encoding="utf-8")
+    pd = __import__("pandas")
+    pd.DataFrame(alignment_rows).to_csv(align_dir / "synchronization_anchors.csv", index=False)
+    summary: dict[str, Any] = {"participant": participant, "mode": "continuous_features" if extract else "alignment_validation", "alignment": qcs}
+    if extract:
+        feature_dir = run / "features"; feature_dir.mkdir(parents=True, exist_ok=False)
+        eeg_df = pd.concat(eeg_tables, ignore_index=True) if eeg_tables else pd.DataFrame()
+        video_df = pd.concat(video_tables, ignore_index=True) if video_tables else pd.DataFrame()
+        merged_df = pd.concat(merged_tables, ignore_index=True) if merged_tables else pd.DataFrame()
+        if {"epoch_index", "trigger"}.intersection(eeg_df.columns) or {"epoch_index", "trigger"}.intersection(video_df.columns):
+            raise RuntimeError("Image-specific epoch/trigger fields leaked into robot features")
+        if len(eeg_df) and eeg_df.duplicated(["participant", "task", "segment_id", "window_id", "channel"]).any():
+            raise RuntimeError("Duplicate EEG participant/task/window/channel IDs")
+        eeg_feature_columns = [name for name in eeg_df if name.startswith("eeg_")]
+        if len(eeg_df) and not np.isfinite(eeg_df[eeg_feature_columns].to_numpy(dtype=float)).all():
+            raise RuntimeError("Non-finite EEG feature value")
+        for name, frame in (("eeg_window_features.csv", eeg_df), ("video_window_features.csv", video_df), ("multimodal_window_features.csv", merged_df)):
+            frame.to_csv(feature_dir / name, index=False)
+        if len(eeg_df) and (eeg_df["sample_count"] != 500).any(): raise RuntimeError("EEG window sample count validation failed")
+        if len(merged_df) and merged_df["window_id"].duplicated().any(): raise RuntimeError("Duplicate multimodal window IDs")
+        summary["window_counts"] = {"eeg_rows": int(len(eeg_df)), "video_windows": int(len(video_df)), "multimodal_windows": int(len(merged_df))}
+    return summary
+
+
 
 def main() -> int:
     a = args()
@@ -311,6 +354,8 @@ def main() -> int:
             config["video_settings"]["face_detection"] = {"crop_validated": bool(a.approve_crop), "notes": "Manually supplied shared crop; explicitly approved." if a.approve_crop else "Manually supplied shared crop; requires manual review."}
             with config_path.open("w", encoding="utf-8") as f: yaml.safe_dump(config, f, sort_keys=False)
             (run / "resolved_participant.yaml").write_text(yaml.safe_dump(config, sort_keys=False), encoding="utf-8")
+    if a.validate_alignment_only or a.continuous_features:
+        summary = continuous_run(config, a.participant, a.resource_root.resolve(), run, a.continuous_features)
     (run / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     if a.health_check_only:
         for task_id, task in summary["tasks"].items():

@@ -68,6 +68,27 @@ def extract_eeg_features(epochs, config: dict[str, Any]) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def extract_eeg_window_features(data: np.ndarray, sampling_hz: float) -> list[dict[str, float]]:
+    """Frozen feature formulas for one continuous window, one row per channel.
+
+    The robot pipeline calls this with exactly 500 samples (2 s at 250 Hz).
+    Keeping the numerical implementation here prevents a feature-definition
+    fork between the image and robot experiments.
+    """
+    bands = {"delta": (1.0, 4.0), "theta": (4.0, 8.0), "alpha": (8.0, 12.0), "beta": (12.0, 30.0), "gamma": (30.0, 40.0)}
+    rows = []
+    for signal in data:
+        frequencies, psd = welch(signal, fs=float(sampling_hz), nperseg=min(len(signal), int(sampling_hz)))
+        row = {"eeg_sd": float(np.std(signal)), "eeg_se": _entropy(psd), "eeg_hm": _hjorth_mobility(signal),
+               "eeg_hc": _hjorth_complexity(signal), "eeg_mf_hz": _median_frequency(frequencies, psd)}
+        for band, (low, high) in bands.items():
+            mask = (frequencies >= low) & (frequencies <= high)
+            row[f"eeg_bp_{band}"] = float(np.trapezoid(psd[mask], frequencies[mask])) if mask.any() else float("nan")
+            row[f"eeg_se_{band}"] = _entropy(psd[mask]) if mask.any() else float("nan")
+        rows.append(row)
+    return rows
+
+
 def _hjorth_mobility(signal: np.ndarray) -> float:
     signal_variance = np.var(signal)
     return float(np.sqrt(np.var(np.diff(signal)) / signal_variance)) if signal_variance else float("nan")
