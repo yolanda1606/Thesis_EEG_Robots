@@ -4,6 +4,7 @@ from __future__ import annotations
 import sys
 import tempfile
 import unittest
+import json
 from pathlib import Path
 from unittest.mock import patch
 
@@ -33,6 +34,24 @@ class TestTrainClassification(unittest.TestCase):
         reporter = tc.ProgressReporter(args.progress, args.verbose)
         self.assertTrue(reporter.progress_enabled)
         self.assertTrue(reporter.verbose_enabled)
+
+    def test_n_jobs_flag_is_accepted(self):
+        base = ["--mode", "individual", "--target", "valence", "--modality", "face", "--run-name", "flags"]
+        self.assertEqual(tc.parse_args(base + ["--n-jobs", "-1"]).n_jobs, -1)
+        with self.assertRaises(SystemExit): tc.parse_args(base + ["--n-jobs", "0"])
+
+    def test_grid_search_receives_requested_n_jobs(self):
+        captured = {}
+        original = tc.GridSearchCV
+        def recording_search(*args, **kwargs):
+            captured["n_jobs"] = kwargs["n_jobs"]
+            return original(*args, **kwargs)
+        x = pd.DataFrame({"x": range(12), "y": [0, 1] * 6})
+        y = pd.Series([0, 1] * 6)
+        splits = list(tc.StratifiedKFold(n_splits=2, shuffle=True, random_state=42).split(x, y))
+        with patch.object(tc, "GridSearchCV", side_effect=recording_search):
+            tc.fit_outer_fold(x, y, x.iloc[:2], model="gnb", feature_count="all", inner_splits=splits, seed=42, n_jobs=2)
+        self.assertEqual(captured["n_jobs"], 2)
 
     def test_label_definition(self):
         self.assertEqual(tc.label_ratings(pd.Series([1, 3.9, 4, 7])).tolist(), [0, 0, 1, 1])
@@ -76,6 +95,13 @@ class TestTrainClassification(unittest.TestCase):
         self.assertTrue(rows)
         self.assertTrue(all(row["participant"] == "P10" and row["training_participants"] == "P10" for row in rows))
 
+    def test_serial_and_parallel_inner_search_have_identical_scientific_results(self):
+        frame = synthetic_table(20)
+        x, y, _ = tc.prepare_modality_data(frame, "P19", "valence", "face")
+        serial, _, _ = tc.evaluate_individual("P19", x, y, "valence", "face", "gnb", "all", 42, n_jobs=1)
+        parallel, _, _ = tc.evaluate_individual("P19", x, y, "valence", "face", "gnb", "all", 42, n_jobs=2)
+        pd.testing.assert_frame_equal(pd.DataFrame(serial), pd.DataFrame(parallel), check_exact=True)
+
     def test_existing_output_directory_is_not_overwritten(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory); readiness = root / "readiness.csv"
@@ -96,6 +122,42 @@ class TestTrainClassification(unittest.TestCase):
             self.assertTrue(result["dry_run"])
             evaluate.assert_not_called()
             self.assertFalse(output.exists())
+
+    def test_checkpoint_resume_skips_completed_and_rejects_mismatch(self):
+        def rows(participant, _x, _y, target, modality, model, request, _seed, _reporter, n_jobs=1):
+            common = {"mode": "individual", "participant": participant, "held_out_participant": participant, "target": target, "modality": modality, "classifier": model, "feature_count_request": request, "feature_count_resolved": "all", "fold": 1}
+            result = {**common, "training_participants": participant, "sample_size": 20, "train_size": 16, "test_size": 4, "low_count": 10, "high_count": 10, "balanced_accuracy": .5, "accuracy": .5, "precision": .5, "recall": .5, "f1": .5, "tn": 1, "fp": 1, "fn": 1, "tp": 1}
+            selected = {**common, "feature": "feature", "selected": True, "feature_score": 1.0}
+            params = {**common, "best_parameters": "{}", "inner_best_balanced_accuracy": .5}
+            return [result], [selected], [params]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); readiness = root / "readiness.csv"; output = root / "outputs"
+            pd.DataFrame({"participant": ["P10", "P11"], "qc_group": ["Very clean", "Very clean"]}).to_csv(readiness, index=False)
+            base = ["--mode", "individual", "--target", "valence", "--modality", "face", "--models", "gnb", "--feature-counts", "all", "--run-name", "checkpoint", "--readiness-csv", str(readiness), "--output-root", str(output)]
+            calls = []
+            def interrupted(*args, **kwargs):
+                calls.append(args[0])
+                if len(calls) == 2: raise RuntimeError("simulated interruption")
+                return rows(*args, **kwargs)
+            with patch.object(tc, "load_participant_table", side_effect=lambda _root, p: (synthetic_table(20), root / f"{p}.csv")), patch.object(tc, "evaluate_individual", side_effect=interrupted):
+                with self.assertRaises(RuntimeError): tc.run(tc.parse_args(base))
+            state = json.loads((output / "checkpoint" / tc.CHECKPOINT_STATE_FILE).read_text())
+            self.assertEqual(len(state["completed_configurations"]), 1)
+            resumed = []
+            def record(*args, **kwargs): resumed.append(args[0]); return rows(*args, **kwargs)
+            with patch.object(tc, "load_participant_table", side_effect=lambda _root, p: (synthetic_table(20), root / f"{p}.csv")), patch.object(tc, "evaluate_individual", side_effect=record):
+                tc.run(tc.parse_args(base + ["--resume"]))
+            self.assertEqual(resumed, ["P11"])
+            self.assertEqual(len(pd.read_csv(output / "checkpoint" / "fold_results.csv")), 2)
+            with patch.object(tc, "load_participant_table", side_effect=lambda _root, p: (synthetic_table(20), root / f"{p}.csv")):
+                with self.assertRaises(ValueError): tc.run(tc.parse_args(base + ["--resume", "--seed", "7"]))
+            clean_base = base.copy(); clean_base[clean_base.index("checkpoint")] = "clean"
+            with patch.object(tc, "load_participant_table", side_effect=lambda _root, p: (synthetic_table(20), root / f"{p}.csv")), patch.object(tc, "evaluate_individual", side_effect=rows):
+                tc.run(tc.parse_args(clean_base))
+            pd.testing.assert_frame_equal(
+                pd.read_csv(output / "checkpoint" / "fold_results.csv"),
+                pd.read_csv(output / "clean" / "fold_results.csv"),
+            )
 
 
 if __name__ == "__main__":

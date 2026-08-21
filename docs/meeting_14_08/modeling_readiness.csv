@@ -36,3 +36,12 @@ P43,120,120,120,120,100.0,100.0,19.166666666666668,0,0,Very clean,No AutoReject 
 P44,119,120,119,119,99.16666666666667,100.0,19.166666666666668,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
 P45,120,120,120,120,100.0,100.0,22.5,0,0,Very clean,No AutoReject epoch losses.
 P46,117,120,117,117,97.5,100.0,20.833333333333332,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P04,101,120,101,101,84.16666666666667,100.0,,0,0,Review due to elevated EEG rejection,"Retained 101/120 trials (84.167%), below the established 116/120 (96.667%) boundary."
+P05,117,120,117,115,97.5,100.0,,0,2,Review due to missing ratings,Observed ratings remain missing; strict cohort preserves missingness rather than imputing it.
+P06,115,120,115,115,95.83333333333333,100.0,,0,0,Review due to elevated EEG rejection,"Retained 115/120 trials (95.833%), below the established 116/120 (96.667%) boundary."
+P07,120,120,119,120,100.0,100.0,,1,0,Review due to missing ratings,Observed ratings remain missing; strict cohort preserves missingness rather than imputing it.
+P09,115,120,115,115,95.83333333333333,100.0,,0,0,Review due to elevated EEG rejection,"Retained 115/120 trials (95.833%), below the established 116/120 (96.667%) boundary."
+P12,120,120,120,120,100.0,100.0,,0,0,Very clean,All 120 EEG trials retained with complete ratings and no incomplete-session flag.
+P13,88,114,88,88,77.19298245614034,99.94152046783628,,0,0,Special/incomplete case,Current validation manifest records an incomplete session.
+P28,110,117,110,110,94.01709401709402,100.0,,0,0,Special/incomplete case,Current validation manifest records an incomplete session.
+P31,116,120,116,116,96.66666666666667,100.0,,0,0,Clean with minor EEG loss,"Retained 116/120 trials (96.667%), meeting the established clean-cohort boundary with complete ratings."

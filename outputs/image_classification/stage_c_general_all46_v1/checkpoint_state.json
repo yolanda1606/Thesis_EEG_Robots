@@ -1,0 +1,188 @@
+{
+  "scientific_settings": {
+    "mode": "general",
+    "participants": [
+      "P01",
+      "P02",
+      "P03",
+      "P04",
+      "P05",
+      "P06",
+      "P07",
+      "P08",
+      "P09",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23",
+      "P24",
+      "P25",
+      "P26",
+      "P27",
+      "P28",
+      "P29",
+      "P30",
+      "P31",
+      "P32",
+      "P33",
+      "P34",
+      "P35",
+      "P36",
+      "P37",
+      "P38",
+      "P39",
+      "P40",
+      "P41",
+      "P42",
+      "P43",
+      "P44",
+      "P45",
+      "P46"
+    ],
+    "cohort_source": "explicit participants",
+    "target": [
+      "valence",
+      "arousal"
+    ],
+    "modalities": [
+      "eeg",
+      "face",
+      "multimodal"
+    ],
+    "models": [
+      "knn",
+      "svm",
+      "gnb"
+    ],
+    "feature_counts": [
+      "all",
+      "5",
+      "10",
+      "20"
+    ],
+    "seed": 42,
+    "cv_strategy": "LeaveOneGroupOut outer CV; StratifiedGroupKFold inner CV",
+    "hyperparameter_grids": {
+      "knn": {
+        "n_neighbors": [
+          3,
+          5,
+          7,
+          11
+        ],
+        "weights": [
+          "uniform",
+          "distance"
+        ]
+      },
+      "svm": {
+        "kernel": [
+          "linear",
+          "rbf"
+        ],
+        "C": [
+          0.1,
+          1,
+          10
+        ],
+        "rbf_gamma": [
+          "scale",
+          0.01,
+          0.1
+        ]
+      },
+      "gnb": {
+        "var_smoothing": [
+          1e-11,
+          1e-09,
+          1e-07
+        ]
+      }
+    },
+    "label_definition": "LOW: rating < 4; HIGH: rating >= 4"
+  },
+  "completed_configurations": [
+    "{\"feature_count_request\":\"10\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"10\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"20\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"5\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"eeg\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"face\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"gnb\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"knn\",\"target\":\"valence\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"arousal\"}",
+    "{\"feature_count_request\":\"all\",\"modality\":\"multimodal\",\"mode\":\"general\",\"model\":\"svm\",\"target\":\"valence\"}"
+  ]
+}
