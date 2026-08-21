@@ -1,0 +1,93 @@
+participant: P01
+raw_participant_dir: D:\Thesis\data\P01_2026-05-26
+canonical_group: C
+ratings_file: D:\Thesis\data\Robot Ratings - Robot Ratings.csv
+video_settings:
+  crop:
+    reviewed: true
+    x: 110
+    y: 25
+    width: 250
+    height: 340
+  face_detection:
+    crop_validated: true
+    notes: Approved
+tasks:
+  pick_place:
+    category: observation
+    condition:
+      planned: control
+      actual: control
+      speed_planned: slow
+      speed_actual: slow
+    eeg: D:\Thesis\data\P01_2026-05-26\Pick and Place\EEG\UnicornRecorder_26_05_2026_15_32_27.bdf
+    video: D:\Thesis\data\P01_2026-05-26\Pick and Place\vision_video_15-32-35_PnP_CONTROL_SLOW.avi
+    vision_log: D:\Thesis\data\P01_2026-05-26\Pick and Place\vision_log_15-32-35_PnP_CONTROL_SLOW.csv
+    robot_metrics: D:\Thesis\data\P01_2026-05-26\Pick and Place\robot_metrics_15-33-09_PnP_CONTROL_SLOW.csv
+    rating:
+      valence: 5.0
+      arousal: 5.0
+  shape_sorter_observation:
+    category: observation
+    condition:
+      planned: control
+      actual: control
+      speed_planned: fast
+      speed_actual: fast
+    eeg: D:\Thesis\data\P01_2026-05-26\Shape Sorter Observation\EEG\UnicornRecorder_26_05_2026_15_34_35.bdf
+    video: D:\Thesis\data\P01_2026-05-26\Shape Sorter Observation\vision_video_15-34-45_SHAPE_CONTROL_FAST.avi
+    vision_log: D:\Thesis\data\P01_2026-05-26\Shape Sorter Observation\vision_log_15-34-45_SHAPE_CONTROL_FAST.csv
+    robot_metrics: D:\Thesis\data\P01_2026-05-26\Shape Sorter Observation\robot_metrics_15-35-36_SHAPE_CONTROL_FAST.csv
+    rating:
+      valence: 7.0
+      arousal: 6.0
+  stack:
+    category: observation
+    condition:
+      planned: faulty
+      actual: faulty
+      speed_planned: fast
+      speed_actual: fast
+    eeg: D:\Thesis\data\P01_2026-05-26\Stack\EEG\UnicornRecorder_26_05_2026_15_36_33.bdf
+    video: D:\Thesis\data\P01_2026-05-26\Stack\vision_video_15-36-38_STACK_FAULTY_FAST.avi
+    vision_log: D:\Thesis\data\P01_2026-05-26\Stack\vision_log_15-36-38_STACK_FAULTY_FAST.csv
+    robot_metrics: D:\Thesis\data\P01_2026-05-26\Stack\robot_metrics_15-37-41_STACK_FAULTY_FAST.csv
+    rating:
+      valence: 5.0
+      arousal: 5.0
+  sisyphus:
+    category: interaction
+    eeg:
+      unavailable: true
+      reason: Available EEG belongs to rejected/incomplete Run 1; no EEG BDF matching selected Run 2 was found. Do not pair
+        it with Run 2 video.
+      rejected_run_1_eeg: D:\Thesis\data\P01_2026-05-26\Sisyphus\EEG\UnicornRecorder_26_05_2026_15_38_51.bdf
+    video: D:\Thesis\data\P01_2026-05-26\Sisyphus\vision_video_15-40-43_SISYPHUS_INTERACTION.avi
+    vision_log: D:\Thesis\data\P01_2026-05-26\Sisyphus\vision_log_15-40-43_SISYPHUS_INTERACTION.csv
+    robot_metrics: D:\Thesis\data\P01_2026-05-26\Sisyphus\robot_metrics_15-41-35_SISYPHUS_INTERACTION.csv
+    rating:
+      valence: 5.0
+      arousal: 5.0
+    rejected_attempt:
+      run_id: run_1
+      reason: Incomplete second movement cycle after collision-spike events; not the selected behavioural run.
+  shape_sorter_interaction:
+    category: interaction
+    eeg: D:\Thesis\data\P01_2026-05-26\Shape Sorter Interaction\EEG\UnicornRecorder_26_05_2026_15_44_23.bdf
+    video: D:\Thesis\data\P01_2026-05-26\Shape Sorter Interaction\vision_video_15-44-33_HRI_INTERACTION.avi
+    vision_log: D:\Thesis\data\P01_2026-05-26\Shape Sorter Interaction\vision_log_15-44-33_HRI_INTERACTION.csv
+    robot_metrics: D:\Thesis\data\P01_2026-05-26\Shape Sorter Interaction\robot_metrics_15-45-45_HRI_INTERACTION.csv
+    rating:
+      valence: 3.0
+      arousal: 5.0
+  shape_sorter_alone:
+    category: alone
+    eeg: D:\Thesis\data\P01_2026-05-26\Shape Sorter Alone\EEG\UnicornRecorder_26_05_2026_15_47_12.bdf
+    video: D:\Thesis\data\P01_2026-05-26\Shape Sorter Alone\vision_video_15-47-13_SHAPE_ALONE.avi
+    vision_log: D:\Thesis\data\P01_2026-05-26\Shape Sorter Alone\vision_log_15-47-13_SHAPE_ALONE.csv
+    robot_metrics:
+      unavailable: true
+      reason: no robot metrics/configuration file found (not required for this task)
+    rating:
+      valence: 6.0
+      arousal: 1.0
