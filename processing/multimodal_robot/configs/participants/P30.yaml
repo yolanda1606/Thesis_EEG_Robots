@@ -4,14 +4,14 @@ canonical_group: A
 ratings_file: D:\Thesis\data\Robot Ratings - Robot Ratings.csv
 video_settings:
   crop:
-    reviewed: false
+    reviewed: true
     x: 110
-    y: 25
-    width: 250
-    height: 340
+    y: 50
+    width: 180
+    height: 270
   face_detection:
-    crop_validated: false
-    notes: Tentative shared crop proposed from one-time visual review; manual approval required.
+    crop_validated: true
+    notes: Approved, had to adjust the crop area to be smaller.
 tasks:
   pick_place:
     category: observation
@@ -70,18 +70,9 @@ tasks:
       unavailable: true
       reason: multiple/restarted EEG recordings require manual review
       review_required: true
-    video:
-      unavailable: true
-      reason: multiple video artifacts require manual selection
-      review_required: true
-    vision_log:
-      unavailable: true
-      reason: multiple logs require manual selection
-      review_required: true
-    robot_metrics:
-      unavailable: true
-      reason: multiple robot metric/configuration logs require manual selection
-      review_required: true
+    video: D:\Thesis\data\P30_2026-07-10\Shape Sorter Interaction\vision_video_14-36-43_HRI_INTERACTION.avi
+    vision_log: D:\Thesis\data\P30_2026-07-10\Shape Sorter Interaction\vision_log_14-36-43_HRI_INTERACTION.csv
+    robot_metrics: D:\Thesis\data\P30_2026-07-10\Shape Sorter Interaction\robot_metrics_14-38-10_HRI_INTERACTION.csv
     rating:
       valence: 6.0
       arousal: 6.0

@@ -131,7 +131,7 @@ def validate(config: dict[str, Any], participant: str) -> tuple[list[str], list[
     return errors, warnings
 
 
-def eeg_check(item: Any) -> dict[str, Any]:
+def eeg_check(item: Any, *, status_events_expected: bool = True) -> dict[str, Any]:
     files = selected_files(item)
     if not files: return {"status": "UNAVAILABLE", "reason": modality_reason(item)}
     records = []
@@ -143,24 +143,75 @@ def eeg_check(item: Any) -> dict[str, Any]:
             records.append({"file": str(path), "sampling_hz": float(raw.info["sfreq"]), "sample_count": int(raw.n_times), "duration_s": float(raw.n_times/raw.info["sfreq"]), "channel_count": len(raw.ch_names), "channels": raw.ch_names, "status_channel": status, "status_trigger_count": int(len(events)), "unique_status_codes": sorted({int(e[2]) for e in events})})
     except Exception as exc:
         return {"status": "ERROR", "reason": str(exc), "segments": records}
-    warning = not any(row["status_trigger_count"] for row in records)
-    return {"status": "PASS_WITH_WARNINGS" if warning else "PASS", "reason": "No BDF Status events" if warning else None, "segmented": len(records) > 1, "segments": records}
+    status_events_found = any(row["status_trigger_count"] for row in records)
+    warning = status_events_expected and not status_events_found
+    return {
+        "status": "PASS_WITH_WARNINGS" if warning else "PASS",
+        "reason": "No BDF Status events" if warning else None,
+        "status_events_expected": status_events_expected,
+        "status_events_found": status_events_found,
+        "segmented": len(records) > 1,
+        "segments": records,
+    }
 
 
 def video_check(item: Any) -> dict[str, Any]:
     files = selected_files(item)
     if not files: return {"status": "UNAVAILABLE", "reason": modality_reason(item)}
-    path = files[0]; cap = cv2.VideoCapture(str(path))
-    opened = cap.isOpened(); fps = float(cap.get(cv2.CAP_PROP_FPS)); frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)); w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)); h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)); ok, _ = cap.read(); cap.release()
-    if not opened or fps <= 0 or frames <= 0 or not ok: return {"status": "ERROR", "file": str(path), "reason": "zero-frame/broken video", "fps": fps, "frame_count": frames, "resolution": [w, h]}
-    return {"status": "PASS", "file": str(path), "fps": fps, "frame_count": frames, "duration_s": frames/fps, "resolution": [w, h]}
+    path = files[0]
+    cap = cv2.VideoCapture(str(path))
+    opened = cap.isOpened()
+    fps = float(cap.get(cv2.CAP_PROP_FPS))
+    metadata_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    decoded_indices: list[int] = []
+    if opened:
+        ok, _ = cap.read()
+        if ok:
+            decoded_indices.append(0)
+        if metadata_frames > 1:
+            for index in sorted({metadata_frames // 2, metadata_frames - 1} - {0}):
+                cap.set(cv2.CAP_PROP_POS_FRAMES, index)
+                ok, _ = cap.read()
+                if ok:
+                    decoded_indices.append(index)
+        else:
+            # Some AVI codecs expose no reliable frame-count metadata.  Probe two
+            # further sequential frames rather than declaring such files broken.
+            for index in (1, 2):
+                ok, _ = cap.read()
+                if ok:
+                    decoded_indices.append(index)
+    cap.release()
+    result = {
+        "file": str(path),
+        "fps": fps,
+        "metadata_frame_count": metadata_frames,
+        "decoded_frame_count": len(decoded_indices),
+        "decoded_frame_indices": decoded_indices,
+        "resolution": [width, height],
+        "metadata_duration_s": metadata_frames / fps if metadata_frames > 0 and fps > 0 else None,
+    }
+    if not decoded_indices:
+        return {"status": "ERROR", "reason": "no decodable frames", **result}
+    return {"status": "PASS", **result}
 
 
 def health(config: dict[str, Any]) -> dict[str, Any]:
     result = {"participant": config["participant"], "tasks": {}}
     for task_id, task in config["tasks"].items():
         log_files = selected_files(task["vision_log"]); metric_files = selected_files(task.get("robot_metrics"))
-        result["tasks"][task_id] = {"eeg": eeg_check(task["eeg"]), "video": video_check(task["video"]), "vision_log": {"status": "PASS" if log_files and log_files[0].is_file() else "UNAVAILABLE", "file": str(log_files[0]) if log_files else None}, "robot_metrics": {"status": "PASS" if metric_files and metric_files[0].is_file() else "NOT_APPLICABLE", "file": str(metric_files[0]) if metric_files else None}, "multimodal_usable": multimodal_available(task)}
+        eeg = eeg_check(task["eeg"], status_events_expected=task_id != "shape_sorter_alone")
+        video = video_check(task["video"])
+        vision_log = {"status": "PASS" if log_files and log_files[0].is_file() else "UNAVAILABLE", "file": str(log_files[0]) if log_files else None}
+        result["tasks"][task_id] = {
+            "eeg": eeg,
+            "video": video,
+            "vision_log": vision_log,
+            "robot_metrics": {"status": "PASS" if metric_files and metric_files[0].is_file() else "NOT_APPLICABLE", "file": str(metric_files[0]) if metric_files else None},
+            "multimodal_usable": eeg["status"] == "PASS" and video["status"] == "PASS" and vision_log["status"] == "PASS",
+        }
     return result
 
 
@@ -172,17 +223,32 @@ def temporary_crop(config: dict[str, Any], candidate: list[int] | None) -> dict[
 
 
 def crop_preview(config: dict[str, Any], resource_root: Path, destination: Path, candidate: list[int] | None) -> dict[str, Any]:
-    crop = temporary_crop(config, candidate); rows = []
+    crop = temporary_crop(config, candidate); rows = []; skipped = []
     frames: list[tuple[str, np.ndarray]] = []
     for task_id, task in config["tasks"].items():
-        if unavailable(task["video"]): continue
         files = selected_files(task["video"])
-        if not files: continue
-        cap = cv2.VideoCapture(str(files[0])); total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        if total <= 0:
-            cap.release(); continue
-        cap.set(cv2.CAP_PROP_POS_FRAMES, total // 2); ok, frame = cap.read(); cap.release()
-        if ok: frames.append((task_id, frame))
+        if not files:
+            skipped.append({"task": task_id, "reason": modality_reason(task["video"])})
+            continue
+        cap = cv2.VideoCapture(str(files[0]))
+        if not cap.isOpened():
+            cap.release()
+            skipped.append({"task": task_id, "reason": "selected video could not be opened"})
+            continue
+        metadata_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        if metadata_frames > 0:
+            cap.set(cv2.CAP_PROP_POS_FRAMES, metadata_frames // 2)
+        ok, frame = cap.read()
+        if not ok and metadata_frames > 0:
+            # A metadata-derived middle frame can be unreliable; try the first
+            # decodable frame before excluding an otherwise readable video.
+            cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+            ok, frame = cap.read()
+        cap.release()
+        if ok:
+            frames.append((task_id, frame))
+        else:
+            skipped.append({"task": task_id, "reason": f"no decodable representative frame (metadata_frame_count={metadata_frames})"})
     if not frames: raise ValueError("No readable usable task videos for crop preview")
     detector = None
     if crop:
@@ -216,7 +282,7 @@ def crop_preview(config: dict[str, Any], resource_root: Path, destination: Path,
     if crop:
         face_sheet = np.vstack(face_panels) if len(face_panels) == 1 else np.vstack([np.hstack(face_panels[i:i+2] if len(face_panels[i:i+2]) == 2 else [face_panels[i], np.zeros_like(face_panels[i])]) for i in range(0,len(face_panels),2)])
         face_path = destination / "crop_face_landmark_validation.jpg"; cv2.imwrite(str(face_path), face_sheet)
-    return {"crop": crop, "representative_tasks": rows, "sampled_frame_count": len(rows), "face_detection_count": sum(row["face_detections"] for row in rows), "image": str(image_path), "face_validation_image": str(face_path) if face_path else None, "automatic_approval": False}
+    return {"crop": crop, "representative_tasks": rows, "skipped_tasks": skipped, "sampled_frame_count": len(rows), "face_detection_count": sum(row["face_detections"] for row in rows), "image": str(image_path), "face_validation_image": str(face_path) if face_path else None, "automatic_approval": False}
 
 
 
@@ -252,6 +318,8 @@ def main() -> int:
     if a.crop_preview_only:
         for row in summary["representative_tasks"]:
             print(f"{row['task']}: face detections={row['face_detections']}/{row['sampled_frames']}")
+        for row in summary["skipped_tasks"]:
+            print(f"{row['task']}: skipped crop preview: {row['reason']}")
         print(f"Crop-preview detections: {summary['face_detection_count']}/{summary['sampled_frame_count']} representative frames")
     print(f"{a.participant} {summary['mode']} complete: {run}")
     return 0

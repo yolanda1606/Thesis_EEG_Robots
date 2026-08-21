@@ -4,14 +4,14 @@ canonical_group: B
 ratings_file: D:\Thesis\data\Robot Ratings - Robot Ratings.csv
 video_settings:
   crop:
-    reviewed: false
+    reviewed: true
     x: 110
-    y: 25
-    width: 250
-    height: 340
+    y: 60
+    width: 160
+    height: 180
   face_detection:
-    crop_validated: false
-    notes: Tentative shared crop proposed from one-time visual review; manual approval required.
+    crop_validated: true
+    notes: NApproved, possible poor face recognition
 tasks:
   pick_place:
     category: observation
