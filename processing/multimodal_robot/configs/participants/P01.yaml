@@ -57,20 +57,17 @@ tasks:
       arousal: 5.0
   sisyphus:
     category: interaction
-    eeg:
-      unavailable: true
-      reason: Available EEG belongs to rejected/incomplete Run 1; no EEG BDF matching selected Run 2 was found. Do not pair
-        it with Run 2 video.
-      rejected_run_1_eeg: D:\Thesis\data\P01_2026-05-26\Sisyphus\EEG\UnicornRecorder_26_05_2026_15_38_51.bdf
-    video: D:\Thesis\data\P01_2026-05-26\Sisyphus\vision_video_15-40-43_SISYPHUS_INTERACTION.avi
-    vision_log: D:\Thesis\data\P01_2026-05-26\Sisyphus\vision_log_15-40-43_SISYPHUS_INTERACTION.csv
-    robot_metrics: D:\Thesis\data\P01_2026-05-26\Sisyphus\robot_metrics_15-41-35_SISYPHUS_INTERACTION.csv
+    eeg: D:\Thesis\data\P01_2026-05-26\Sisyphus\EEG\UnicornRecorder_26_05_2026_15_38_51.bdf
+    video: D:\Thesis\data\P01_2026-05-26\Sisyphus\vision_video_15-38-57_SISYPHUS_INTERACTION.avi
+    vision_log: D:\Thesis\data\P01_2026-05-26\Sisyphus\vision_log_15-38-57_SISYPHUS_INTERACTION.csv
+    robot_metrics: D:\Thesis\data\P01_2026-05-26\Sisyphus\robot_metrics_15-39-44_SISYPHUS_INTERACTION.csv
     rating:
       valence: 5.0
       arousal: 5.0
-    rejected_attempt:
-      run_id: run_1
-      reason: Incomplete second movement cycle after collision-spike events; not the selected behavioural run.
+    provenance:
+      canonical_pair: matched_run_1
+      decision: Use the video, vision log, and EEG BDF with validated Status-event alignment for continuous EEG analysis.
+      alignment_evidence: 22 matched Status anchors; constant-offset RMSE approximately 0.012 s and maximum residual approximately 0.030 s.
   shape_sorter_interaction:
     category: interaction
     eeg: D:\Thesis\data\P01_2026-05-26\Shape Sorter Interaction\EEG\UnicornRecorder_26_05_2026_15_44_23.bdf

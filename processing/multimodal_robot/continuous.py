@@ -9,6 +9,7 @@ import csv
 import json
 import re
 import sys
+import warnings
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 from pathlib import Path
@@ -19,18 +20,119 @@ import mne
 import numpy as np
 import pandas as pd
 import yaml
+from scipy.signal import butter, sosfiltfilt, welch
+from scipy.stats import pearsonr
+from sklearn.exceptions import ConvergenceWarning
 
 IMAGE_ROOT = Path(__file__).resolve().parents[1] / "multimodal_image"
 if str(IMAGE_ROOT) not in sys.path:
     sys.path.insert(0, str(IMAGE_ROOT))
-from src.eeg import _prepare_raw, continuous_ica_motion_edit
-from src.features import extract_eeg_window_features
+from src.eeg import _prepare_raw
 from src.video import _facial_measures, _landmarker
 import mediapipe as mp
 from mediapipe.tasks.python import vision
 
 
 FIELDS = ("participant", "task", "category", "actual_condition", "actual_speed", "segment_id", "window_id", "window_start_s", "window_end_s", "alignment_method", "alignment_qc", "eeg_coverage", "video_coverage")
+
+
+def _continuous_ica_motion_edit(raw: mne.io.BaseRaw, eeg_names: list[str], config: dict[str, Any]) -> dict[str, Any]:
+    """Apply the original continuous ICA/ACC source edit before windowing.
+
+    This compatibility helper is retained here because the Image EEG module no
+    longer exports it. Its implementation is unchanged from the robot
+    pipeline's imported version, preserving the established ICA behavior.
+    """
+    if not config["eeg"]["ica"]["enabled"]:
+        return {"enabled": False, "corrected_source_count": 0}
+    eeg = raw.copy().pick(eeg_names)
+    motion_names = [name for name in ("ACC X", "ACC Y", "ACC Z") if name in raw.ch_names]
+    if len(motion_names) != 3:
+        raise ValueError(f"ICA requires ACC X/Y/Z motion references; found {motion_names}")
+    data = eeg.get_data().copy()
+    rank = int(np.linalg.matrix_rank(data))
+    if rank < 1:
+        raise RuntimeError("ICA cannot be fitted: post-CAR EEG rank is zero")
+    ica_config = config["eeg"]["ica"]
+    ica = mne.preprocessing.ICA(n_components=rank, method=ica_config["method"], random_state=ica_config["random_seed"], verbose=False)
+    with warnings.catch_warnings(record=True) as fit_warnings:
+        warnings.simplefilter("always")
+        ica.fit(eeg, verbose=False)
+    if any(issubclass(item.category, ConvergenceWarning) for item in fit_warnings):
+        raise RuntimeError("Rank-aware continuous ICA did not converge; preprocessing stopped")
+    if any("unstable mixing matrix" in str(item.message) for item in fit_warnings):
+        raise RuntimeError("Rank-aware continuous ICA reported an unstable mixing matrix; preprocessing stopped")
+    sources = ica.get_sources(eeg).get_data()
+    motion = raw.copy().pick(motion_names).get_data()
+    correlations = np.full((ica.n_components_, 3), np.nan)
+    for axis in range(3):
+        for component in range(ica.n_components_):
+            correlation, _ = pearsonr(sources[component], motion[axis])
+            correlations[component, axis] = correlation if np.isfinite(correlation) else np.nan
+    means = np.nanmean(correlations, axis=0)
+    standard_deviations = np.nanstd(correlations, axis=0)
+    highpass_sos = butter(4, 3.0, btype="highpass", fs=float(raw.info["sfreq"]), output="sos")
+    selected = []
+    for component in range(ica.n_components_):
+        axes = [motion_names[index] for index in range(3) if np.isfinite(correlations[component, index])
+                and correlations[component, index] > means[index] + 2.0 * standard_deviations[index]]
+        if axes:
+            sources[component] = sosfiltfilt(highpass_sos, sources[component])
+            selected.append({"component": component, "axes": axes})
+    prewhitened = ica.pca_components_[:ica.n_components_].T @ (ica.mixing_matrix_ @ sources)
+    if ica.pca_mean_ is not None:
+        prewhitened += ica.pca_mean_[:, None]
+    reconstructed = prewhitened * ica.pre_whitener_ if ica.noise_cov is None else np.linalg.pinv(ica.pre_whitener_, rcond=1e-14) @ prewhitened
+    raw._data[[raw.ch_names.index(name) for name in eeg_names]] = reconstructed
+    return {"enabled": True, "detected_eeg_rank": rank, "fitted_ica_components": int(ica.n_components_),
+            "corrected_source_count": len(selected), "motion_related_components": selected}
+
+
+def _extract_eeg_window_features(data: np.ndarray, sampling_hz: float) -> list[dict[str, float]]:
+    """Calculate the original frozen continuous-window feature definitions."""
+    bands = {"delta": (1.0, 4.0), "theta": (4.0, 8.0), "alpha": (8.0, 12.0), "beta": (12.0, 30.0), "gamma": (30.0, 40.0)}
+    rows = []
+    for signal in data:
+        frequencies, psd = welch(signal, fs=float(sampling_hz), nperseg=min(len(signal), int(sampling_hz)))
+        row = {"eeg_sd": float(np.std(signal)), "eeg_se": _entropy(psd), "eeg_hm": _hjorth_mobility(signal),
+               "eeg_hc": _hjorth_complexity(signal), "eeg_mf_hz": _median_frequency(frequencies, psd)}
+        for band, (low, high) in bands.items():
+            mask = (frequencies >= low) & (frequencies <= high)
+            row[f"eeg_bp_{band}"] = float(np.trapezoid(psd[mask], frequencies[mask])) if mask.any() else float("nan")
+            row[f"eeg_se_{band}"] = _entropy(psd[mask]) if mask.any() else float("nan")
+        rows.append(row)
+    return rows
+
+
+def _entropy(values: np.ndarray) -> float:
+    values = np.asarray(values, dtype=float)
+    total = values.sum()
+    if total <= 0 or not np.isfinite(total):
+        return float("nan")
+    probabilities = values / total
+    probabilities = probabilities[probabilities > 0]
+    return float(-np.sum(probabilities * np.log2(probabilities)))
+
+
+def _median_frequency(frequencies: np.ndarray, psd: np.ndarray) -> float:
+    cumulative = np.cumsum((psd[1:] + psd[:-1]) * np.diff(frequencies) / 2.0)
+    if not len(cumulative) or cumulative[-1] <= 0:
+        return float("nan")
+    return float(frequencies[np.searchsorted(cumulative, cumulative[-1] / 2.0) + 1])
+
+
+def _hjorth_mobility(signal: np.ndarray) -> float:
+    signal_variance = np.var(signal)
+    return float(np.sqrt(np.var(np.diff(signal)) / signal_variance)) if signal_variance else float("nan")
+
+
+def _hjorth_complexity(signal: np.ndarray) -> float:
+    first = np.diff(signal)
+    first_variance = np.var(first)
+    mobility = _hjorth_mobility(signal)
+    if not first_variance or not np.isfinite(mobility) or mobility == 0:
+        return float("nan")
+    return float(np.sqrt(np.var(np.diff(first)) / first_variance) / mobility)
 
 
 def image_defaults() -> dict[str, Any]:
@@ -247,7 +349,7 @@ def extract_task(participant: str, task_id: str, task: dict[str, Any], qc: dict[
         eeg = raw.copy().pick(list(cfg["channels"]["eeg_mapping"].values()))
         raw.set_eeg_reference(ref_channels="average", projection=False, verbose=False)
         raw.filter(1.0, 40.0, method="iir", iir_params={"order":4,"ftype":"butter","output":"sos"}, verbose=False)
-        continuous_ica_motion_edit(raw, list(cfg["channels"]["eeg_mapping"].values()), logger=None, config=cfg)
+        _continuous_ica_motion_edit(raw, list(cfg["channels"]["eeg_mapping"].values()), cfg)
         if not task.get("bad_channels", []): pass
         duration = raw.n_times/raw.info["sfreq"]
         for start in np.arange(0, duration-2.0+1e-9, 1.0):
@@ -255,7 +357,7 @@ def extract_task(participant: str, task_id: str, task: dict[str, Any], qc: dict[
             if data.shape[1] != 500: continue
             selected_frames=[item for item in frame_times if start <= item[0] < start+2.0]
             meta=_metadata(participant,task_id,task,segment_id,float(start),float(start+2),qc,1.0,1.0 if selected_frames else 0.0)
-            for channel, row in zip(raw.copy().pick(list(cfg["channels"]["eeg_mapping"].values())).ch_names, extract_eeg_window_features(data, raw.info["sfreq"])): eeg_rows.append({**meta,"channel":channel,"sample_count":500,**row})
+            for channel, row in zip(raw.copy().pick(list(cfg["channels"]["eeg_mapping"].values())).ch_names, _extract_eeg_window_features(data, raw.info["sfreq"])): eeg_rows.append({**meta,"channel":channel,"sample_count":500,**row})
             # Filename-fallback video has an explicit task-relative origin.
             # Emit only complete video [k, k+2) intervals at their mapped EEG
             # starts, rather than partial windows on either edge.

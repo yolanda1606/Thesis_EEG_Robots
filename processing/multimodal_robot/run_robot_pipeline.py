@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import shutil
 import sys
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 from typing import Any
 
 import cv2
@@ -24,6 +25,10 @@ def args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--participant-config", type=Path, required=True)
     p.add_argument("--participant", required=True)
+    p.add_argument("--raw-root", type=Path,
+                   help="Local participant data directory used to resolve Windows-authored task paths.")
+    p.add_argument("--tasks", nargs="+", choices=TASKS,
+                   help="Optional subset of robot tasks; defaults to all six tasks.")
     p.add_argument("--resource-root", type=Path, default=HERE.parent / "multimodal_image" / "models")
     p.add_argument("--output-root", type=Path, default=Path("derived"))
     p.add_argument("--run-name", required=True)
@@ -47,6 +52,55 @@ def load(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ValueError("Participant YAML must contain a mapping")
     return value
+
+
+def localize_task_paths(config: dict[str, Any], raw_root: Path | None) -> dict[str, Any]:
+    """Resolve selected task files below ``raw_root`` without altering the YAML.
+
+    Participant YAML files retain their acquisition-machine paths.  On a
+    different host, the participant-directory basename anchors each configured
+    path below the supplied local raw root.
+    """
+    if raw_root is None:
+        return config
+    raw_root = raw_root.resolve(strict=True)
+    configured_root = PureWindowsPath(str(config.get("raw_participant_dir", ""))).name
+    if not configured_root:
+        raise ValueError("--raw-root requires raw_participant_dir in the participant YAML")
+    if raw_root.name.casefold() != configured_root.casefold():
+        raise ValueError(f"--raw-root basename must match raw_participant_dir: {raw_root.name} != {configured_root}")
+
+    def local_path(value: str) -> str:
+        path = Path(value)
+        if path.is_file():
+            return str(path)
+        parts = PureWindowsPath(value).parts
+        indices = [i for i, part in enumerate(parts) if part.casefold() == configured_root.casefold()]
+        if not indices:
+            raise ValueError(f"Configured task path is not beneath raw_participant_dir: {value}")
+        return str(raw_root.joinpath(*parts[indices[-1] + 1:]))
+
+    def local_item(item: Any) -> Any:
+        if isinstance(item, str):
+            return local_path(item)
+        if not isinstance(item, dict):
+            return item
+        result = copy.deepcopy(item)
+        if isinstance(result.get("file"), str):
+            result["file"] = local_path(result["file"])
+        if isinstance(result.get("segments"), list):
+            for segment in result["segments"]:
+                if isinstance(segment, dict) and isinstance(segment.get("file"), str):
+                    segment["file"] = local_path(segment["file"])
+        return result
+
+    result = copy.deepcopy(config)
+    for task in result.get("tasks", {}).values():
+        if isinstance(task, dict):
+            for modality in ("eeg", "video", "vision_log", "robot_metrics"):
+                if modality in task:
+                    task[modality] = local_item(task[modality])
+    return result
 
 
 def selected_files(modality: Any) -> list[Path]:
@@ -289,11 +343,12 @@ def crop_preview(config: dict[str, Any], resource_root: Path, destination: Path,
     return {"crop": crop, "representative_tasks": rows, "skipped_tasks": skipped, "sampled_frame_count": len(rows), "face_detection_count": sum(row["face_detections"] for row in rows), "image": str(image_path), "face_validation_image": str(face_path) if face_path else None, "automatic_approval": False}
 
 
-def continuous_run(config: dict[str, Any], participant: str, resource_root: Path, run: Path, extract: bool) -> dict[str, Any]:
+def continuous_run(config: dict[str, Any], participant: str, resource_root: Path, run: Path, extract: bool, task_ids: tuple[str, ...]) -> dict[str, Any]:
     """Validate all robot timelines, then optionally extract supported tasks."""
     alignment_rows: list[dict[str, Any]] = []; qcs: list[dict[str, Any]] = []
     eeg_tables = []; video_tables = []; merged_tables = []
-    for task_id, task in config["tasks"].items():
+    for task_id in task_ids:
+        task = config["tasks"][task_id]
         qc, pairs, raws = alignment_for_task(task, task_id, str(config.get("raw_participant_dir", "")))
         qcs.append(qc); alignment_rows.extend(pairs)
         print(f"{task_id}: EEG={qc['eeg_duration_s']:.3f}s, video={qc['video_duration_s']:.3f}s, Status={qc['status_event_count']}, anchors={qc['matched_anchor_count']}, model={qc['method']}, offset={qc['offset_s']}, drift={qc['drift_s_per_s']}, RMSE={qc['rmse_s']}, max={qc['max_residual_s']}, overlap={qc['aligned_overlap_s']:.3f}s")
@@ -336,7 +391,8 @@ def main() -> int:
     if a.save_crop and not a.crop_preview_only: raise ValueError("--save-crop is available only with --crop-preview-only")
     if not a.run_name or a.run_name in {".", ".."} or "/" in a.run_name or "\\" in a.run_name:
         raise ValueError("--run-name must be one directory name")
-    config_path = a.participant_config.resolve(strict=True); config = load(config_path)
+    config_path = a.participant_config.resolve(strict=True)
+    config = localize_task_paths(load(config_path), a.raw_root)
     errors, warnings = validate(config, a.participant)
     if errors: raise ValueError("Validation failed: " + " | ".join(errors))
     for warning in warnings: print(f"WARNING: {warning}")
@@ -355,7 +411,8 @@ def main() -> int:
             with config_path.open("w", encoding="utf-8") as f: yaml.safe_dump(config, f, sort_keys=False)
             (run / "resolved_participant.yaml").write_text(yaml.safe_dump(config, sort_keys=False), encoding="utf-8")
     if a.validate_alignment_only or a.continuous_features:
-        summary = continuous_run(config, a.participant, a.resource_root.resolve(), run, a.continuous_features)
+        task_ids = tuple(a.tasks) if a.tasks else TASKS
+        summary = continuous_run(config, a.participant, a.resource_root.resolve(), run, a.continuous_features, task_ids)
     (run / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     if a.health_check_only:
         for task_id, task in summary["tasks"].items():

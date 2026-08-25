@@ -1,0 +1,47 @@
+participant,eeg_usable_trials,face_usable_trials,valence_multimodal_usable_trials,arousal_multimodal_usable_trials,eeg_retention_percent,face_detection_percent,motion_correction_percent,missing_valence,missing_arousal,qc_group,reason
+P01,114,120,114,112,95.0,100.0,22.5,0,2,Review due to missing ratings,At least one target rating is absent.
+P02,110,120,85,101,91.66666666666669,99.95833333333331,22.5,27,10,Review due to missing ratings,At least one target rating is absent.
+P03,53,54,53,53,100.0,100.0,15.09433962264151,0,0,Special/incomplete case,Approved incomplete EEG session.
+P04,101,120,101,101,84.16666666666667,100.0,,0,0,Review due to elevated EEG rejection,"Retained 101/120 trials (84.167%), below the established 116/120 (96.667%) boundary."
+P05,117,120,117,115,97.5,100.0,,0,2,Review due to missing ratings,Observed ratings remain missing; strict cohort preserves missingness rather than imputing it.
+P06,115,120,115,115,95.83333333333331,100.0,,0,0,Review due to elevated EEG rejection,"Retained 115/120 trials (95.833%), below the established 116/120 (96.667%) boundary."
+P07,120,120,119,120,100.0,100.0,,1,0,Review due to missing ratings,Observed ratings remain missing; strict cohort preserves missingness rather than imputing it.
+P08,109,119,109,109,90.83333333333331,99.09734759061242,26.666666666666668,0,0,Review due to elevated EEG rejection,Retention below cohort first quartile (96.7%).
+P09,115,120,115,115,95.83333333333331,100.0,,0,0,Review due to elevated EEG rejection,"Retained 115/120 trials (95.833%), below the established 116/120 (96.667%) boundary."
+P10,120,120,120,120,100.0,100.0,17.5,0,0,Very clean,No AutoReject epoch losses.
+P11,120,120,120,120,100.0,100.0,20.83333333333333,0,0,Very clean,No AutoReject epoch losses.
+P12,120,120,120,120,100.0,100.0,,0,0,Very clean,All 120 EEG trials retained with complete ratings and no incomplete-session flag.
+P13,88,114,88,88,77.19298245614034,99.94152046783628,,0,0,Special/incomplete case,Current validation manifest records an incomplete session.
+P14,116,120,116,116,96.66666666666669,99.98611111111111,26.666666666666668,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P15,116,120,116,116,96.66666666666669,100.0,18.33333333333333,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P16,117,120,117,117,97.5,100.0,31.666666666666668,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P17,118,120,118,118,98.33333333333331,99.81944444444444,18.33333333333333,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P18,116,120,116,116,96.66666666666669,99.09722222222224,34.166666666666664,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P19,120,120,120,120,100.0,100.0,27.5,0,0,Very clean,No AutoReject epoch losses.
+P20,117,120,117,117,97.5,100.0,28.33333333333333,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P21,111,120,111,111,92.5,98.70851270656853,28.33333333333333,0,0,Review due to elevated EEG rejection,Retention below cohort first quartile (96.7%).
+P22,120,120,120,120,100.0,100.0,24.166666666666668,0,0,Very clean,No AutoReject epoch losses.
+P23,117,120,117,117,97.5,100.0,25.83333333333333,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P24,117,120,117,117,97.5,100.0,29.166666666666668,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P25,120,120,120,120,100.0,100.0,21.666666666666668,0,0,Very clean,No AutoReject epoch losses.
+P26,117,120,117,117,97.5,99.98611111111111,19.166666666666668,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P27,116,120,116,116,96.66666666666669,100.0,23.33333333333333,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P28,110,117,110,110,94.01709401709402,100.0,,0,0,Special/incomplete case,Current validation manifest records an incomplete session.
+P29,110,120,110,110,91.66666666666669,100.0,28.33333333333333,0,0,Review due to elevated EEG rejection,Retention below cohort first quartile (96.7%).
+P30,116,120,116,116,96.66666666666669,100.0,21.666666666666668,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P31,116,120,116,116,96.66666666666669,100.0,,0,0,Clean with minor EEG loss,"Retained 116/120 trials (96.667%), meeting the established clean-cohort boundary with complete ratings."
+P32,120,120,120,120,100.0,100.0,26.666666666666668,0,0,Very clean,No AutoReject epoch losses.
+P33,117,120,117,117,97.5,100.0,23.33333333333333,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P34,118,120,118,118,98.33333333333331,100.0,24.166666666666668,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P35,114,120,114,114,95.0,99.98611111111111,23.33333333333333,0,0,Review due to elevated EEG rejection,Retention below cohort first quartile (96.7%).
+P36,102,120,102,102,85.0,100.0,34.166666666666664,0,0,Review due to elevated EEG rejection,Retention below cohort first quartile (96.7%).
+P37,108,120,108,108,90.0,100.0,26.666666666666668,0,0,Review due to elevated EEG rejection,Retention below cohort first quartile (96.7%).
+P38,117,120,117,117,97.5,100.0,21.666666666666668,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P39,117,120,117,117,97.5,100.0,25.83333333333333,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P40,120,120,120,120,100.0,100.0,16.666666666666668,0,0,Very clean,No AutoReject epoch losses.
+P41,117,120,117,117,97.5,100.0,30.0,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P42,120,120,120,120,100.0,100.0,21.666666666666668,0,0,Very clean,No AutoReject epoch losses.
+P43,120,120,120,120,100.0,100.0,19.166666666666668,0,0,Very clean,No AutoReject epoch losses.
+P44,119,120,119,119,99.16666666666669,100.0,19.166666666666668,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
+P45,120,120,120,120,100.0,100.0,22.5,0,0,Very clean,No AutoReject epoch losses.
+P46,117,120,117,117,97.5,100.0,20.83333333333333,0,0,Clean with minor EEG loss,Retention at or above cohort first quartile.
