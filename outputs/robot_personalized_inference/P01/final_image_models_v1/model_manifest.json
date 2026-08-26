@@ -1,0 +1,496 @@
+{
+  "participant": "P01",
+  "stage": "Image-only final deployment model preparation",
+  "label_definition": "LOW=0 when rating < 4; HIGH=1 when rating >= 4",
+  "image_source": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P01/Image_Experiment/runs/p01_final/merged/p01_image_trial_dataset.csv",
+  "seed": 42,
+  "tie_resolution": "Face has 10 candidate features; exact BA tie among requests 10/20/all retained request 10 as the simplest explicit effective dimensionality.",
+  "models": [
+    {
+      "spec": {
+        "target": "valence",
+        "modality": "eeg",
+        "classifier": "svm",
+        "feature_count_request": "5"
+      },
+      "identifier": "valence__eeg__svm__5",
+      "best_parameters": {
+        "classifier__C": 0.1,
+        "classifier__kernel": "linear"
+      },
+      "internal_cv_best_balanced_accuracy": 0.5764335664335665,
+      "usable_image_rows": 114,
+      "low_count": 52,
+      "high_count": 62,
+      "candidate_features": [
+        "eeg_sd__C3",
+        "eeg_sd__C4",
+        "eeg_sd__Cz",
+        "eeg_sd__Fz",
+        "eeg_sd__Oz",
+        "eeg_sd__PO7",
+        "eeg_sd__PO8",
+        "eeg_sd__Pz",
+        "eeg_se__C3",
+        "eeg_se__C4",
+        "eeg_se__Cz",
+        "eeg_se__Fz",
+        "eeg_se__Oz",
+        "eeg_se__PO7",
+        "eeg_se__PO8",
+        "eeg_se__Pz",
+        "eeg_hm__C3",
+        "eeg_hm__C4",
+        "eeg_hm__Cz",
+        "eeg_hm__Fz",
+        "eeg_hm__Oz",
+        "eeg_hm__PO7",
+        "eeg_hm__PO8",
+        "eeg_hm__Pz",
+        "eeg_hc__C3",
+        "eeg_hc__C4",
+        "eeg_hc__Cz",
+        "eeg_hc__Fz",
+        "eeg_hc__Oz",
+        "eeg_hc__PO7",
+        "eeg_hc__PO8",
+        "eeg_hc__Pz",
+        "eeg_mf_hz__C3",
+        "eeg_mf_hz__C4",
+        "eeg_mf_hz__Cz",
+        "eeg_mf_hz__Fz",
+        "eeg_mf_hz__Oz",
+        "eeg_mf_hz__PO7",
+        "eeg_mf_hz__PO8",
+        "eeg_mf_hz__Pz",
+        "eeg_bp_delta__C3",
+        "eeg_bp_delta__C4",
+        "eeg_bp_delta__Cz",
+        "eeg_bp_delta__Fz",
+        "eeg_bp_delta__Oz",
+        "eeg_bp_delta__PO7",
+        "eeg_bp_delta__PO8",
+        "eeg_bp_delta__Pz",
+        "eeg_se_delta__C3",
+        "eeg_se_delta__C4",
+        "eeg_se_delta__Cz",
+        "eeg_se_delta__Fz",
+        "eeg_se_delta__Oz",
+        "eeg_se_delta__PO7",
+        "eeg_se_delta__PO8",
+        "eeg_se_delta__Pz",
+        "eeg_bp_theta__C3",
+        "eeg_bp_theta__C4",
+        "eeg_bp_theta__Cz",
+        "eeg_bp_theta__Fz",
+        "eeg_bp_theta__Oz",
+        "eeg_bp_theta__PO7",
+        "eeg_bp_theta__PO8",
+        "eeg_bp_theta__Pz",
+        "eeg_se_theta__C3",
+        "eeg_se_theta__C4",
+        "eeg_se_theta__Cz",
+        "eeg_se_theta__Fz",
+        "eeg_se_theta__Oz",
+        "eeg_se_theta__PO7",
+        "eeg_se_theta__PO8",
+        "eeg_se_theta__Pz",
+        "eeg_bp_alpha__C3",
+        "eeg_bp_alpha__C4",
+        "eeg_bp_alpha__Cz",
+        "eeg_bp_alpha__Fz",
+        "eeg_bp_alpha__Oz",
+        "eeg_bp_alpha__PO7",
+        "eeg_bp_alpha__PO8",
+        "eeg_bp_alpha__Pz",
+        "eeg_se_alpha__C3",
+        "eeg_se_alpha__C4",
+        "eeg_se_alpha__Cz",
+        "eeg_se_alpha__Fz",
+        "eeg_se_alpha__Oz",
+        "eeg_se_alpha__PO7",
+        "eeg_se_alpha__PO8",
+        "eeg_se_alpha__Pz",
+        "eeg_bp_beta__C3",
+        "eeg_bp_beta__C4",
+        "eeg_bp_beta__Cz",
+        "eeg_bp_beta__Fz",
+        "eeg_bp_beta__Oz",
+        "eeg_bp_beta__PO7",
+        "eeg_bp_beta__PO8",
+        "eeg_bp_beta__Pz",
+        "eeg_se_beta__C3",
+        "eeg_se_beta__C4",
+        "eeg_se_beta__Cz",
+        "eeg_se_beta__Fz",
+        "eeg_se_beta__Oz",
+        "eeg_se_beta__PO7",
+        "eeg_se_beta__PO8",
+        "eeg_se_beta__Pz",
+        "eeg_bp_gamma__C3",
+        "eeg_bp_gamma__C4",
+        "eeg_bp_gamma__Cz",
+        "eeg_bp_gamma__Fz",
+        "eeg_bp_gamma__Oz",
+        "eeg_bp_gamma__PO7",
+        "eeg_bp_gamma__PO8",
+        "eeg_bp_gamma__Pz",
+        "eeg_se_gamma__C3",
+        "eeg_se_gamma__C4",
+        "eeg_se_gamma__Cz",
+        "eeg_se_gamma__Fz",
+        "eeg_se_gamma__Oz",
+        "eeg_se_gamma__PO7",
+        "eeg_se_gamma__PO8",
+        "eeg_se_gamma__Pz"
+      ],
+      "selected_features": [
+        "eeg_sd__C3",
+        "eeg_se__Cz",
+        "eeg_bp_theta__C3",
+        "eeg_bp_alpha__C3",
+        "eeg_bp_beta__C3"
+      ],
+      "classifier_classes": [
+        0,
+        1
+      ],
+      "high_probability_column": 1,
+      "supports_predict_proba": true,
+      "image_feature_min": {
+        "eeg_sd__C3": 2.765380334643571,
+        "eeg_se__Cz": 3.4463948266918645,
+        "eeg_bp_theta__C3": 0.6931883454058931,
+        "eeg_bp_alpha__C3": 0.9737673748397634,
+        "eeg_bp_beta__C3": 1.4447216785750767
+      },
+      "image_feature_max": {
+        "eeg_sd__C3": 19.52157953613717,
+        "eeg_se__Cz": 4.477969991820776,
+        "eeg_bp_theta__C3": 43.42753595540368,
+        "eeg_bp_alpha__C3": 32.6277919458048,
+        "eeg_bp_beta__C3": 19.49550996874364
+      },
+      "model_file": "valence__eeg__svm__5.joblib",
+      "image_selected_features_file": "valence__eeg__svm__5__image_selected_features.csv"
+    },
+    {
+      "spec": {
+        "target": "valence",
+        "modality": "face",
+        "classifier": "gnb",
+        "feature_count_request": "5"
+      },
+      "identifier": "valence__face__gnb__5",
+      "best_parameters": {
+        "classifier__var_smoothing": 1e-11
+      },
+      "internal_cv_best_balanced_accuracy": 0.5744555444555445,
+      "usable_image_rows": 120,
+      "low_count": 54,
+      "high_count": 66,
+      "candidate_features": [
+        "video_irisdo_norm_mean",
+        "video_irisdo_norm_std",
+        "video_eso_norm_mean",
+        "video_eso_norm_std",
+        "video_enso_norm_mean",
+        "video_enso_norm_std",
+        "video_mnso_norm_mean",
+        "video_mnso_norm_std",
+        "video_mwo_norm_mean",
+        "video_mwo_norm_std"
+      ],
+      "selected_features": [
+        "video_irisdo_norm_mean",
+        "video_irisdo_norm_std",
+        "video_eso_norm_std",
+        "video_enso_norm_std",
+        "video_mwo_norm_std"
+      ],
+      "classifier_classes": [
+        0,
+        1
+      ],
+      "high_probability_column": 1,
+      "supports_predict_proba": true,
+      "image_feature_min": {
+        "video_irisdo_norm_mean": 0.0454547775671642,
+        "video_irisdo_norm_std": 0.0017451824758797,
+        "video_eso_norm_std": 0.0015078436372778,
+        "video_enso_norm_std": 0.0013780353182869,
+        "video_mwo_norm_std": 0.0037454095327807
+      },
+      "image_feature_max": {
+        "video_irisdo_norm_mean": 0.0965246590747805,
+        "video_irisdo_norm_std": 0.0290489120936422,
+        "video_eso_norm_std": 0.019389271961215,
+        "video_enso_norm_std": 0.030580351387278,
+        "video_mwo_norm_std": 0.041051023130437
+      },
+      "model_file": "valence__face__gnb__5.joblib",
+      "image_selected_features_file": "valence__face__gnb__5__image_selected_features.csv"
+    },
+    {
+      "spec": {
+        "target": "valence",
+        "modality": "face",
+        "classifier": "gnb",
+        "feature_count_request": "10"
+      },
+      "identifier": "valence__face__gnb__10",
+      "best_parameters": {
+        "classifier__var_smoothing": 1e-11
+      },
+      "internal_cv_best_balanced_accuracy": 0.5653646353646353,
+      "usable_image_rows": 120,
+      "low_count": 54,
+      "high_count": 66,
+      "candidate_features": [
+        "video_irisdo_norm_mean",
+        "video_irisdo_norm_std",
+        "video_eso_norm_mean",
+        "video_eso_norm_std",
+        "video_enso_norm_mean",
+        "video_enso_norm_std",
+        "video_mnso_norm_mean",
+        "video_mnso_norm_std",
+        "video_mwo_norm_mean",
+        "video_mwo_norm_std"
+      ],
+      "selected_features": [
+        "video_irisdo_norm_mean",
+        "video_irisdo_norm_std",
+        "video_eso_norm_mean",
+        "video_eso_norm_std",
+        "video_enso_norm_mean",
+        "video_enso_norm_std",
+        "video_mnso_norm_mean",
+        "video_mnso_norm_std",
+        "video_mwo_norm_mean",
+        "video_mwo_norm_std"
+      ],
+      "classifier_classes": [
+        0,
+        1
+      ],
+      "high_probability_column": 1,
+      "supports_predict_proba": true,
+      "image_feature_min": {
+        "video_irisdo_norm_mean": 0.0454547775671642,
+        "video_irisdo_norm_std": 0.0017451824758797,
+        "video_eso_norm_mean": 0.7187625219974045,
+        "video_eso_norm_std": 0.0015078436372778,
+        "video_enso_norm_mean": 0.5311867285711643,
+        "video_enso_norm_std": 0.0013780353182869,
+        "video_mnso_norm_mean": 0.1335949359696487,
+        "video_mnso_norm_std": 0.000975380865181,
+        "video_mwo_norm_mean": 0.5542939789690418,
+        "video_mwo_norm_std": 0.0037454095327807
+      },
+      "image_feature_max": {
+        "video_irisdo_norm_mean": 0.0965246590747805,
+        "video_irisdo_norm_std": 0.0290489120936422,
+        "video_eso_norm_mean": 0.7449443628471464,
+        "video_eso_norm_std": 0.019389271961215,
+        "video_enso_norm_mean": 0.5827789519922383,
+        "video_enso_norm_std": 0.030580351387278,
+        "video_mnso_norm_mean": 0.161735799316531,
+        "video_mnso_norm_std": 0.012224546362704,
+        "video_mwo_norm_mean": 0.6420248216073696,
+        "video_mwo_norm_std": 0.041051023130437
+      },
+      "model_file": "valence__face__gnb__10.joblib",
+      "image_selected_features_file": "valence__face__gnb__10__image_selected_features.csv"
+    },
+    {
+      "spec": {
+        "target": "arousal",
+        "modality": "face",
+        "classifier": "svm",
+        "feature_count_request": "10"
+      },
+      "identifier": "arousal__face__svm__10",
+      "best_parameters": {
+        "classifier__C": 0.1,
+        "classifier__kernel": "linear"
+      },
+      "internal_cv_best_balanced_accuracy": 0.6065079365079366,
+      "usable_image_rows": 118,
+      "low_count": 47,
+      "high_count": 71,
+      "candidate_features": [
+        "video_irisdo_norm_mean",
+        "video_irisdo_norm_std",
+        "video_eso_norm_mean",
+        "video_eso_norm_std",
+        "video_enso_norm_mean",
+        "video_enso_norm_std",
+        "video_mnso_norm_mean",
+        "video_mnso_norm_std",
+        "video_mwo_norm_mean",
+        "video_mwo_norm_std"
+      ],
+      "selected_features": [
+        "video_irisdo_norm_mean",
+        "video_irisdo_norm_std",
+        "video_eso_norm_mean",
+        "video_eso_norm_std",
+        "video_enso_norm_mean",
+        "video_enso_norm_std",
+        "video_mnso_norm_mean",
+        "video_mnso_norm_std",
+        "video_mwo_norm_mean",
+        "video_mwo_norm_std"
+      ],
+      "classifier_classes": [
+        0,
+        1
+      ],
+      "high_probability_column": 1,
+      "supports_predict_proba": true,
+      "image_feature_min": {
+        "video_irisdo_norm_mean": 0.0454547775671642,
+        "video_irisdo_norm_std": 0.0017451824758797,
+        "video_eso_norm_mean": 0.7187625219974045,
+        "video_eso_norm_std": 0.0015078436372778,
+        "video_enso_norm_mean": 0.5311867285711643,
+        "video_enso_norm_std": 0.0017449118128893,
+        "video_mnso_norm_mean": 0.1335949359696487,
+        "video_mnso_norm_std": 0.000975380865181,
+        "video_mwo_norm_mean": 0.5542939789690418,
+        "video_mwo_norm_std": 0.0037454095327807
+      },
+      "image_feature_max": {
+        "video_irisdo_norm_mean": 0.0965246590747805,
+        "video_irisdo_norm_std": 0.0290489120936422,
+        "video_eso_norm_mean": 0.7449443628471464,
+        "video_eso_norm_std": 0.019389271961215,
+        "video_enso_norm_mean": 0.5827789519922383,
+        "video_enso_norm_std": 0.030580351387278,
+        "video_mnso_norm_mean": 0.161735799316531,
+        "video_mnso_norm_std": 0.012224546362704,
+        "video_mwo_norm_mean": 0.6420248216073696,
+        "video_mwo_norm_std": 0.041051023130437
+      },
+      "model_file": "arousal__face__svm__10.joblib",
+      "image_selected_features_file": "arousal__face__svm__10__image_selected_features.csv"
+    },
+    {
+      "spec": {
+        "target": "arousal",
+        "modality": "face",
+        "classifier": "gnb",
+        "feature_count_request": "5"
+      },
+      "identifier": "arousal__face__gnb__5",
+      "best_parameters": {
+        "classifier__var_smoothing": 1e-11
+      },
+      "internal_cv_best_balanced_accuracy": 0.6033333333333333,
+      "usable_image_rows": 118,
+      "low_count": 47,
+      "high_count": 71,
+      "candidate_features": [
+        "video_irisdo_norm_mean",
+        "video_irisdo_norm_std",
+        "video_eso_norm_mean",
+        "video_eso_norm_std",
+        "video_enso_norm_mean",
+        "video_enso_norm_std",
+        "video_mnso_norm_mean",
+        "video_mnso_norm_std",
+        "video_mwo_norm_mean",
+        "video_mwo_norm_std"
+      ],
+      "selected_features": [
+        "video_irisdo_norm_mean",
+        "video_irisdo_norm_std",
+        "video_eso_norm_std",
+        "video_enso_norm_mean",
+        "video_enso_norm_std"
+      ],
+      "classifier_classes": [
+        0,
+        1
+      ],
+      "high_probability_column": 1,
+      "supports_predict_proba": true,
+      "image_feature_min": {
+        "video_irisdo_norm_mean": 0.0454547775671642,
+        "video_irisdo_norm_std": 0.0017451824758797,
+        "video_eso_norm_std": 0.0015078436372778,
+        "video_enso_norm_mean": 0.5311867285711643,
+        "video_enso_norm_std": 0.0017449118128893
+      },
+      "image_feature_max": {
+        "video_irisdo_norm_mean": 0.0965246590747805,
+        "video_irisdo_norm_std": 0.0290489120936422,
+        "video_eso_norm_std": 0.019389271961215,
+        "video_enso_norm_mean": 0.5827789519922383,
+        "video_enso_norm_std": 0.030580351387278
+      },
+      "model_file": "arousal__face__gnb__5.joblib",
+      "image_selected_features_file": "arousal__face__gnb__5__image_selected_features.csv"
+    },
+    {
+      "spec": {
+        "target": "arousal",
+        "modality": "face",
+        "classifier": "svm",
+        "feature_count_request": "5"
+      },
+      "identifier": "arousal__face__svm__5",
+      "best_parameters": {
+        "classifier__C": 10,
+        "classifier__gamma": 0.1,
+        "classifier__kernel": "rbf"
+      },
+      "internal_cv_best_balanced_accuracy": 0.6349206349206349,
+      "usable_image_rows": 118,
+      "low_count": 47,
+      "high_count": 71,
+      "candidate_features": [
+        "video_irisdo_norm_mean",
+        "video_irisdo_norm_std",
+        "video_eso_norm_mean",
+        "video_eso_norm_std",
+        "video_enso_norm_mean",
+        "video_enso_norm_std",
+        "video_mnso_norm_mean",
+        "video_mnso_norm_std",
+        "video_mwo_norm_mean",
+        "video_mwo_norm_std"
+      ],
+      "selected_features": [
+        "video_irisdo_norm_mean",
+        "video_irisdo_norm_std",
+        "video_eso_norm_std",
+        "video_enso_norm_mean",
+        "video_enso_norm_std"
+      ],
+      "classifier_classes": [
+        0,
+        1
+      ],
+      "high_probability_column": 1,
+      "supports_predict_proba": true,
+      "image_feature_min": {
+        "video_irisdo_norm_mean": 0.0454547775671642,
+        "video_irisdo_norm_std": 0.0017451824758797,
+        "video_eso_norm_std": 0.0015078436372778,
+        "video_enso_norm_mean": 0.5311867285711643,
+        "video_enso_norm_std": 0.0017449118128893
+      },
+      "image_feature_max": {
+        "video_irisdo_norm_mean": 0.0965246590747805,
+        "video_irisdo_norm_std": 0.0290489120936422,
+        "video_eso_norm_std": 0.019389271961215,
+        "video_enso_norm_mean": 0.5827789519922383,
+        "video_enso_norm_std": 0.030580351387278
+      },
+      "model_file": "arousal__face__svm__5.joblib",
+      "image_selected_features_file": "arousal__face__svm__5__image_selected_features.csv"
+    }
+  ]
+}

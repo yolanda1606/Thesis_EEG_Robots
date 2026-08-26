@@ -1,0 +1,7 @@
+target,modality,classifier,feature_count_request,identifier,selected_feature_count,best_parameters,classifier_classes,high_probability_column
+valence,eeg,svm,all,valence__eeg__svm__all,120,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}","[0, 1]",1
+valence,multimodal,svm,10,valence__multimodal__svm__10,10,"{""classifier__C"": 10, ""classifier__kernel"": ""linear""}","[0, 1]",1
+valence,eeg,svm,20,valence__eeg__svm__20,20,"{""classifier__C"": 10, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}","[0, 1]",1
+arousal,multimodal,knn,5,arousal__multimodal__knn__5,5,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}","[0, 1]",1
+arousal,multimodal,gnb,10,arousal__multimodal__gnb__10,10,"{""classifier__var_smoothing"": 1e-11}","[0, 1]",1
+arousal,eeg,knn,5,arousal__eeg__knn__5,5,"{""classifier__n_neighbors"": 7, ""classifier__weights"": ""uniform""}","[0, 1]",1

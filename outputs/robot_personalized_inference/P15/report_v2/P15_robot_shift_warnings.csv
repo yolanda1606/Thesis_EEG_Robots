@@ -1,0 +1,73 @@
+participant,target,task,model_rank,model_label,condition,median_nearest_image_distance,median_abs_z,out_of_range_fraction,shift_flag,shift_reason
+P15,valence,pick_place,1,Face GNB Top-5,ICA,2.862522264160093,1.4337634104057009,0.23,False,
+P15,valence,shape_sorter_alone,1,Face GNB Top-5,ICA,3.200531071502824,1.0151026552741904,0.15,False,
+P15,valence,shape_sorter_interaction,1,Face GNB Top-5,ICA,2.33417782488226,1.694225604158026,0.1775,False,
+P15,valence,shape_sorter_observation,1,Face GNB Top-5,ICA,1.5708018400052302,1.109723571395253,0.1192307692307692,False,
+P15,valence,sisyphus,1,Face GNB Top-5,ICA,1.4159357126564818,1.0087827568115633,0.0757894736842105,False,
+P15,valence,stack,1,Face GNB Top-5,ICA,1.5300930010846232,1.142069504016132,0.0950819672131147,False,
+P15,valence,pick_place,2,Eeg SVM Top-20,ICA,3.67381064213908,0.7626673830219772,0.0619999999999999,False,
+P15,valence,shape_sorter_alone,2,Eeg SVM Top-20,ICA,3.7472291360780474,0.8755090426820824,0.0782608695652174,False,
+P15,valence,shape_sorter_interaction,2,Eeg SVM Top-20,ICA,3.799591319917856,0.8743625372079027,0.0517647058823529,False,
+P15,valence,shape_sorter_observation,2,Eeg SVM Top-20,ICA,3.4703016014625008,0.8123598683639464,0.0361111111111111,False,
+P15,valence,sisyphus,2,Eeg SVM Top-20,ICA,68.14840890586949,1.4589977694989615,0.3672897196261682,True,median nearest Image-training distance > 10 in selected standardized feature space
+P15,valence,stack,2,Eeg SVM Top-20,ICA,3.631688037187345,0.8265413491450813,0.0528985507246376,False,
+P15,valence,pick_place,3,Face GNB Top-10,ICA,6.73270875195967,1.8964095538566283,0.3399999999999999,False,
+P15,valence,shape_sorter_alone,3,Face GNB Top-10,ICA,8.113681991651003,2.0567252055614365,0.3333333333333333,False,
+P15,valence,shape_sorter_interaction,3,Face GNB Top-10,ICA,6.5672106091819415,1.924526206216782,0.3712499999999999,False,
+P15,valence,shape_sorter_observation,3,Face GNB Top-10,ICA,5.743041782372302,1.5904563278576151,0.3009615384615384,False,
+P15,valence,sisyphus,3,Face GNB Top-10,ICA,6.027801450894076,1.4893048429642817,0.2726315789473684,False,
+P15,valence,stack,3,Face GNB Top-10,ICA,5.12579014165336,1.307526115521859,0.2770491803278688,False,
+P15,arousal,pick_place,1,Face GNB Top-5,ICA,1.964705896968572,1.4904696481171475,0.23,False,
+P15,arousal,shape_sorter_alone,1,Face GNB Top-5,ICA,2.0541728138938877,1.50487066200985,0.1166666666666666,False,
+P15,arousal,shape_sorter_interaction,1,Face GNB Top-5,ICA,1.9115514212154656,1.390248235066065,0.1375,False,
+P15,arousal,shape_sorter_observation,1,Face GNB Top-5,ICA,1.6265181690812198,1.2097067565587802,0.1192307692307692,False,
+P15,arousal,sisyphus,1,Face GNB Top-5,ICA,1.5555962201905449,1.0503783942226113,0.0926315789473684,False,
+P15,arousal,stack,1,Face GNB Top-5,ICA,1.4184279741071475,1.166012115151566,0.121311475409836,False,
+P15,arousal,pick_place,2,Multimodal KNN All,ICA,20.122391914086386,0.7932035659105678,0.0684615384615384,True,median nearest Image-training distance > 10 in selected standardized feature space
+P15,arousal,shape_sorter_alone,2,Multimodal KNN All,ICA,24.910683256614625,0.9104522252499376,0.0987179487179487,True,median nearest Image-training distance > 10 in selected standardized feature space
+P15,arousal,shape_sorter_interaction,2,Multimodal KNN All,ICA,17.19098038874286,0.8215757425852703,0.073076923076923,True,median nearest Image-training distance > 10 in selected standardized feature space
+P15,arousal,shape_sorter_observation,2,Multimodal KNN All,ICA,15.812067286266366,0.8009925920006109,0.0575443786982248,True,median nearest Image-training distance > 10 in selected standardized feature space
+P15,arousal,sisyphus,2,Multimodal KNN All,ICA,223.346282589634,2.043611624004667,0.4216194331983805,True,median nearest Image-training distance > 10 in selected standardized feature space
+P15,arousal,stack,2,Multimodal KNN All,ICA,15.33129656302575,0.8124793635755625,0.0614123581336696,True,median nearest Image-training distance > 10 in selected standardized feature space
+P15,arousal,pick_place,3,Multimodal GNB Top-20,ICA,8.232855537498452,0.8983837969255322,0.1075,False,
+P15,arousal,shape_sorter_alone,3,Multimodal GNB Top-20,ICA,9.091686150759893,0.9600768841963776,0.1333333333333333,False,
+P15,arousal,shape_sorter_interaction,3,Multimodal GNB Top-20,ICA,4.657530169391025,0.881572661380988,0.07625,False,
+P15,arousal,shape_sorter_observation,3,Multimodal GNB Top-20,ICA,4.242453315487508,0.8450949531806079,0.0509615384615384,False,
+P15,arousal,sisyphus,3,Multimodal GNB Top-20,ICA,96.81479373892896,2.0708821012596035,0.4531578947368421,True,median nearest Image-training distance > 10 in selected standardized feature space
+P15,arousal,stack,3,Multimodal GNB Top-20,ICA,4.218533115488039,0.8174683612620235,0.0549180327868852,False,
+P15,valence,pick_place,1,Face GNB Top-5,no-ICA,2.862522264160093,1.4337634104057009,0.23,False,
+P15,valence,shape_sorter_alone,1,Face GNB Top-5,no-ICA,3.200531071502824,1.0151026552741904,0.15,False,
+P15,valence,shape_sorter_interaction,1,Face GNB Top-5,no-ICA,2.33417782488226,1.694225604158026,0.1775,False,
+P15,valence,shape_sorter_observation,1,Face GNB Top-5,no-ICA,1.5708018400052302,1.109723571395253,0.1192307692307692,False,
+P15,valence,sisyphus,1,Face GNB Top-5,no-ICA,1.4159357126564818,1.0087827568115633,0.0757894736842105,False,
+P15,valence,stack,1,Face GNB Top-5,no-ICA,1.5300930010846232,1.142069504016132,0.0950819672131147,False,
+P15,valence,pick_place,2,Eeg SVM Top-20,no-ICA,3.6738106421389936,0.762667383021908,0.0619999999999999,False,
+P15,valence,shape_sorter_alone,2,Eeg SVM Top-20,no-ICA,3.747229136078342,0.8755090426819672,0.0782608695652174,False,
+P15,valence,shape_sorter_interaction,2,Eeg SVM Top-20,no-ICA,3.7995913199181897,0.8743625372083483,0.0517647058823529,False,
+P15,valence,shape_sorter_observation,2,Eeg SVM Top-20,no-ICA,3.470301601462475,0.8123598683639379,0.0361111111111111,False,
+P15,valence,sisyphus,2,Eeg SVM Top-20,no-ICA,3.98516030402457,0.9384291953603272,0.058411214953271,False,
+P15,valence,stack,2,Eeg SVM Top-20,no-ICA,3.6316880371871,0.8265413491450804,0.0528985507246376,False,
+P15,valence,pick_place,3,Face GNB Top-10,no-ICA,6.73270875195967,1.8964095538566283,0.3399999999999999,False,
+P15,valence,shape_sorter_alone,3,Face GNB Top-10,no-ICA,8.113681991651003,2.0567252055614365,0.3333333333333333,False,
+P15,valence,shape_sorter_interaction,3,Face GNB Top-10,no-ICA,6.5672106091819415,1.924526206216782,0.3712499999999999,False,
+P15,valence,shape_sorter_observation,3,Face GNB Top-10,no-ICA,5.743041782372302,1.5904563278576151,0.3009615384615384,False,
+P15,valence,sisyphus,3,Face GNB Top-10,no-ICA,6.027801450894076,1.4893048429642817,0.2726315789473684,False,
+P15,valence,stack,3,Face GNB Top-10,no-ICA,5.12579014165336,1.307526115521859,0.2770491803278688,False,
+P15,arousal,pick_place,1,Face GNB Top-5,no-ICA,1.964705896968572,1.4904696481171475,0.23,False,
+P15,arousal,shape_sorter_alone,1,Face GNB Top-5,no-ICA,2.0541728138938877,1.50487066200985,0.1166666666666666,False,
+P15,arousal,shape_sorter_interaction,1,Face GNB Top-5,no-ICA,1.9115514212154656,1.390248235066065,0.1375,False,
+P15,arousal,shape_sorter_observation,1,Face GNB Top-5,no-ICA,1.6265181690812198,1.2097067565587802,0.1192307692307692,False,
+P15,arousal,sisyphus,1,Face GNB Top-5,no-ICA,1.5555962201905449,1.0503783942226113,0.0926315789473684,False,
+P15,arousal,stack,1,Face GNB Top-5,no-ICA,1.4184279741071475,1.166012115151566,0.121311475409836,False,
+P15,arousal,pick_place,2,Multimodal KNN All,no-ICA,20.12239191408661,0.7932035659106094,0.0684615384615384,True,median nearest Image-training distance > 10 in selected standardized feature space
+P15,arousal,shape_sorter_alone,2,Multimodal KNN All,no-ICA,24.910683256615386,0.910452225250016,0.0987179487179487,True,median nearest Image-training distance > 10 in selected standardized feature space
+P15,arousal,shape_sorter_interaction,2,Multimodal KNN All,no-ICA,17.190980388742496,0.8215757425852022,0.073076923076923,True,median nearest Image-training distance > 10 in selected standardized feature space
+P15,arousal,shape_sorter_observation,2,Multimodal KNN All,no-ICA,15.812067286266508,0.8009925920006086,0.0575443786982248,True,median nearest Image-training distance > 10 in selected standardized feature space
+P15,arousal,sisyphus,2,Multimodal KNN All,no-ICA,16.588194422579566,0.8667100868547941,0.0697165991902833,True,median nearest Image-training distance > 10 in selected standardized feature space
+P15,arousal,stack,2,Multimodal KNN All,no-ICA,15.331296563025678,0.812479363575392,0.0614123581336696,True,median nearest Image-training distance > 10 in selected standardized feature space
+P15,arousal,pick_place,3,Multimodal GNB Top-20,no-ICA,8.23285553749946,0.898383796925499,0.1075,False,
+P15,arousal,shape_sorter_alone,3,Multimodal GNB Top-20,no-ICA,9.091686150760172,0.9600768841963352,0.1333333333333333,False,
+P15,arousal,shape_sorter_interaction,3,Multimodal GNB Top-20,no-ICA,4.657530169390739,0.8815726613808352,0.07625,False,
+P15,arousal,shape_sorter_observation,3,Multimodal GNB Top-20,no-ICA,4.242453315487454,0.8450949531806169,0.0509615384615384,False,
+P15,arousal,sisyphus,3,Multimodal GNB Top-20,no-ICA,4.577024019658783,0.8636704925358052,0.0673684210526315,False,
+P15,arousal,stack,3,Multimodal GNB Top-20,no-ICA,4.218533115488065,0.8174683612619574,0.0549180327868852,False,

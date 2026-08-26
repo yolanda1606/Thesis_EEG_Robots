@@ -1,0 +1,98 @@
+{
+  "participant": "P01",
+  "source": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/image_classification/stage_c_individual_added18_v1/results_summary.csv",
+  "model_specs": [
+    {
+      "target": "valence",
+      "modality": "eeg",
+      "classifier": "svm",
+      "feature_count_request": "5"
+    },
+    {
+      "target": "valence",
+      "modality": "face",
+      "classifier": "gnb",
+      "feature_count_request": "5"
+    },
+    {
+      "target": "valence",
+      "modality": "face",
+      "classifier": "gnb",
+      "feature_count_request": "10"
+    },
+    {
+      "target": "arousal",
+      "modality": "face",
+      "classifier": "svm",
+      "feature_count_request": "10"
+    },
+    {
+      "target": "arousal",
+      "modality": "face",
+      "classifier": "gnb",
+      "feature_count_request": "5"
+    },
+    {
+      "target": "arousal",
+      "modality": "face",
+      "classifier": "svm",
+      "feature_count_request": "5"
+    }
+  ],
+  "selection": [
+    {
+      "target": "valence",
+      "modality": "eeg",
+      "classifier": "svm",
+      "feature_count_request": "5",
+      "rank": 1,
+      "mean_outer_balanced_accuracy": 0.5828321678321678,
+      "tie_resolution": "simplest explicit request among exact mean-BA ties with the same effective feature dimensionality"
+    },
+    {
+      "target": "valence",
+      "modality": "face",
+      "classifier": "gnb",
+      "feature_count_request": "5",
+      "rank": 2,
+      "mean_outer_balanced_accuracy": 0.5744555444555445,
+      "tie_resolution": "simplest explicit request among exact mean-BA ties with the same effective feature dimensionality"
+    },
+    {
+      "target": "valence",
+      "modality": "face",
+      "classifier": "gnb",
+      "feature_count_request": "10",
+      "rank": 3,
+      "mean_outer_balanced_accuracy": 0.5653646353646354,
+      "tie_resolution": "simplest explicit request among exact mean-BA ties with the same effective feature dimensionality"
+    },
+    {
+      "target": "arousal",
+      "modality": "face",
+      "classifier": "svm",
+      "feature_count_request": "10",
+      "rank": 1,
+      "mean_outer_balanced_accuracy": 0.6065079365079364,
+      "tie_resolution": "simplest explicit request among exact mean-BA ties with the same effective feature dimensionality"
+    },
+    {
+      "target": "arousal",
+      "modality": "face",
+      "classifier": "gnb",
+      "feature_count_request": "5",
+      "rank": 2,
+      "mean_outer_balanced_accuracy": 0.6033333333333333,
+      "tie_resolution": "simplest explicit request among exact mean-BA ties with the same effective feature dimensionality"
+    },
+    {
+      "target": "arousal",
+      "modality": "face",
+      "classifier": "svm",
+      "feature_count_request": "5",
+      "rank": 3,
+      "mean_outer_balanced_accuracy": 0.6011111111111112,
+      "tie_resolution": "simplest explicit request among exact mean-BA ties with the same effective feature dimensionality"
+    }
+  ]
+}

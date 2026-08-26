@@ -40,6 +40,16 @@ class TestTrainClassification(unittest.TestCase):
         self.assertEqual(tc.parse_args(base + ["--n-jobs", "-1"]).n_jobs, -1)
         with self.assertRaises(SystemExit): tc.parse_args(base + ["--n-jobs", "0"])
 
+    def test_source_run_defaults_to_final_and_resolves_no_ica_template(self):
+        base = ["--mode", "individual", "--target", "valence", "--modality", "face", "--run-name", "source"]
+        self.assertEqual(tc.parse_args(base).source_run, tc.DEFAULT_SOURCE_RUN)
+        args = tc.parse_args(base + ["--source-run", "{participant_lower}_no_ica"])
+        self.assertEqual(tc.source_run_name("P15", args.source_run), "p15_no_ica")
+        self.assertEqual(
+            tc.final_run_path(Path("derived"), "P15", args.source_run),
+            Path("derived/P15/Image_Experiment/runs/p15_no_ica"),
+        )
+
     def test_grid_search_receives_requested_n_jobs(self):
         captured = {}
         original = tc.GridSearchCV
@@ -139,20 +149,20 @@ class TestTrainClassification(unittest.TestCase):
                 calls.append(args[0])
                 if len(calls) == 2: raise RuntimeError("simulated interruption")
                 return rows(*args, **kwargs)
-            with patch.object(tc, "load_participant_table", side_effect=lambda _root, p: (synthetic_table(20), root / f"{p}.csv")), patch.object(tc, "evaluate_individual", side_effect=interrupted):
+            with patch.object(tc, "load_participant_table", side_effect=lambda _root, p, _source: (synthetic_table(20), root / f"{p}.csv")), patch.object(tc, "evaluate_individual", side_effect=interrupted):
                 with self.assertRaises(RuntimeError): tc.run(tc.parse_args(base))
             state = json.loads((output / "checkpoint" / tc.CHECKPOINT_STATE_FILE).read_text())
             self.assertEqual(len(state["completed_configurations"]), 1)
             resumed = []
             def record(*args, **kwargs): resumed.append(args[0]); return rows(*args, **kwargs)
-            with patch.object(tc, "load_participant_table", side_effect=lambda _root, p: (synthetic_table(20), root / f"{p}.csv")), patch.object(tc, "evaluate_individual", side_effect=record):
+            with patch.object(tc, "load_participant_table", side_effect=lambda _root, p, _source: (synthetic_table(20), root / f"{p}.csv")), patch.object(tc, "evaluate_individual", side_effect=record):
                 tc.run(tc.parse_args(base + ["--resume"]))
             self.assertEqual(resumed, ["P11"])
             self.assertEqual(len(pd.read_csv(output / "checkpoint" / "fold_results.csv")), 2)
-            with patch.object(tc, "load_participant_table", side_effect=lambda _root, p: (synthetic_table(20), root / f"{p}.csv")):
+            with patch.object(tc, "load_participant_table", side_effect=lambda _root, p, _source: (synthetic_table(20), root / f"{p}.csv")):
                 with self.assertRaises(ValueError): tc.run(tc.parse_args(base + ["--resume", "--seed", "7"]))
             clean_base = base.copy(); clean_base[clean_base.index("checkpoint")] = "clean"
-            with patch.object(tc, "load_participant_table", side_effect=lambda _root, p: (synthetic_table(20), root / f"{p}.csv")), patch.object(tc, "evaluate_individual", side_effect=rows):
+            with patch.object(tc, "load_participant_table", side_effect=lambda _root, p, _source: (synthetic_table(20), root / f"{p}.csv")), patch.object(tc, "evaluate_individual", side_effect=rows):
                 tc.run(tc.parse_args(clean_base))
             pd.testing.assert_frame_equal(
                 pd.read_csv(output / "checkpoint" / "fold_results.csv"),

@@ -10,7 +10,7 @@ import mne
 import numpy as np
 import pandas as pd
 
-from processing.multimodal_image.run_image_pipeline import input_manifest, merge_tables
+from processing.multimodal_image.run_image_pipeline import input_manifest, load_reused_video_features, merge_tables
 from processing.multimodal_image.src.configuration import _validate_eeg_input_choice
 from processing.multimodal_image.src.eeg_sources import load_eeg_session
 from processing.multimodal_image.src.validation import (available_image_codes,
@@ -125,6 +125,17 @@ class TestMultiFileEeg(unittest.TestCase):
                 manifest = input_manifest({"eeg_files": [first, second]}, {"inputs": {}})
             self.assertEqual([row["source_index"] for row in manifest["eeg_files"]], [0, 1])
             self.assertTrue(all(len(row["sha256"]) == 64 for row in manifest["eeg_files"]))
+
+    def test_reused_video_features_keep_only_trigger_and_video_columns(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "video_trial_features.csv"
+            pd.DataFrame({"trigger": [101, 102], "video_irisdo_norm_mean": [0.1, 0.2], "other": [1, 2]}).to_csv(source, index=False)
+            reused = load_reused_video_features(source)
+            self.assertEqual(reused.columns.tolist(), ["trigger", "video_irisdo_norm_mean"])
+            duplicate = Path(directory) / "duplicate.csv"
+            pd.DataFrame({"trigger": [101, 101], "video_irisdo_norm_mean": [0.1, 0.2]}).to_csv(duplicate, index=False)
+            with self.assertRaisesRegex(ValueError, "duplicate trigger"):
+                load_reused_video_features(duplicate)
 
 
 if __name__ == "__main__":

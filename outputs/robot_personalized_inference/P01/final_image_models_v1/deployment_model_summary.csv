@@ -1,0 +1,7 @@
+target,modality,classifier,feature_count_request,identifier,selected_feature_count,best_parameters,classifier_classes,high_probability_column
+valence,eeg,svm,5,valence__eeg__svm__5,5,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}","[0, 1]",1
+valence,face,gnb,5,valence__face__gnb__5,5,"{""classifier__var_smoothing"": 1e-11}","[0, 1]",1
+valence,face,gnb,10,valence__face__gnb__10,10,"{""classifier__var_smoothing"": 1e-11}","[0, 1]",1
+arousal,face,svm,10,arousal__face__svm__10,10,"{""classifier__C"": 0.1, ""classifier__kernel"": ""linear""}","[0, 1]",1
+arousal,face,gnb,5,arousal__face__gnb__5,5,"{""classifier__var_smoothing"": 1e-11}","[0, 1]",1
+arousal,face,svm,5,arousal__face__svm__5,5,"{""classifier__C"": 10, ""classifier__gamma"": 0.1, ""classifier__kernel"": ""rbf""}","[0, 1]",1

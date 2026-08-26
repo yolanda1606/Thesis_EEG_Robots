@@ -1,0 +1,332 @@
+{
+  "created_utc": "2026-08-25T15:06:38.126594+00:00",
+  "git_commit": "ceb3f245ff69783ba83bc4a7e0e9ab14d413e119",
+  "python": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/bin/python",
+  "python_version": "3.10.12 (main, Jun 22 2026, 18:55:27) [GCC 11.4.0]",
+  "platform": "Linux-5.15.0-1078-realtime-x86_64-with-glibc2.35",
+  "numpy": "2.2.6",
+  "scipy": "1.15.3",
+  "pandas": "2.3.3",
+  "sklearn": "1.7.2",
+  "n_jobs": 1,
+  "resolved_participants": [
+    "P01",
+    "P02",
+    "P03",
+    "P04",
+    "P05",
+    "P06",
+    "P07",
+    "P08",
+    "P09",
+    "P10",
+    "P11",
+    "P12",
+    "P13",
+    "P14",
+    "P15",
+    "P16",
+    "P17",
+    "P18",
+    "P19",
+    "P20",
+    "P21",
+    "P22",
+    "P23",
+    "P24",
+    "P25",
+    "P26",
+    "P27",
+    "P28",
+    "P29",
+    "P30",
+    "P31",
+    "P32",
+    "P33",
+    "P34",
+    "P35",
+    "P36",
+    "P37",
+    "P38",
+    "P39",
+    "P40",
+    "P41",
+    "P42",
+    "P43",
+    "P44",
+    "P45",
+    "P46"
+  ],
+  "cohort_source": "explicit participants",
+  "source_merged_tables": {
+    "P01": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P01/Image_Experiment/runs/p01_no_ica/merged/p01_image_trial_dataset.csv",
+    "P02": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P02/Image_Experiment/runs/p02_no_ica/merged/p02_image_trial_dataset.csv",
+    "P03": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P03/Image_Experiment/runs/p03_no_ica/merged/p03_image_trial_dataset.csv",
+    "P04": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P04/Image_Experiment/runs/p04_no_ica/merged/p04_image_trial_dataset.csv",
+    "P05": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P05/Image_Experiment/runs/p05_no_ica/merged/p05_image_trial_dataset.csv",
+    "P06": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P06/Image_Experiment/runs/p06_no_ica/merged/p06_image_trial_dataset.csv",
+    "P07": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P07/Image_Experiment/runs/p07_no_ica/merged/p07_image_trial_dataset.csv",
+    "P08": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P08/Image_Experiment/runs/p08_no_ica/merged/p08_image_trial_dataset.csv",
+    "P09": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P09/Image_Experiment/runs/p09_no_ica/merged/p09_image_trial_dataset.csv",
+    "P10": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P10/Image_Experiment/runs/p10_no_ica/merged/p10_image_trial_dataset.csv",
+    "P11": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P11/Image_Experiment/runs/p11_no_ica/merged/p11_image_trial_dataset.csv",
+    "P12": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P12/Image_Experiment/runs/p12_no_ica/merged/p12_image_trial_dataset.csv",
+    "P13": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P13/Image_Experiment/runs/p13_no_ica/merged/p13_image_trial_dataset.csv",
+    "P14": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P14/Image_Experiment/runs/p14_no_ica/merged/p14_image_trial_dataset.csv",
+    "P15": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P15/Image_Experiment/runs/p15_no_ica/merged/p15_image_trial_dataset.csv",
+    "P16": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P16/Image_Experiment/runs/p16_no_ica/merged/p16_image_trial_dataset.csv",
+    "P17": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P17/Image_Experiment/runs/p17_no_ica/merged/p17_image_trial_dataset.csv",
+    "P18": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P18/Image_Experiment/runs/p18_no_ica/merged/p18_image_trial_dataset.csv",
+    "P19": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P19/Image_Experiment/runs/p19_no_ica/merged/p19_image_trial_dataset.csv",
+    "P20": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P20/Image_Experiment/runs/p20_no_ica/merged/p20_image_trial_dataset.csv",
+    "P21": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P21/Image_Experiment/runs/p21_no_ica/merged/p21_image_trial_dataset.csv",
+    "P22": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P22/Image_Experiment/runs/p22_no_ica/merged/p22_image_trial_dataset.csv",
+    "P23": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P23/Image_Experiment/runs/p23_no_ica/merged/p23_image_trial_dataset.csv",
+    "P24": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P24/Image_Experiment/runs/p24_no_ica/merged/p24_image_trial_dataset.csv",
+    "P25": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P25/Image_Experiment/runs/p25_no_ica/merged/p25_image_trial_dataset.csv",
+    "P26": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P26/Image_Experiment/runs/p26_no_ica/merged/p26_image_trial_dataset.csv",
+    "P27": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P27/Image_Experiment/runs/p27_no_ica/merged/p27_image_trial_dataset.csv",
+    "P28": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P28/Image_Experiment/runs/p28_no_ica/merged/p28_image_trial_dataset.csv",
+    "P29": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P29/Image_Experiment/runs/p29_no_ica/merged/p29_image_trial_dataset.csv",
+    "P30": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P30/Image_Experiment/runs/p30_no_ica/merged/p30_image_trial_dataset.csv",
+    "P31": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P31/Image_Experiment/runs/p31_no_ica/merged/p31_image_trial_dataset.csv",
+    "P32": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P32/Image_Experiment/runs/p32_no_ica/merged/p32_image_trial_dataset.csv",
+    "P33": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P33/Image_Experiment/runs/p33_no_ica/merged/p33_image_trial_dataset.csv",
+    "P34": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P34/Image_Experiment/runs/p34_no_ica/merged/p34_image_trial_dataset.csv",
+    "P35": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P35/Image_Experiment/runs/p35_no_ica/merged/p35_image_trial_dataset.csv",
+    "P36": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P36/Image_Experiment/runs/p36_no_ica/merged/p36_image_trial_dataset.csv",
+    "P37": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P37/Image_Experiment/runs/p37_no_ica/merged/p37_image_trial_dataset.csv",
+    "P38": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P38/Image_Experiment/runs/p38_no_ica/merged/p38_image_trial_dataset.csv",
+    "P39": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P39/Image_Experiment/runs/p39_no_ica/merged/p39_image_trial_dataset.csv",
+    "P40": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P40/Image_Experiment/runs/p40_no_ica/merged/p40_image_trial_dataset.csv",
+    "P41": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P41/Image_Experiment/runs/p41_no_ica/merged/p41_image_trial_dataset.csv",
+    "P42": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P42/Image_Experiment/runs/p42_no_ica/merged/p42_image_trial_dataset.csv",
+    "P43": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P43/Image_Experiment/runs/p43_no_ica/merged/p43_image_trial_dataset.csv",
+    "P44": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P44/Image_Experiment/runs/p44_no_ica/merged/p44_image_trial_dataset.csv",
+    "P45": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P45/Image_Experiment/runs/p45_no_ica/merged/p45_image_trial_dataset.csv",
+    "P46": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P46/Image_Experiment/runs/p46_no_ica/merged/p46_image_trial_dataset.csv"
+  },
+  "mode": "individual",
+  "participants": [
+    "P01",
+    "P02",
+    "P03",
+    "P04",
+    "P05",
+    "P06",
+    "P07",
+    "P08",
+    "P09",
+    "P10",
+    "P11",
+    "P12",
+    "P13",
+    "P14",
+    "P15",
+    "P16",
+    "P17",
+    "P18",
+    "P19",
+    "P20",
+    "P21",
+    "P22",
+    "P23",
+    "P24",
+    "P25",
+    "P26",
+    "P27",
+    "P28",
+    "P29",
+    "P30",
+    "P31",
+    "P32",
+    "P33",
+    "P34",
+    "P35",
+    "P36",
+    "P37",
+    "P38",
+    "P39",
+    "P40",
+    "P41",
+    "P42",
+    "P43",
+    "P44",
+    "P45",
+    "P46"
+  ],
+  "source_run": "{participant_lower}_no_ica",
+  "target": [
+    "valence",
+    "arousal"
+  ],
+  "modalities": [
+    "eeg",
+    "face",
+    "multimodal"
+  ],
+  "models": [
+    "knn",
+    "svm",
+    "gnb"
+  ],
+  "feature_counts": [
+    "all",
+    "5",
+    "10",
+    "20"
+  ],
+  "seed": 42,
+  "cv_strategy": "StratifiedKFold nested CV",
+  "hyperparameter_grids": {
+    "knn": {
+      "n_neighbors": [
+        3,
+        5,
+        7,
+        11
+      ],
+      "weights": [
+        "uniform",
+        "distance"
+      ]
+    },
+    "svm": {
+      "kernel": [
+        "linear",
+        "rbf"
+      ],
+      "C": [
+        0.1,
+        1,
+        10
+      ],
+      "rbf_gamma": [
+        "scale",
+        0.01,
+        0.1
+      ]
+    },
+    "gnb": {
+      "var_smoothing": [
+        1e-11,
+        1e-09,
+        1e-07
+      ]
+    }
+  },
+  "label_definition": "LOW: rating < 4; HIGH: rating >= 4",
+  "scientific_settings": {
+    "mode": "individual",
+    "participants": [
+      "P01",
+      "P02",
+      "P03",
+      "P04",
+      "P05",
+      "P06",
+      "P07",
+      "P08",
+      "P09",
+      "P10",
+      "P11",
+      "P12",
+      "P13",
+      "P14",
+      "P15",
+      "P16",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P21",
+      "P22",
+      "P23",
+      "P24",
+      "P25",
+      "P26",
+      "P27",
+      "P28",
+      "P29",
+      "P30",
+      "P31",
+      "P32",
+      "P33",
+      "P34",
+      "P35",
+      "P36",
+      "P37",
+      "P38",
+      "P39",
+      "P40",
+      "P41",
+      "P42",
+      "P43",
+      "P44",
+      "P45",
+      "P46"
+    ],
+    "cohort_source": "explicit participants",
+    "source_run": "{participant_lower}_no_ica",
+    "target": [
+      "valence",
+      "arousal"
+    ],
+    "modalities": [
+      "eeg",
+      "face",
+      "multimodal"
+    ],
+    "models": [
+      "knn",
+      "svm",
+      "gnb"
+    ],
+    "feature_counts": [
+      "all",
+      "5",
+      "10",
+      "20"
+    ],
+    "seed": 42,
+    "cv_strategy": "StratifiedKFold nested CV",
+    "hyperparameter_grids": {
+      "knn": {
+        "n_neighbors": [
+          3,
+          5,
+          7,
+          11
+        ],
+        "weights": [
+          "uniform",
+          "distance"
+        ]
+      },
+      "svm": {
+        "kernel": [
+          "linear",
+          "rbf"
+        ],
+        "C": [
+          0.1,
+          1,
+          10
+        ],
+        "rbf_gamma": [
+          "scale",
+          0.01,
+          0.1
+        ]
+      },
+      "gnb": {
+        "var_smoothing": [
+          1e-11,
+          1e-09,
+          1e-07
+        ]
+      }
+    },
+    "label_definition": "LOW: rating < 4; HIGH: rating >= 4"
+  }
+}

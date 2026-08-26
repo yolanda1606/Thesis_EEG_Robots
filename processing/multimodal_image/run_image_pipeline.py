@@ -59,6 +59,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--preprocess-video", action="store_true")
     parser.add_argument("--extract-eeg-features", action="store_true")
     parser.add_argument("--extract-video-features", action="store_true")
+    parser.add_argument("--reuse-video-features-from", type=Path,
+                        help="Existing video_trial_features.csv to validate and reuse only when merging a new run.")
     parser.add_argument("--merge-modalities", action="store_true")
     parser.add_argument("--save-clean-epochs", action="store_true")
     parser.add_argument("--save-landmarks", action="store_true")
@@ -141,14 +143,18 @@ def package_versions() -> dict[str, str]:
     return versions
 
 
-def setup_run(run_dir: Path, config: dict, sources: list[str], args: argparse.Namespace, health_only: bool, paths: dict | None = None) -> None:
+def setup_run(run_dir: Path, config: dict, sources: list[str], args: argparse.Namespace, health_only: bool,
+              paths: dict | None = None, reused_video_features: Path | None = None) -> None:
     if run_dir.exists():
         raise FileExistsError(f"Output directory already exists: {run_dir}. Choose a new --run-name.")
     run_dir.mkdir(parents=True, exist_ok=False)
     ensure_parent(run_dir / "config" / "resolved_configuration.yaml")
     with (run_dir / "config" / "resolved_configuration.yaml").open("x", encoding="utf-8") as handle: yaml.safe_dump(config, handle, sort_keys=False)
     git = subprocess.run(["git", "rev-parse", "HEAD"], cwd=HERE.parents[1], text=True, capture_output=True, check=False).stdout.strip() or None
-    write_json(run_dir / "manifest" / "run_manifest.json", {"created_utc": datetime.now(timezone.utc).isoformat(), "command": " ".join(map(str, sys.argv)), "configuration_sources": sources, "python": sys.executable, "python_version": sys.version, "platform": platform.platform(), "git_commit": git, "package_versions": package_versions(), "resolved_configuration": config, "flags": vars(args), "incomplete_session": bool(config.get("trials", {}).get("allow_incomplete_image_trials", False)), "input_sources": input_manifest(paths, config) if paths is not None else {}})
+    manifest = {"created_utc": datetime.now(timezone.utc).isoformat(), "command": " ".join(map(str, sys.argv)), "configuration_sources": sources, "python": sys.executable, "python_version": sys.version, "platform": platform.platform(), "git_commit": git, "package_versions": package_versions(), "resolved_configuration": config, "flags": vars(args), "incomplete_session": bool(config.get("trials", {}).get("allow_incomplete_image_trials", False)), "input_sources": input_manifest(paths, config) if paths is not None else {}}
+    if reused_video_features is not None:
+        manifest["reused_video_feature_source"] = file_record(reused_video_features)
+    write_json(run_dir / "manifest" / "run_manifest.json", manifest)
 
 
 def input_manifest(paths: dict[str, Path], config: dict) -> dict:
@@ -176,6 +182,19 @@ def merge_tables(ratings_path: Path, eeg: pd.DataFrame | None, video: pd.DataFra
         selected = selected.merge(wide_eeg.reset_index(), on="trigger", how="left", validate="one_to_one")
     if video is not None: selected = selected.merge(video, on="trigger", how="left", validate="one_to_one")
     return selected
+
+
+def load_reused_video_features(path: Path) -> pd.DataFrame:
+    """Load an existing Image video trial table without regenerating video artifacts."""
+    if not path.is_file():
+        raise FileNotFoundError(f"Reused video feature table does not exist: {path}")
+    frame = pd.read_csv(path)
+    video_columns = [column for column in frame if column.startswith("video_")]
+    if "trigger" not in frame or not video_columns:
+        raise ValueError("Reused video feature table must contain trigger and at least one video_ feature column")
+    if frame.trigger.duplicated().any():
+        raise ValueError("Reused video feature table has duplicate trigger values")
+    return frame.loc[:, ["trigger", *video_columns]].copy()
 
 
 def run_health_checks(paths: dict[str, Path], config: dict, run_dir: Path, logger) -> None:
@@ -214,6 +233,13 @@ def main() -> int:
         # remains visible in the resolved run configuration and manifest.
         config["resources"]["resource_root"] = str(resource_root)
     paths = resolve_inputs(config, root, resource_root)
+    reused_video_features = args.reuse_video_features_from.resolve() if args.reuse_video_features_from else None
+    if reused_video_features is not None:
+        if args.preprocess_video or args.extract_video_features:
+            raise ValueError("--reuse-video-features-from cannot be combined with video preprocessing or extraction flags")
+        if not args.merge_modalities:
+            raise ValueError("--reuse-video-features-from requires --merge-modalities")
+        load_reused_video_features(reused_video_features)
     output_root = args.output_root.resolve(); raw_root = (root / "data").resolve()
     validate_output_root(output_root, root, raw_root)
     run_dir = make_run_dir(output_root, config, args)
@@ -223,13 +249,14 @@ def main() -> int:
         logger.info("Configuration sources: %s", sources)
         logger.info("Resolved configuration:\n%s", yaml.safe_dump(config, sort_keys=False))
         logger.info("Read-only inputs: %s", {key: str(value) for key, value in paths.items() if key != "experiment_dir"})
+        if reused_video_features is not None: logger.info("Reused video feature source: %s", reused_video_features)
         logger.info("Planned output directory: %s", run_dir)
         return 0
     stage_flags = [args.crop_preview_only, args.validate_only, args.preprocess_eeg, args.preprocess_video, args.extract_eeg_features, args.extract_video_features, args.merge_modalities]
     if args.health_check_only and any(stage_flags): raise ValueError("--health-check-only cannot be combined with processing-stage flags")
     replacement_logger = configure_logging(None, config, args.log_level)
     replace_run_directory_if_requested(run_dir, output_root, config, args, replacement_logger)
-    setup_run(run_dir, config, sources, args, args.health_check_only, paths)
+    setup_run(run_dir, config, sources, args, args.health_check_only, paths, reused_video_features)
     logger = configure_logging(run_dir, config, args.log_level)
     logger.info("Activating %s %s pipeline", config["participant"], config["experiment"])
     logger.info("Configuration sources: %s", sources)
@@ -246,7 +273,9 @@ def main() -> int:
     write_rows(run_dir / "alignment" / "trigger_alignment.csv", alignment_rows); write_json(run_dir / "alignment" / "alignment_model.json", alignment_model)
     if args.validate_only:
         logger.info("Validation-only run complete; no EEG or video preprocessing was performed"); return 0
-    eeg_features = video_features = None
+    eeg_features = None
+    video_features = load_reused_video_features(reused_video_features) if reused_video_features is not None else None
+    if reused_video_features is not None: logger.info("Reusing existing video trial features: %s", reused_video_features)
     output_prefix = f"{config['participant'].lower()}_{config['experiment'].lower()}"
     if args.preprocess_eeg:
         epochs, qc, ica_table, reject_log, autoreject_events = preprocess_eeg(paths, config, logger)

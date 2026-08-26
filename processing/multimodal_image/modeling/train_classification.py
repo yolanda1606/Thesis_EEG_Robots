@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Leakage-safe experimental Image Experiment binary classification.
 
-Reads official ``p##_final`` merged tables and never changes them. Results are
-written only below ``outputs/image_classification/<run-name>/``.
+Reads participant Image merged tables and never changes them. By default it
+uses the official ``p##_final`` runs. Results are written only below
+``outputs/image_classification/<run-name>/``.
 """
 from __future__ import annotations
 
@@ -42,6 +43,7 @@ EEG_COLUMNS = [f"{family}__{channel}" for family in EEG_FAMILIES for channel in 
 FACE_COLUMNS = [f"video_{name}_norm_{stat}" for name in ("irisdo", "eso", "enso", "mnso", "mwo") for stat in ("mean", "std")]
 TARGET_COLUMNS = {"valence": "valence_rating", "arousal": "arousal_rating"}
 QC_GROUPS = ("Very clean", "Clean with minor EEG loss", "Review due to elevated EEG rejection", "Review due to missing ratings", "Special/incomplete case")
+DEFAULT_SOURCE_RUN = "{participant_lower}_final"
 
 
 def parse_csv_option(value: str) -> list[str]:
@@ -59,6 +61,15 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--qc-group", help="Comma-separated groups from modeling_readiness.csv.")
     parser.add_argument("--readiness-csv", type=Path, default=Path("docs/meeting_14_08/modeling_readiness.csv"))
     parser.add_argument("--derived-root", type=Path, default=Path("derived"))
+    parser.add_argument(
+        "--source-run",
+        default=DEFAULT_SOURCE_RUN,
+        help=(
+            "Run-name template beneath each participant's Image_Experiment/runs directory. "
+            "Available fields: {participant} and {participant_lower}. "
+            "Default: {participant_lower}_final."
+        ),
+    )
     parser.add_argument("--output-root", type=Path, default=Path("outputs/image_classification"))
     parser.add_argument("--run-name", required=True)
     parser.add_argument("--seed", type=int, default=42)
@@ -78,6 +89,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     if args.n_jobs == 0 or args.n_jobs < -1: parser.error("--n-jobs must be -1 or a non-zero integer")
     if args.append and args.resume: parser.error("--append and --resume cannot be used together")
     if "/" in args.run_name or "\\" in args.run_name or args.run_name in {"", ".", ".."}: parser.error("--run-name must be a simple directory name")
+    try:
+        example_source_run = args.source_run.format(participant="P01", participant_lower="p01")
+    except (KeyError, ValueError) as error:
+        parser.error(f"Invalid --source-run template: {error}")
+    if "/" in example_source_run or "\\" in example_source_run or example_source_run in {"", ".", ".."}:
+        parser.error("--source-run must resolve to a simple directory name")
     return args
 
 
@@ -135,20 +152,32 @@ def resolve_participants(readiness_path: Path, explicit: str | None, qc_groups: 
     return resolved, resolved.participant.tolist(), "QC group"
 
 
-def final_run_path(derived_root: Path, participant: str) -> Path:
-    return derived_root / participant / "Image_Experiment" / "runs" / f"{participant.lower()}_final"
+def source_run_name(participant: str, source_run: str = DEFAULT_SOURCE_RUN) -> str:
+    """Resolve one validated participant-specific source Image run name."""
+    try:
+        run_name = source_run.format(participant=participant.upper(), participant_lower=participant.lower())
+    except (KeyError, ValueError) as error:
+        raise ValueError(f"Invalid source-run template {source_run!r}: {error}") from error
+    if "/" in run_name or "\\" in run_name or run_name in {"", ".", ".."}:
+        raise ValueError(f"Source run must be a simple directory name, got {run_name!r}")
+    return run_name
 
 
-def load_participant_table(derived_root: Path, participant: str) -> tuple[pd.DataFrame, Path]:
-    run = final_run_path(derived_root, participant)
+def final_run_path(derived_root: Path, participant: str, source_run: str = DEFAULT_SOURCE_RUN) -> Path:
+    """Return the selected participant Image run path (defaulting to final)."""
+    return derived_root / participant / "Image_Experiment" / "runs" / source_run_name(participant, source_run)
+
+
+def load_participant_table(derived_root: Path, participant: str, source_run: str = DEFAULT_SOURCE_RUN) -> tuple[pd.DataFrame, Path]:
+    run = final_run_path(derived_root, participant, source_run)
     manifest_path = run / "manifest" / "run_manifest.json"
-    if not manifest_path.is_file(): raise FileNotFoundError(f"Official final-run manifest missing: {manifest_path}")
+    if not manifest_path.is_file(): raise FileNotFoundError(f"Image source-run manifest missing: {manifest_path}")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     config = manifest.get("resolved_configuration", manifest.get("configuration", {}))
     recorded = str(config.get("participant", "")).upper()
     if recorded != participant.upper(): raise ValueError(f"Participant mismatch: requested {participant}, manifest records {recorded or 'none'}")
     dataset = run / "merged" / f"{participant.lower()}_image_trial_dataset.csv"
-    if not dataset.is_file(): raise FileNotFoundError(f"Merged final trial dataset missing: {dataset}")
+    if not dataset.is_file(): raise FileNotFoundError(f"Merged source-run trial dataset missing: {dataset}")
     table = pd.read_csv(dataset)
     return table, dataset.resolve()
 
@@ -345,7 +374,7 @@ def configuration_key(mode: str, participant: str | None, target: str, modality:
 
 
 def scientific_settings(args: argparse.Namespace, participants: list[str], targets: list[str], modalities: list[str], source: str) -> dict[str, Any]:
-    return {"mode": args.mode, "participants": participants, "cohort_source": source, "target": targets, "modalities": modalities, "models": args.models, "feature_counts": args.feature_counts, "seed": args.seed, "cv_strategy": "StratifiedKFold nested CV" if args.mode == "individual" else "LeaveOneGroupOut outer CV; StratifiedGroupKFold inner CV", "hyperparameter_grids": {"knn": {"n_neighbors": [3, 5, 7, 11], "weights": ["uniform", "distance"]}, "svm": {"kernel": ["linear", "rbf"], "C": [0.1, 1, 10], "rbf_gamma": ["scale", 0.01, 0.1]}, "gnb": {"var_smoothing": [1e-11, 1e-9, 1e-7]}}, "label_definition": "LOW: rating < 4; HIGH: rating >= 4"}
+    return {"mode": args.mode, "participants": participants, "cohort_source": source, "source_run": args.source_run, "target": targets, "modalities": modalities, "models": args.models, "feature_counts": args.feature_counts, "seed": args.seed, "cv_strategy": "StratifiedKFold nested CV" if args.mode == "individual" else "LeaveOneGroupOut outer CV; StratifiedGroupKFold inner CV", "hyperparameter_grids": {"knn": {"n_neighbors": [3, 5, 7, 11], "weights": ["uniform", "distance"]}, "svm": {"kernel": ["linear", "rbf"], "C": [0.1, 1, 10], "rbf_gamma": ["scale", 0.01, 0.1]}, "gnb": {"var_smoothing": [1e-11, 1e-9, 1e-7]}}, "label_definition": "LOW: rating < 4; HIGH: rating >= 4"}
 
 
 def checkpoint_outputs(out: Path, results: pd.DataFrame, selected: pd.DataFrame, parameters: pd.DataFrame, completed_keys: set[str], settings: dict[str, Any]) -> None:
@@ -366,7 +395,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     output_root=(PROJECT_ROOT/args.output_root).resolve() if not args.output_root.is_absolute() else args.output_root
     resolved, participants, source = resolve_participants(readiness_path, args.participants, args.qc_group)
     source_tables={}; tables={}
-    for participant in participants: tables[participant], source_tables[participant]=load_participant_table(derived_root,participant)
+    for participant in participants: tables[participant], source_tables[participant]=load_participant_table(derived_root,participant,args.source_run)
     targets=selected_dimensions(args.target,TARGET_COLUMNS); modalities=selected_dimensions(args.modality,("eeg","face","multimodal"))
     prepared=[]
     for participant, table in tables.items():

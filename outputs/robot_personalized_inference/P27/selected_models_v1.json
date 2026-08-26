@@ -1,0 +1,98 @@
+{
+  "participant": "P27",
+  "source": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/image_classification/stage_b_individual_v1/results_summary.csv",
+  "model_specs": [
+    {
+      "target": "valence",
+      "modality": "eeg",
+      "classifier": "svm",
+      "feature_count_request": "all"
+    },
+    {
+      "target": "valence",
+      "modality": "multimodal",
+      "classifier": "svm",
+      "feature_count_request": "10"
+    },
+    {
+      "target": "valence",
+      "modality": "eeg",
+      "classifier": "svm",
+      "feature_count_request": "20"
+    },
+    {
+      "target": "arousal",
+      "modality": "multimodal",
+      "classifier": "knn",
+      "feature_count_request": "5"
+    },
+    {
+      "target": "arousal",
+      "modality": "multimodal",
+      "classifier": "gnb",
+      "feature_count_request": "10"
+    },
+    {
+      "target": "arousal",
+      "modality": "eeg",
+      "classifier": "knn",
+      "feature_count_request": "5"
+    }
+  ],
+  "selection": [
+    {
+      "target": "valence",
+      "modality": "eeg",
+      "classifier": "svm",
+      "feature_count_request": "all",
+      "rank": 1,
+      "mean_outer_balanced_accuracy": 0.5951785714285714,
+      "tie_resolution": "simplest explicit request among exact mean-BA ties with the same effective feature dimensionality"
+    },
+    {
+      "target": "valence",
+      "modality": "multimodal",
+      "classifier": "svm",
+      "feature_count_request": "10",
+      "rank": 2,
+      "mean_outer_balanced_accuracy": 0.5817857142857144,
+      "tie_resolution": "simplest explicit request among exact mean-BA ties with the same effective feature dimensionality"
+    },
+    {
+      "target": "valence",
+      "modality": "eeg",
+      "classifier": "svm",
+      "feature_count_request": "20",
+      "rank": 3,
+      "mean_outer_balanced_accuracy": 0.5670833333333334,
+      "tie_resolution": "simplest explicit request among exact mean-BA ties with the same effective feature dimensionality"
+    },
+    {
+      "target": "arousal",
+      "modality": "multimodal",
+      "classifier": "knn",
+      "feature_count_request": "5",
+      "rank": 1,
+      "mean_outer_balanced_accuracy": 0.5860130718954248,
+      "tie_resolution": "simplest explicit request among exact mean-BA ties with the same effective feature dimensionality"
+    },
+    {
+      "target": "arousal",
+      "modality": "multimodal",
+      "classifier": "gnb",
+      "feature_count_request": "10",
+      "rank": 2,
+      "mean_outer_balanced_accuracy": 0.5808496732026144,
+      "tie_resolution": "simplest explicit request among exact mean-BA ties with the same effective feature dimensionality"
+    },
+    {
+      "target": "arousal",
+      "modality": "eeg",
+      "classifier": "knn",
+      "feature_count_request": "5",
+      "rank": 3,
+      "mean_outer_balanced_accuracy": 0.5794771241830066,
+      "tie_resolution": "simplest explicit request among exact mean-BA ties with the same effective feature dimensionality"
+    }
+  ]
+}

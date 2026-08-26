@@ -1,0 +1,7 @@
+{
+  "participant": "P15",
+  "condition": "no-ICA",
+  "model_manifest": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_personalized_inference/P15/final_image_models_v1/model_manifest.json",
+  "robot_eeg_csv": "derived/P15/Robot_Experiment/runs/p15_robot_continuous_no_ica/features/eeg_window_features.csv",
+  "robot_video_csv": "derived/P15/Robot_Experiment/runs/p15_robot_continuous/features/video_window_features.csv"
+}

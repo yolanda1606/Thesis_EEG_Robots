@@ -1,0 +1,7 @@
+target,modality,classifier,feature_count_request,identifier,selected_feature_count,best_parameters,classifier_classes,high_probability_column
+valence,face,gnb,5,valence__face__gnb__5,5,"{""classifier__var_smoothing"": 1e-11}","[0, 1]",1
+valence,eeg,svm,20,valence__eeg__svm__20,20,"{""classifier__C"": 10, ""classifier__gamma"": ""scale"", ""classifier__kernel"": ""rbf""}","[0, 1]",1
+valence,face,gnb,10,valence__face__gnb__10,10,"{""classifier__var_smoothing"": 1e-11}","[0, 1]",1
+arousal,face,gnb,5,arousal__face__gnb__5,5,"{""classifier__var_smoothing"": 1e-11}","[0, 1]",1
+arousal,multimodal,knn,all,arousal__multimodal__knn__all,130,"{""classifier__n_neighbors"": 5, ""classifier__weights"": ""uniform""}","[0, 1]",1
+arousal,multimodal,gnb,20,arousal__multimodal__gnb__20,20,"{""classifier__var_smoothing"": 1e-11}","[0, 1]",1
