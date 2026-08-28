@@ -1,0 +1,140 @@
+{
+  "command": "processing/multimodal_image/modeling/run_label_ambiguity_diagnostic.py --participants P36,P22,P06,P17,P40 --targets valence,arousal --modalities eeg,face,multimodal --seed 42 --n-jobs 4 --progress",
+  "requested_participants": [
+    "P36",
+    "P22",
+    "P06",
+    "P17",
+    "P40"
+  ],
+  "settings": {
+    "conditions": [
+      "standard",
+      "exclude_midpoint"
+    ],
+    "feature_requests": [
+      "3",
+      "5",
+      "8",
+      "10",
+      "15",
+      "20",
+      "30",
+      "all"
+    ],
+    "hyperparameter_grids": {
+      "gnb": [
+        {
+          "classifier__var_smoothing": [
+            1e-11,
+            1e-09,
+            1e-07
+          ]
+        }
+      ],
+      "knn": [
+        {
+          "classifier__metric": [
+            "euclidean",
+            "manhattan"
+          ],
+          "classifier__n_neighbors": [
+            3,
+            5,
+            7,
+            9,
+            11,
+            15,
+            21
+          ],
+          "classifier__weights": [
+            "uniform",
+            "distance"
+          ]
+        }
+      ],
+      "logreg": [
+        {
+          "classifier__C": [
+            0.01,
+            0.1,
+            1,
+            10,
+            100
+          ],
+          "classifier__class_weight": [
+            null,
+            "balanced"
+          ]
+        }
+      ],
+      "svm": [
+        {
+          "classifier__C": [
+            0.01,
+            0.1,
+            1,
+            10,
+            100
+          ],
+          "classifier__class_weight": [
+            null,
+            "balanced"
+          ],
+          "classifier__kernel": [
+            "linear"
+          ]
+        },
+        {
+          "classifier__C": [
+            0.01,
+            0.1,
+            1,
+            10,
+            100
+          ],
+          "classifier__class_weight": [
+            null,
+            "balanced"
+          ],
+          "classifier__gamma": [
+            "scale",
+            "auto",
+            0.001,
+            0.01,
+            0.1,
+            1
+          ],
+          "classifier__kernel": [
+            "rbf"
+          ]
+        }
+      ]
+    },
+    "inner_cv": "StratifiedKFold up to 3 folds, shuffled, random_state=42+outer_fold",
+    "label_definitions": {
+      "exclude_midpoint": "LOW: rating <= 3; HIGH: rating >= 5; DROP rating == 4",
+      "standard": "LOW: rating < 4; HIGH: rating >= 4"
+    },
+    "modalities": [
+      "eeg",
+      "face",
+      "multimodal"
+    ],
+    "models": [
+      "svm",
+      "knn",
+      "logreg",
+      "gnb"
+    ],
+    "outer_cv": "StratifiedKFold up to 5 folds, shuffled, random_state=42",
+    "outer_experiment_loop": "serial",
+    "output_directory": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/image_classification/label_ambiguity_top5",
+    "seed": 42,
+    "source_run": "{participant_lower}_no_ica",
+    "targets": [
+      "valence",
+      "arousal"
+    ]
+  }
+}

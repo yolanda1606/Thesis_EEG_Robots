@@ -1,0 +1,63 @@
+{
+  "baseline_csv": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/image_classification/no_ica/results_summary.csv",
+  "command": "processing/multimodal_image/modeling/run_classifier_search.py --participants P36,P22,P06,P17,P40 --targets valence,arousal --modalities eeg,face,multimodal --seed 42 --n-jobs 4 --progress --resume",
+  "created_utc": "2026-08-28T08:48:41.844734+00:00",
+  "numpy": "2.2.6",
+  "pandas": "2.3.3",
+  "platform": "Linux-5.15.0-1078-realtime-x86_64-with-glibc2.35",
+  "python": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/bin/python",
+  "python_version": "3.10.12 (main, Jun 22 2026, 18:55:27) [GCC 11.4.0]",
+  "scipy": "1.15.3",
+  "settings": {
+    "estimator_nested_parallelism": "disabled (ExtraTrees n_jobs=1)",
+    "feature_counts": [
+      "3",
+      "5",
+      "8",
+      "10",
+      "15",
+      "20",
+      "30",
+      "all"
+    ],
+    "gridsearch_n_jobs": 4,
+    "inner_cv": "StratifiedKFold up to 3 folds, shuffled, random_state=42+outer_fold",
+    "label_definition": "LOW: rating < 4; HIGH: rating >= 4",
+    "modalities": [
+      "eeg",
+      "face",
+      "multimodal"
+    ],
+    "models": [
+      "gnb",
+      "knn",
+      "svm",
+      "logreg",
+      "extra_trees"
+    ],
+    "outer_cv": "StratifiedKFold up to 5 folds, shuffled, random_state=42",
+    "outer_experiment_loop": "serial",
+    "participants": [
+      "P36",
+      "P22",
+      "P06",
+      "P17",
+      "P40"
+    ],
+    "seed": 42,
+    "selection_metric": "balanced_accuracy",
+    "source_run": "{participant_lower}_no_ica",
+    "targets": [
+      "valence",
+      "arousal"
+    ]
+  },
+  "sklearn": "1.7.2",
+  "source_merged_tables": {
+    "P06": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P06/Image_Experiment/runs/p06_no_ica/merged/p06_image_trial_dataset.csv",
+    "P17": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P17/Image_Experiment/runs/p17_no_ica/merged/p17_image_trial_dataset.csv",
+    "P22": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P22/Image_Experiment/runs/p22_no_ica/merged/p22_image_trial_dataset.csv",
+    "P36": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P36/Image_Experiment/runs/p36_no_ica/merged/p36_image_trial_dataset.csv",
+    "P40": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P40/Image_Experiment/runs/p40_no_ica/merged/p40_image_trial_dataset.csv"
+  }
+}
