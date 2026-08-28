@@ -1,9 +1,10 @@
 {
-  "model": "CNN",
+  "model": "cnn",
   "task": "general regression",
   "target": "arousal",
   "seed": 42,
-  "architecture": "Conv1d(8,16,k=7,p=3)->ReLU->MaxPool1d(2)->Conv1d(16,32,k=5,p=2)->ReLU->AdaptiveAvgPool1d(1)->Linear(32,16)->ReLU->Linear(16,1)",
+  "architecture": "baseline",
+  "architecture_definition": "Conv1d(8,16,k=7,p=3)->ReLU->MaxPool1d(2)->Conv1d(16,32,k=5,p=2)->ReLU->AdaptiveAvgPool1d(1)->Linear(32,16)->ReLU->Linear(16,1)",
   "parameter_count": 4049,
   "channel_order": [
     "Fz",
@@ -72,5 +73,5 @@
     "P45",
     "P46"
   ],
-  "timestamp_utc": "2026-08-26T16:48:41.077234+00:00"
+  "timestamp_utc": "2026-08-26T17:25:49.765248+00:00"
 }
