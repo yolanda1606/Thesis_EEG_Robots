@@ -30,3 +30,4 @@ eeg_venv/
 # Local Codex instructions
 /AGENTS.md
 /processing/multimodal_image/AGENTS.md
+outputs/image_regression/stage_c_individual_regression_all46_v1/selected_features_by_fold.csv
