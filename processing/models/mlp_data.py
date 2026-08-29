@@ -269,7 +269,8 @@ def cleaned_epoch_path(derived_root: Path, participant: str) -> Path:
 
 
 def load_general_eeg_epoch_data(derived_root: Path, participants: list[str] | tuple[str, ...],
-                                target: str, include_triggers: bool = False):
+                                target: str, include_triggers: bool = False,
+                                include_times: bool = False):
     """Load retained no-ICA trial epochs aligned to observed original ratings.
 
     Each row follows the saved MNE epoch event order and has shape
@@ -285,6 +286,7 @@ def load_general_eeg_epoch_data(derived_root: Path, participants: list[str] | tu
     expected_shape: tuple[int, int] | None = None
     expected_channels: tuple[str, ...] | None = None
     expected_sampling_hz: float | None = None
+    expected_times: np.ndarray | None = None
     target_column = train_classification.TARGET_COLUMNS[target]
     for participant in participant_ids:
         table, _ = train_classification.load_participant_table(
@@ -306,6 +308,7 @@ def load_general_eeg_epoch_data(derived_root: Path, participants: list[str] | tu
         channels = tuple(epochs.ch_names)
         data = epochs.get_data(copy=True)
         triggers = epochs.events[:, 2].astype(int)
+        times = epochs.times.copy()
         usable = np.asarray([trigger in rating_by_trigger for trigger in triggers], dtype=bool)
         if not usable.any():
             raise ValueError(f"{participant} has no retained epochs with usable {target} ratings")
@@ -313,8 +316,9 @@ def load_general_eeg_epoch_data(derived_root: Path, participants: list[str] | tu
         ratings = np.asarray([rating_by_trigger[trigger] for trigger in triggers], dtype=float)
         shape, sampling_hz = data.shape[1:], float(epochs.info["sfreq"])
         if expected_shape is None:
-            expected_shape, expected_channels, expected_sampling_hz = shape, channels, sampling_hz
-        elif shape != expected_shape or channels != expected_channels or sampling_hz != expected_sampling_hz:
+            expected_shape, expected_channels, expected_sampling_hz, expected_times = shape, channels, sampling_hz, times
+        elif (shape != expected_shape or channels != expected_channels or sampling_hz != expected_sampling_hz
+              or not np.array_equal(times, expected_times)):
             raise ValueError(f"EEG epoch schema mismatch for {participant}")
         epoch_matrices.append(data)
         rating_vectors.append(ratings)
@@ -324,7 +328,71 @@ def load_general_eeg_epoch_data(derived_root: Path, participants: list[str] | tu
         np.concatenate(epoch_matrices), np.concatenate(rating_vectors), np.concatenate(group_vectors),
         expected_channels or (), float(expected_sampling_hz or 0.0),
     )
-    return result + (np.concatenate(trigger_vectors),) if include_triggers else result
+    if include_triggers:
+        result += (np.concatenate(trigger_vectors),)
+    if include_times:
+        result += (np.asarray(expected_times, dtype=float),)
+    return result
+
+
+def load_general_multimodal_epoch_data(
+    derived_root: Path, participants: list[str] | tuple[str, ...], target: str,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, tuple[str, ...], float, np.ndarray, np.ndarray, np.ndarray, list[str], list[dict[str, int | str]]]:
+    """Load trigger-aligned raw epochs, ratings, and existing face predictors.
+
+    Face rows are joined to EEG rows by their saved ``trigger`` identifiers,
+    never by CSV or epoch row position.  Missing face features remove only the
+    affected multimodal trial and are reported per participant.
+    """
+    epochs, ratings, groups, channels, sampling_hz, triggers, times = load_general_eeg_epoch_data(
+        derived_root, participants, target, include_triggers=True, include_times=True
+    )
+    face_names = list(FACE_FEATURE_NAMES)
+    target_column = train_classification.TARGET_COLUMNS[target]
+    aligned_indices: list[int] = []
+    aligned_face_rows: list[np.ndarray] = []
+    alignment_report: list[dict[str, int | str]] = []
+    for participant in dict.fromkeys(groups.astype(str)):
+        eeg_indices = np.flatnonzero(groups.astype(str) == participant)
+        participant_triggers = triggers[eeg_indices].astype(int)
+        table, _ = train_classification.load_participant_table(
+            derived_root, participant, DEFAULT_NO_ICA_SOURCE_RUN
+        )
+        required = set(face_names + ["trigger", target_column])
+        if missing := sorted(required.difference(table.columns)):
+            raise ValueError(f"{participant} merged table missing required multimodal columns: {missing}")
+        face_table = table.loc[:, ["trigger", target_column] + face_names].copy()
+        face_table["trigger"] = pd.to_numeric(face_table["trigger"], errors="coerce")
+        face_table[target_column] = pd.to_numeric(face_table[target_column], errors="coerce")
+        face_values = face_table[face_names].apply(pd.to_numeric, errors="coerce")
+        usable_face = face_table["trigger"].notna() & face_table[target_column].notna() & face_values.notna().all(axis=1)
+        face_table = face_table.loc[usable_face]
+        if face_table["trigger"].duplicated().any():
+            raise ValueError(f"{participant} has duplicate usable face-feature triggers")
+        face_by_trigger = {
+            int(trigger): values.to_numpy(dtype=float)
+            for trigger, (_, values) in zip(face_table["trigger"], face_table[face_names].iterrows())
+        }
+        face_triggers = set(face_by_trigger)
+        eeg_trigger_set = set(participant_triggers)
+        selected = [index for index in eeg_indices if int(triggers[index]) in face_by_trigger]
+        aligned_indices.extend(selected)
+        aligned_face_rows.extend(face_by_trigger[int(triggers[index])] for index in selected)
+        alignment_report.append({
+            "participant": participant,
+            "eeg_epochs": int(len(eeg_indices)),
+            "face_trials": int(len(face_table)),
+            "aligned_multimodal_trials": int(len(selected)),
+            "dropped_eeg_only": int(len(eeg_trigger_set.difference(face_triggers))),
+            "dropped_face_only": int(len(face_triggers.difference(eeg_trigger_set))),
+        })
+    if not aligned_indices:
+        raise ValueError("No EEG and face trials aligned by trigger")
+    indices = np.asarray(aligned_indices, dtype=int)
+    return (
+        epochs[indices], ratings[indices], groups[indices], channels, sampling_hz, times, triggers[indices],
+        np.vstack(aligned_face_rows), face_names, alignment_report,
+    )
 
 
 def participant_channel_zscore_epochs(epochs: np.ndarray, groups: np.ndarray) -> np.ndarray:

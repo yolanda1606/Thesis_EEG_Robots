@@ -157,11 +157,15 @@ def evaluate_rating_classification(model: torch.nn.Module, x: torch.Tensor, rati
 def fit_with_early_stopping(model: torch.nn.Module, optimizer: torch.optim.Optimizer, loss_fn: torch.nn.Module,
                             x_train: torch.Tensor, y_train: torch.Tensor, x_val: torch.Tensor, y_val: torch.Tensor,
                             max_epochs: int = 200, batch_size: int = 16, patience: int = 20, seed: int = 42,
-                            progress_callback: Callable[[int, float, float, bool], None] | None = None) -> dict[str, float | int]:
-    """Fit with validation loss early stopping and in-memory best weights."""
+                            progress_callback: Callable[[int, float, float, bool], None] | None = None,
+                            history_callback: Callable[[dict[str, float | int | bool]], None] | None = None) -> dict[str, object]:
+    """Fit with validation early stopping, best weights, and optional loss history."""
     for name, value in (("max_epochs", max_epochs), ("batch_size", batch_size), ("patience", patience)):
         if not isinstance(value, int) or isinstance(value, bool) or value <= 0: raise ValueError(f"{name} must be a positive integer")
     best_loss, best_epoch, stale, best_state, final_training_loss = float("inf"), 0, 0, None, float("nan")
+    history: list[dict[str, float | int | bool]] = []
+    non_finite_loss = False
+    stopped_early = False
     for epoch in range(1, max_epochs + 1):
         final_training_loss = train_one_epoch(model, optimizer, loss_fn, x_train, y_train, batch_size, True, seed + epoch - 1)
         model.eval()
@@ -169,16 +173,37 @@ def fit_with_early_stopping(model: torch.nn.Module, optimizer: torch.optim.Optim
             logits = model(x_val); targets = y_val.unsqueeze(1) if y_val.ndim == 1 else y_val
             if targets.shape != logits.shape: raise ValueError(f"Expected validation target shape {tuple(logits.shape)}, received {tuple(targets.shape)}.")
             validation_loss = float(loss_fn(logits, targets))
-        if validation_loss < best_loss:
+        finite_losses = bool(np.isfinite(final_training_loss) and np.isfinite(validation_loss))
+        if finite_losses and validation_loss < best_loss:
             best_loss, best_epoch, best_state, stale = validation_loss, epoch, copy.deepcopy(model.state_dict()), 0
             improved = True
         else:
             stale += 1
             improved = False
+        record = {
+            "epoch": epoch,
+            "train_mse": final_training_loss,
+            "validation_mse": validation_loss,
+            "is_best_validation": improved,
+            "epochs_without_improvement": stale,
+            "learning_rate": float(optimizer.param_groups[0]["lr"]),
+            "non_finite_loss": not finite_losses,
+        }
+        history.append(record)
+        if history_callback is not None:
+            history_callback(record)
         if progress_callback is not None:
             progress_callback(epoch, final_training_loss, validation_loss, improved)
+        if not finite_losses:
+            non_finite_loss = True
+            stopped_early = True
+            break
         if not improved:
-            if stale >= patience: break
+            if stale >= patience:
+                stopped_early = True
+                break
     if best_state is None: raise RuntimeError("No validation loss was recorded")
     model.load_state_dict(best_state)
-    return {"epochs_run": epoch, "best_epoch": best_epoch, "best_validation_loss": best_loss, "final_training_loss": final_training_loss}
+    return {"epochs_run": epoch, "best_epoch": best_epoch, "best_validation_loss": best_loss,
+            "final_training_loss": final_training_loss, "history": history,
+            "non_finite_loss": non_finite_loss, "stopped_early": stopped_early}
