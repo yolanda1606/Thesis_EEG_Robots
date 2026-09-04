@@ -1,5 +1,5 @@
 participant: P41
-raw_participant_dir: D:\Thesis\data\P41_2026-07-22
+raw_participant_dir: P41_2026-07-22
 canonical_group: B
 ratings_file: D:\Thesis\data\Robot Ratings - Robot Ratings.csv
 video_settings:
@@ -20,10 +20,10 @@ tasks:
       actual: control
       speed_planned: fast
       speed_actual: fast
-    eeg: D:\Thesis\data\P41_2026-07-22\Pick and Place\EEG\UnicornRecorder_22_07_2026_10_50_32.bdf
-    video: D:\Thesis\data\P41_2026-07-22\Pick and Place\vision_video_10-50-41_PnP_CONTROL_FAST.avi
-    vision_log: D:\Thesis\data\P41_2026-07-22\Pick and Place\vision_log_10-50-41_PnP_CONTROL_FAST.csv
-    robot_metrics: D:\Thesis\data\P41_2026-07-22\Pick and Place\robot_metrics_10-50-58_PnP_CONTROL_FAST.csv
+    eeg: P41_2026-07-22/Pick and Place/EEG/UnicornRecorder_22_07_2026_10_50_32.bdf
+    video: P41_2026-07-22/Pick and Place/vision_video_10-50-41_PnP_CONTROL_FAST.avi
+    vision_log: P41_2026-07-22/Pick and Place/vision_log_10-50-41_PnP_CONTROL_FAST.csv
+    robot_metrics: P41_2026-07-22/Pick and Place/robot_metrics_10-50-58_PnP_CONTROL_FAST.csv
     rating:
       valence: 3.0
       arousal: 5.0
@@ -34,10 +34,10 @@ tasks:
       actual: faulty
       speed_planned: fast
       speed_actual: fast
-    eeg: D:\Thesis\data\P41_2026-07-22\Shape Sorter Observation\EEG\UnicornRecorder_22_07_2026_10_52_30.bdf
-    video: D:\Thesis\data\P41_2026-07-22\Shape Sorter Observation\vision_video_10-52-35_SHAPE_FAULTY_FAST.avi
-    vision_log: D:\Thesis\data\P41_2026-07-22\Shape Sorter Observation\vision_log_10-52-35_SHAPE_FAULTY_FAST.csv
-    robot_metrics: D:\Thesis\data\P41_2026-07-22\Shape Sorter Observation\robot_metrics_10-53-29_SHAPE_FAULTY_FAST.csv
+    eeg: P41_2026-07-22/Shape Sorter Observation/EEG/UnicornRecorder_22_07_2026_10_52_30.bdf
+    video: P41_2026-07-22/Shape Sorter Observation/vision_video_10-52-35_SHAPE_FAULTY_FAST.avi
+    vision_log: P41_2026-07-22/Shape Sorter Observation/vision_log_10-52-35_SHAPE_FAULTY_FAST.csv
+    robot_metrics: P41_2026-07-22/Shape Sorter Observation/robot_metrics_10-53-29_SHAPE_FAULTY_FAST.csv
     rating:
       valence: 3.0
       arousal: 7.0
@@ -48,36 +48,36 @@ tasks:
       actual: control
       speed_planned: slow
       speed_actual: slow
-    eeg: D:\Thesis\data\P41_2026-07-22\Stack\EEG\UnicornRecorder_22_07_2026_10_54_30.bdf
-    video: D:\Thesis\data\P41_2026-07-22\Stack\vision_video_10-54-34_STACK_CONTROL_SLOW.avi
-    vision_log: D:\Thesis\data\P41_2026-07-22\Stack\vision_log_10-54-34_STACK_CONTROL_SLOW.csv
-    robot_metrics: D:\Thesis\data\P41_2026-07-22\Stack\robot_metrics_10-56-29_STACK_CONTROL_SLOW.csv
+    eeg: P41_2026-07-22/Stack/EEG/UnicornRecorder_22_07_2026_10_54_30.bdf
+    video: P41_2026-07-22/Stack/vision_video_10-54-34_STACK_CONTROL_SLOW.avi
+    vision_log: P41_2026-07-22/Stack/vision_log_10-54-34_STACK_CONTROL_SLOW.csv
+    robot_metrics: P41_2026-07-22/Stack/robot_metrics_10-56-29_STACK_CONTROL_SLOW.csv
     rating:
       valence: 4.0
       arousal: 6.0
   sisyphus:
     category: interaction
-    eeg: D:\Thesis\data\P41_2026-07-22\Sisyphus\EEG\UnicornRecorder_22_07_2026_10_58_20.bdf
-    video: D:\Thesis\data\P41_2026-07-22\Sisyphus\vision_video_10-58-28_SISYPHUS_INTERACTION.avi
-    vision_log: D:\Thesis\data\P41_2026-07-22\Sisyphus\vision_log_10-58-28_SISYPHUS_INTERACTION.csv
-    robot_metrics: D:\Thesis\data\P41_2026-07-22\Sisyphus\robot_metrics_11-00-30_SISYPHUS_INTERACTION.csv
+    eeg: P41_2026-07-22/Sisyphus/EEG/UnicornRecorder_22_07_2026_10_58_20.bdf
+    video: P41_2026-07-22/Sisyphus/vision_video_10-58-28_SISYPHUS_INTERACTION.avi
+    vision_log: P41_2026-07-22/Sisyphus/vision_log_10-58-28_SISYPHUS_INTERACTION.csv
+    robot_metrics: P41_2026-07-22/Sisyphus/robot_metrics_11-00-30_SISYPHUS_INTERACTION.csv
     rating:
       valence: 6.0
       arousal: 7.0
   shape_sorter_interaction:
     category: interaction
-    eeg: D:\Thesis\data\P41_2026-07-22\Shape Sorter Interaction\EEG\UnicornRecorder_22_07_2026_11_02_14.bdf
-    video: D:\Thesis\data\P41_2026-07-22\Shape Sorter Interaction\vision_video_11-02-23_HRI_INTERACTION.avi
-    vision_log: D:\Thesis\data\P41_2026-07-22\Shape Sorter Interaction\vision_log_11-02-23_HRI_INTERACTION.csv
-    robot_metrics: D:\Thesis\data\P41_2026-07-22\Shape Sorter Interaction\robot_metrics_11-03-35_HRI_INTERACTION.csv
+    eeg: P41_2026-07-22/Shape Sorter Interaction/EEG/UnicornRecorder_22_07_2026_11_02_14.bdf
+    video: P41_2026-07-22/Shape Sorter Interaction/vision_video_11-02-23_HRI_INTERACTION.avi
+    vision_log: P41_2026-07-22/Shape Sorter Interaction/vision_log_11-02-23_HRI_INTERACTION.csv
+    robot_metrics: P41_2026-07-22/Shape Sorter Interaction/robot_metrics_11-03-35_HRI_INTERACTION.csv
     rating:
       valence: 6.0
       arousal: 6.0
   shape_sorter_alone:
     category: alone
-    eeg: D:\Thesis\data\P41_2026-07-22\Shape Sorter Alone\EEG\UnicornRecorder_22_07_2026_11_04_13.bdf
-    video: D:\Thesis\data\P41_2026-07-22\Shape Sorter Alone\vision_video_11-04-25_SHAPE_ALONE.avi
-    vision_log: D:\Thesis\data\P41_2026-07-22\Shape Sorter Alone\vision_log_11-04-25_SHAPE_ALONE.csv
+    eeg: P41_2026-07-22/Shape Sorter Alone/EEG/UnicornRecorder_22_07_2026_11_04_13.bdf
+    video: P41_2026-07-22/Shape Sorter Alone/vision_video_11-04-25_SHAPE_ALONE.avi
+    vision_log: P41_2026-07-22/Shape Sorter Alone/vision_log_11-04-25_SHAPE_ALONE.csv
     rating:
       valence: 3.0
       arousal: 1.0

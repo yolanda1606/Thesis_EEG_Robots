@@ -1,5 +1,5 @@
 participant: P44
-raw_participant_dir: D:\Thesis\data\P44_2026-07-24
+raw_participant_dir: P44_2026-07-24
 canonical_group: B
 ratings_file: D:\Thesis\data\Robot Ratings - Robot Ratings.csv
 video_settings:
@@ -20,10 +20,10 @@ tasks:
       actual: control
       speed_planned: fast
       speed_actual: fast
-    eeg: D:\Thesis\data\P44_2026-07-24\Pick and Place\EEG\UnicornRecorder_24_07_2026_14_31_40.bdf
-    video: D:\Thesis\data\P44_2026-07-24\Pick and Place\vision_video_14-31-47_PnP_CONTROL_FAST.avi
-    vision_log: D:\Thesis\data\P44_2026-07-24\Pick and Place\vision_log_14-31-47_PnP_CONTROL_FAST.csv
-    robot_metrics: D:\Thesis\data\P44_2026-07-24\Pick and Place\robot_metrics_14-32-03_PnP_CONTROL_FAST.csv
+    eeg: P44_2026-07-24/Pick and Place/EEG/UnicornRecorder_24_07_2026_14_31_40.bdf
+    video: P44_2026-07-24/Pick and Place/vision_video_14-31-47_PnP_CONTROL_FAST.avi
+    vision_log: P44_2026-07-24/Pick and Place/vision_log_14-31-47_PnP_CONTROL_FAST.csv
+    robot_metrics: P44_2026-07-24/Pick and Place/robot_metrics_14-32-03_PnP_CONTROL_FAST.csv
     rating:
       valence: 7.0
       arousal: 1.0
@@ -34,10 +34,10 @@ tasks:
       actual: faulty
       speed_planned: fast
       speed_actual: fast
-    eeg: D:\Thesis\data\P44_2026-07-24\Shape Sorter Observation\EEG\UnicornRecorder_24_07_2026_14_33_14.bdf
-    video: D:\Thesis\data\P44_2026-07-24\Shape Sorter Observation\vision_video_14-33-20_SHAPE_FAULTY_FAST.avi
-    vision_log: D:\Thesis\data\P44_2026-07-24\Shape Sorter Observation\vision_log_14-33-20_SHAPE_FAULTY_FAST.csv
-    robot_metrics: D:\Thesis\data\P44_2026-07-24\Shape Sorter Observation\robot_metrics_14-34-14_SHAPE_FAULTY_FAST.csv
+    eeg: P44_2026-07-24/Shape Sorter Observation/EEG/UnicornRecorder_24_07_2026_14_33_14.bdf
+    video: P44_2026-07-24/Shape Sorter Observation/vision_video_14-33-20_SHAPE_FAULTY_FAST.avi
+    vision_log: P44_2026-07-24/Shape Sorter Observation/vision_log_14-33-20_SHAPE_FAULTY_FAST.csv
+    robot_metrics: P44_2026-07-24/Shape Sorter Observation/robot_metrics_14-34-14_SHAPE_FAULTY_FAST.csv
     rating:
       valence: 6.0
       arousal: 4.0
@@ -50,13 +50,13 @@ tasks:
       speed_actual: slow
     eeg:
       segments:
-      - file: D:\Thesis\data\P44_2026-07-24\Stack\EEG\UnicornRecorder_24_07_2026_14_35_13.bdf
+      - file: P44_2026-07-24/Stack/EEG/UnicornRecorder_24_07_2026_14_35_13.bdf
         order: 1
         status_codes:
         - 1
         - 11
         - 12
-      - file: D:\Thesis\data\P44_2026-07-24\Stack\EEG\UnicornRecorder_24_07_2026_14_35_33.bdf
+      - file: P44_2026-07-24/Stack/EEG/UnicornRecorder_24_07_2026_14_35_33.bdf
         order: 2
         status_codes:
         - 16
@@ -82,7 +82,7 @@ tasks:
         - 38
         - 39
         - 41
-      - file: D:\Thesis\data\P44_2026-07-24\Stack\EEG\UnicornRecorder_24_07_2026_14_36_49.bdf
+      - file: P44_2026-07-24/Stack/EEG/UnicornRecorder_24_07_2026_14_36_49.bdf
         order: 3
         status_codes:
         - 45
@@ -105,35 +105,35 @@ tasks:
         - 44
       discontinuities_preserved: true
       interpolate_gaps: false
-    video: D:\Thesis\data\P44_2026-07-24\Stack\vision_video_14-35-17_STACK_CONTROL_SLOW.avi
-    vision_log: D:\Thesis\data\P44_2026-07-24\Stack\vision_log_14-35-17_STACK_CONTROL_SLOW.csv
-    robot_metrics: D:\Thesis\data\P44_2026-07-24\Stack\robot_metrics_14-37-12_STACK_CONTROL_SLOW.csv
+    video: P44_2026-07-24/Stack/vision_video_14-35-17_STACK_CONTROL_SLOW.avi
+    vision_log: P44_2026-07-24/Stack/vision_log_14-35-17_STACK_CONTROL_SLOW.csv
+    robot_metrics: P44_2026-07-24/Stack/robot_metrics_14-37-12_STACK_CONTROL_SLOW.csv
     rating:
       valence: 7.0
       arousal: 5.0
   sisyphus:
     category: interaction
-    eeg: D:\Thesis\data\P44_2026-07-24\Sisyphus\EEG\UnicornRecorder_24_07_2026_14_40_18.bdf
-    video: D:\Thesis\data\P44_2026-07-24\Sisyphus\vision_video_14-40-24_SISYPHUS_INTERACTION.avi
-    vision_log: D:\Thesis\data\P44_2026-07-24\Sisyphus\vision_log_14-40-24_SISYPHUS_INTERACTION.csv
-    robot_metrics: D:\Thesis\data\P44_2026-07-24\Sisyphus\robot_metrics_14-41-59_SISYPHUS_INTERACTION.csv
+    eeg: P44_2026-07-24/Sisyphus/EEG/UnicornRecorder_24_07_2026_14_40_18.bdf
+    video: P44_2026-07-24/Sisyphus/vision_video_14-40-24_SISYPHUS_INTERACTION.avi
+    vision_log: P44_2026-07-24/Sisyphus/vision_log_14-40-24_SISYPHUS_INTERACTION.csv
+    robot_metrics: P44_2026-07-24/Sisyphus/robot_metrics_14-41-59_SISYPHUS_INTERACTION.csv
     rating:
       valence: 7.0
       arousal: 7.0
   shape_sorter_interaction:
     category: interaction
-    eeg: D:\Thesis\data\P44_2026-07-24\Shape Sorter Interaction\EEG\UnicornRecorder_24_07_2026_14_44_10.bdf
-    video: D:\Thesis\data\P44_2026-07-24\Shape Sorter Interaction\vision_video_14-44-16_HRI_INTERACTION.avi
-    vision_log: D:\Thesis\data\P44_2026-07-24\Shape Sorter Interaction\vision_log_14-44-16_HRI_INTERACTION.csv
-    robot_metrics: D:\Thesis\data\P44_2026-07-24\Shape Sorter Interaction\robot_metrics_14-45-31_HRI_INTERACTION.csv
+    eeg: P44_2026-07-24/Shape Sorter Interaction/EEG/UnicornRecorder_24_07_2026_14_44_10.bdf
+    video: P44_2026-07-24/Shape Sorter Interaction/vision_video_14-44-16_HRI_INTERACTION.avi
+    vision_log: P44_2026-07-24/Shape Sorter Interaction/vision_log_14-44-16_HRI_INTERACTION.csv
+    robot_metrics: P44_2026-07-24/Shape Sorter Interaction/robot_metrics_14-45-31_HRI_INTERACTION.csv
     rating:
       valence: 7.0
       arousal: 7.0
   shape_sorter_alone:
     category: alone
-    eeg: D:\Thesis\data\P44_2026-07-24\Shape Sorter Alone\EEG\UnicornRecorder_24_07_2026_14_46_08.bdf
-    video: D:\Thesis\data\P44_2026-07-24\Shape Sorter Alone\vision_video_14-46-14_SHAPE_ALONE.avi
-    vision_log: D:\Thesis\data\P44_2026-07-24\Shape Sorter Alone\vision_log_14-46-14_SHAPE_ALONE.csv
+    eeg: P44_2026-07-24/Shape Sorter Alone/EEG/UnicornRecorder_24_07_2026_14_46_08.bdf
+    video: P44_2026-07-24/Shape Sorter Alone/vision_video_14-46-14_SHAPE_ALONE.avi
+    vision_log: P44_2026-07-24/Shape Sorter Alone/vision_log_14-46-14_SHAPE_ALONE.csv
     rating:
       valence: 7.0
       arousal: 7.0

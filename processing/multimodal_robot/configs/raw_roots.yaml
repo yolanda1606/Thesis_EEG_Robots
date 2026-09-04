@@ -1,0 +1,5 @@
+schema_version: 1
+
+raw_roots:
+  windows: D:\Thesis\data
+  linux: /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data

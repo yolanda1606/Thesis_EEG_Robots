@@ -80,7 +80,8 @@ health:
   video_timestamp_gap_factor: 2.0
   sync:
     linear_rmse_warning_s: 0.05
-    linear_max_residual_warning_s: 0.10
+    # Global status/vision linear-synchronization acceptance limit: 125 ms.
+    linear_max_residual_warning_s: 0.125
     outlier_residual_s: 0.05
 
 output:

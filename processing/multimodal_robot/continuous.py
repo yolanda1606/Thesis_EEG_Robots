@@ -10,10 +10,12 @@ import json
 import re
 import sys
 import warnings
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 from pathlib import Path
-from typing import Any
+from time import perf_counter
+from typing import Any, Callable
 
 import cv2
 import mne
@@ -34,6 +36,89 @@ from mediapipe.tasks.python import vision
 
 
 FIELDS = ("participant", "task", "category", "actual_condition", "actual_speed", "segment_id", "window_id", "window_start_s", "window_end_s", "alignment_method", "alignment_qc", "eeg_coverage", "video_coverage")
+
+
+@dataclass
+class ProgressReporter:
+    """Opt-in concise terminal reporting for long Robot processing runs."""
+
+    show_progress: bool = False
+    video_progress: bool = False
+    eeg_progress: bool = False
+    timing: bool = False
+    writer: Callable[[str], None] = print
+    started_at: float = field(default_factory=perf_counter)
+    task_started_at: float | None = None
+    completed_tasks: list[str] = field(default_factory=list)
+    skipped_tasks: list[tuple[str, str]] = field(default_factory=list)
+
+    def participant_start(self, participant: str, task_count: int) -> None:
+        if self.show_progress:
+            self.writer(f"[{participant}] Starting Robot processing: {task_count} tasks")
+
+    def task_start(self, index: int, total: int, task_id: str) -> None:
+        self.task_started_at = perf_counter()
+        if self.show_progress or self.timing:
+            self.writer(f"[{index}/{total}] {task_id}")
+
+    def eeg(self, message: str) -> None:
+        if self.eeg_progress:
+            self.writer(f"[EEG] {message}")
+
+    def alignment(self, qc: dict[str, Any]) -> None:
+        if not self.show_progress:
+            return
+        labels = {
+            "status_constant_offset": "constant offset",
+            "status_linear": "linear offset",
+            "filename_fallback": "filename fallback",
+            "non_trigger_absolute_start": "absolute-start fallback",
+        }
+        rmse = qc.get("rmse_s")
+        rmse_text = f", RMSE={float(rmse):.3f} s" if rmse is not None else ""
+        self.writer(f"[ALIGN] {qc['matched_anchor_count']} anchors, {labels.get(qc['method'], qc['method'])}{rmse_text}")
+
+    def video_start(self, total_frames: int) -> None:
+        if self.video_progress:
+            suffix = f" ({total_frames} frames)" if total_frames > 0 else ""
+            self.writer(f"[VIDEO] MediaPipe face processing{suffix}")
+
+    def video_frame(self, processed: int, total_frames: int, interval: int) -> None:
+        if not self.video_progress or processed % interval != 0 and processed != total_frames:
+            return
+        if total_frames > 0:
+            self.writer(f"[VIDEO] {processed}/{total_frames} frames ({100.0 * processed / total_frames:.1f}%)")
+        else:
+            self.writer(f"[VIDEO] {processed} frames")
+
+    def features(self, windows: int) -> None:
+        if self.show_progress:
+            self.writer(f"[FEATURES] {windows} windows")
+
+    def elapsed(self, label: str, started_at: float) -> None:
+        if self.timing:
+            self.writer(f"[TIMING] {label}: {perf_counter() - started_at:.1f} s")
+
+    def task_done(self, task_id: str) -> None:
+        self.completed_tasks.append(task_id)
+        if (self.show_progress or self.timing) and self.task_started_at is not None:
+            self.writer(f"[DONE] {task_id} in {perf_counter() - self.task_started_at:.1f} s")
+
+    def task_skipped(self, task_id: str, reason: str) -> None:
+        self.skipped_tasks.append((task_id, reason))
+        if self.show_progress or self.timing:
+            self.writer(f"[SKIPPED] {task_id}: {reason}")
+
+    def participant_done(self, participant: str, destination: Path) -> None:
+        if not (self.show_progress or self.timing):
+            return
+        self.writer(f"[{participant}] OK tasks: {', '.join(self.completed_tasks) or 'none'}")
+        self.writer(f"[{participant}] Skipped tasks: {len(self.skipped_tasks)}")
+        for task_id, reason in self.skipped_tasks:
+            self.writer(f"  - {task_id}: {reason}")
+        self.writer(f"[{participant}] Failed tasks: none")
+        self.writer(f"[{participant}] Total runtime: {perf_counter() - self.started_at:.1f} s")
+        self.writer(f"[{participant}] Output: {destination}")
 
 
 def _continuous_ica_motion_edit(raw: mne.io.BaseRaw, eeg_names: list[str], config: dict[str, Any]) -> dict[str, Any]:
@@ -157,13 +242,16 @@ def robot_eeg_config() -> dict[str, Any]:
     return cfg
 
 
-def prepare_continuous_robot_eeg(raw: mne.io.BaseRaw) -> mne.io.BaseRaw:
+def prepare_continuous_robot_eeg(raw: mne.io.BaseRaw, progress: ProgressReporter | None = None) -> mne.io.BaseRaw:
     """Apply the validated Robot continuous no-ICA signal preparation.
 
     ``raw`` has already been loaded, mapped, and assigned its montage by
     ``_prepare_raw``.  Keep the recording continuous: no epoching, baseline
     correction, resampling, AutoReject, or ICA is applied here.
     """
+    started_at = perf_counter()
+    if progress:
+        progress.eeg("Applying CAR + 1–40 Hz filter...")
     raw.set_eeg_reference(ref_channels="average", projection=False, verbose=False)
     raw.filter(
         1.0,
@@ -172,6 +260,9 @@ def prepare_continuous_robot_eeg(raw: mne.io.BaseRaw) -> mne.io.BaseRaw:
         iir_params={"order": 4, "ftype": "butter", "output": "sos"},
         verbose=False,
     )
+    if progress:
+        progress.eeg("CAR + 1–40 Hz filter complete")
+        progress.elapsed("EEG CAR + filtering", started_at)
     return raw
 
 
@@ -240,17 +331,23 @@ def _filename_start(path: Path, session_date: str) -> datetime | None:
     except ValueError: return None
 
 
-def alignment_for_task(task: dict[str, Any], task_id: str, session_date: str) -> tuple[dict[str, Any], list[dict[str, Any]], list[tuple[Path, mne.io.BaseRaw]]]:
+def alignment_for_task(task: dict[str, Any], task_id: str, session_date: str, progress: ProgressReporter | None = None) -> tuple[dict[str, Any], list[dict[str, Any]], list[tuple[Path, mne.io.BaseRaw]]]:
     """Validate task timing and choose an offset/linear mapping conservatively."""
     cfg = robot_eeg_config(); eeg_files = _files(task["eeg"]); video = _files(task["video"])[0]; log = _files(task["vision_log"])[0]
     raws: list[tuple[Path, mne.io.BaseRaw]] = []
     anchors: list[tuple[str, float]] = []
     offset = 0.0
+    eeg_started_at = perf_counter()
+    if progress:
+        progress.eeg("Loading...")
     for file in eeg_files:
         # Calling the frozen setup for each source avoids concatenating actual
         # recorder-off gaps.
         raw, _, _ = _prepare_raw({"eeg": file}, cfg)
         raws.append((file, raw)); anchors.extend(_status_events(raw, cfg))
+    if progress:
+        progress.eeg("Channel/montage preparation complete")
+        progress.elapsed("EEG loading and channel/montage preparation", eeg_started_at)
     _, log_times, log_anchors = read_vision_log(log)
     cap = cv2.VideoCapture(str(video)); fps = float(cap.get(cv2.CAP_PROP_FPS)); frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)); cap.release()
     if fps <= 0: raise ValueError(f"{task_id}: video has no usable frame rate")
@@ -332,12 +429,12 @@ def _metadata(participant: str, task_id: str, task: dict[str, Any], segment_id: 
     return {"participant": participant, "task": task_id, "category": task["category"], "actual_condition": condition.get("actual"), "actual_speed": condition.get("speed_actual"), "segment_id": segment_id, "window_id": f"{task_id}_s{segment_id}_{start:.3f}", "window_start_s": start, "window_end_s": end, "alignment_method": qc["method"], "alignment_qc": "PASS", "eeg_coverage": eeg_coverage, "video_coverage": video_coverage}
 
 
-def extract_task(participant: str, task_id: str, task: dict[str, Any], qc: dict[str, Any], raws: list[tuple[Path, mne.io.BaseRaw]], resource_root: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def extract_task(participant: str, task_id: str, task: dict[str, Any], qc: dict[str, Any], raws: list[tuple[Path, mne.io.BaseRaw]], resource_root: Path, progress: ProgressReporter | None = None) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     if qc["method"].startswith(("unsupported", "invalid")) or qc["aligned_overlap_s"] < 2.0:
         return pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
     cfg = robot_eeg_config(); defaults = image_defaults(); crop = task.get("_crop")
     if not crop: raise ValueError("Robot task requires a participant approved crop")
-    video_file = _files(task["video"])[0]; cap = cv2.VideoCapture(str(video_file)); fps = float(cap.get(cv2.CAP_PROP_FPS))
+    video_file = _files(task["video"])[0]; cap = cv2.VideoCapture(str(video_file)); fps = float(cap.get(cv2.CAP_PROP_FPS)); total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     log_rows, _, _ = read_vision_log(_files(task["vision_log"])[0])
     log_time_by_frame = {}
     for row in log_rows:
@@ -348,6 +445,10 @@ def extract_task(participant: str, task_id: str, task: dict[str, Any], qc: dict[
     frame_times: list[tuple[float, np.ndarray, bool, dict[str, float]]] = []
     model = resource_root / defaults["resources"]["face_landmarker_filename"]
     video_cfg = {**defaults, "video": {**defaults["video"], "crop": {"left": crop["x"], "top": crop["y"], "right": crop["x"]+crop["width"], "bottom": crop["y"]+crop["height"], "scale": 1.0, "approved": True},}}
+    video_started_at = perf_counter()
+    video_interval = max(1, total_frames // 20) if total_frames > 0 else 250
+    if progress:
+        progress.video_start(total_frames)
     with _landmarker(video_cfg, model, vision.RunningMode.VIDEO) as detector:
         index = 0
         while True:
@@ -366,15 +467,24 @@ def extract_task(participant: str, task_id: str, task: dict[str, Any], qc: dict[
                 if points.shape == (478,3): values = _facial_measures(points, defaults["video"]["landmark_indices"], region.shape[1], region.shape[0])
                 else: found = False
             frame_times.append((eeg_time, np.empty(0), found, values))
+            if progress and progress.video_progress:
+                progress.video_frame(index, total_frames, video_interval)
     cap.release()
+    if progress:
+        progress.elapsed("Video/MediaPipe processing", video_started_at)
     eeg_rows: list[dict[str, Any]]=[]; video_rows: list[dict[str, Any]]=[]
+    window_count = 0
+    feature_started_at = perf_counter()
+    if progress:
+        progress.eeg("Window feature extraction...")
     for segment_id, (_, raw) in enumerate(raws, start=1):
-        prepare_continuous_robot_eeg(raw)
+        prepare_continuous_robot_eeg(raw, progress)
         if not task.get("bad_channels", []): pass
         duration = raw.n_times/raw.info["sfreq"]
         for start in np.arange(0, duration-2.0+1e-9, 1.0):
             first=int(round(start*raw.info["sfreq"])); data=raw.copy().pick(list(cfg["channels"]["eeg_mapping"].values())).get_data(start=first, stop=first+500)
             if data.shape[1] != 500: continue
+            window_count += 1
             selected_frames=[item for item in frame_times if start <= item[0] < start+2.0]
             meta=_metadata(participant,task_id,task,segment_id,float(start),float(start+2),qc,1.0,1.0 if selected_frames else 0.0)
             for channel, row in zip(raw.copy().pick(list(cfg["channels"]["eeg_mapping"].values())).ch_names, _extract_eeg_window_features(data, raw.info["sfreq"])): eeg_rows.append({**meta,"channel":channel,"sample_count":500,**row})
@@ -398,4 +508,7 @@ def extract_task(participant: str, task_id: str, task: dict[str, Any], qc: dict[
     else: eeg_wide=pd.DataFrame(columns=["window_id"])
     # A multimodal row is valid only when both streams cover the same interval.
     merged=video_df[video_df["video_coverage"] == 1.0].merge(eeg_wide,on="window_id",how="inner") if len(video_df) else pd.DataFrame()
+    if progress:
+        progress.features(window_count)
+        progress.elapsed("EEG window feature extraction", feature_started_at)
     return eeg_df,video_df,merged

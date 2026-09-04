@@ -5,9 +5,10 @@ from __future__ import annotations
 import argparse
 import copy
 import json
+import platform as platform_module
 import shutil
 import sys
-from pathlib import Path, PureWindowsPath
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any
 
 import cv2
@@ -15,7 +16,7 @@ import mne
 import numpy as np
 import yaml
 
-from continuous import alignment_for_task, extract_task
+from continuous import ProgressReporter, alignment_for_task, extract_task
 
 HERE = Path(__file__).resolve().parent
 TASKS = ("pick_place", "shape_sorter_observation", "stack", "sisyphus", "shape_sorter_interaction", "shape_sorter_alone")
@@ -26,7 +27,9 @@ def args() -> argparse.Namespace:
     p.add_argument("--participant-config", type=Path, required=True)
     p.add_argument("--participant", required=True)
     p.add_argument("--raw-root", type=Path,
-                   help="Local participant data directory used to resolve Windows-authored task paths.")
+                   help="Override configured raw-data root. A participant directory remains supported for compatibility.")
+    p.add_argument("--platform", choices=("windows", "linux"),
+                   help="Raw-root platform; defaults to the current operating system.")
     p.add_argument("--tasks", nargs="+", choices=TASKS,
                    help="Optional subset of robot tasks; defaults to all six tasks.")
     p.add_argument("--resource-root", type=Path, default=HERE.parent / "multimodal_image" / "models")
@@ -42,6 +45,10 @@ def args() -> argparse.Namespace:
     p.add_argument("--crop", nargs=4, type=int, metavar=("X", "Y", "WIDTH", "HEIGHT"), help="Temporary shared crop candidate; does not change YAML.")
     p.add_argument("--save-crop", action="store_true", help="Save --crop to participant-level YAML after crop preview; remains unreviewed unless --approve-crop is supplied.")
     p.add_argument("--approve-crop", action="store_true", help="Explicitly approve a --save-crop candidate after preview.")
+    p.add_argument("--show-progress", action="store_true", help="Show participant/task/stage progress for alignment and feature runs.")
+    p.add_argument("--video-progress", action="store_true", help="Show throttled MediaPipe/video frame progress.")
+    p.add_argument("--eeg-progress", action="store_true", help="Show major continuous EEG preparation and feature stages.")
+    p.add_argument("--timing", action="store_true", help="Show elapsed time for major stages and tasks.")
     p.add_argument("--verbose", action="store_true")
     return p.parse_args()
 
@@ -54,31 +61,70 @@ def load(path: Path) -> dict[str, Any]:
     return value
 
 
-def localize_task_paths(config: dict[str, Any], raw_root: Path | None) -> dict[str, Any]:
-    """Resolve selected task files below ``raw_root`` without altering the YAML.
+def raw_roots() -> dict[str, str]:
+    """Load the shared platform-specific Robot raw-data roots."""
+    value = load(HERE / "configs" / "raw_roots.yaml").get("raw_roots")
+    if not isinstance(value, dict) or not all(isinstance(value.get(name), str) for name in ("windows", "linux")):
+        raise ValueError("configs/raw_roots.yaml must define string windows and linux raw_roots")
+    return {name: value[name] for name in ("windows", "linux")}
 
-    Participant YAML files retain their acquisition-machine paths.  On a
-    different host, the participant-directory basename anchors each configured
-    path below the supplied local raw root.
+
+def resolved_platform(platform_name: str | None) -> str:
+    if platform_name is not None:
+        return platform_name
+    return "windows" if platform_module.system().casefold().startswith("win") else "linux"
+
+
+def relative_task_parts(value: str, participant_dir: str) -> tuple[str, ...]:
+    """Return a configured task path beneath its participant directory."""
+    windows_path = PureWindowsPath(value)
+    posix_path = PurePosixPath(value)
+    parts = windows_path.parts if not posix_path.is_absolute() else posix_path.parts
+    participant_indices = [index for index, part in enumerate(parts) if part.casefold() == participant_dir.casefold()]
+    if windows_path.is_absolute() or posix_path.is_absolute():
+        if not participant_indices:
+            raise ValueError(f"Configured task path is not beneath raw_participant_dir: {value}")
+        parts = parts[participant_indices[-1]:]
+    if not parts or parts[0].casefold() != participant_dir.casefold() or any(part in {"", ".", ".."} for part in parts):
+        raise ValueError(f"Configured task path must be relative to the raw-data root beneath {participant_dir}: {value}")
+    return tuple(parts)
+
+
+def localize_task_paths(
+    config: dict[str, Any],
+    raw_root: Path | None,
+    platform_name: str | None = None,
+    configured_roots: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    """Resolve root-relative task files without altering the source YAML.
+
+    Priority is ``--raw-root``, then the shared configured root for
+    ``--platform`` (or the detected platform), then legacy configured paths.
+    ``--raw-root`` may be either the raw-data root or, for compatibility, the
+    participant directory accepted by earlier pipeline versions.
     """
-    if raw_root is None:
-        return config
-    raw_root = raw_root.resolve(strict=True)
-    configured_root = PureWindowsPath(str(config.get("raw_participant_dir", ""))).name
-    if not configured_root:
-        raise ValueError("--raw-root requires raw_participant_dir in the participant YAML")
-    if raw_root.name.casefold() != configured_root.casefold():
-        raise ValueError(f"--raw-root basename must match raw_participant_dir: {raw_root.name} != {configured_root}")
+    participant_dir = PureWindowsPath(str(config.get("raw_participant_dir", ""))).name
+    if not participant_dir:
+        raise ValueError("Participant YAML requires raw_participant_dir")
+    selected_platform = resolved_platform(platform_name)
+    root_is_participant_dir = False
+    if raw_root is not None:
+        selected_root: str | Path = raw_root.resolve(strict=True)
+        root_is_participant_dir = raw_root.name.casefold() == participant_dir.casefold()
+    else:
+        roots = configured_roots if configured_roots is not None else raw_roots()
+        root = roots.get(selected_platform)
+        if root is None:
+            return config
+        selected_root = root
 
     def local_path(value: str) -> str:
-        path = Path(value)
-        if path.is_file():
-            return str(path)
-        parts = PureWindowsPath(value).parts
-        indices = [i for i, part in enumerate(parts) if part.casefold() == configured_root.casefold()]
-        if not indices:
-            raise ValueError(f"Configured task path is not beneath raw_participant_dir: {value}")
-        return str(raw_root.joinpath(*parts[indices[-1] + 1:]))
+        parts = relative_task_parts(value, participant_dir)
+        if root_is_participant_dir:
+            parts = parts[1:]
+        if selected_platform == "windows" and raw_root is None:
+            return str(PureWindowsPath(str(selected_root)).joinpath(*parts))
+        return str(Path(selected_root).joinpath(*parts))
 
     def local_item(item: Any) -> Any:
         if isinstance(item, str):
@@ -356,12 +402,14 @@ def crop_preview(config: dict[str, Any], resource_root: Path, destination: Path,
     return {"crop": crop, "representative_tasks": rows, "skipped_tasks": skipped, "sampled_frame_count": len(rows), "face_detection_count": sum(row["face_detections"] for row in rows), "image": str(image_path), "face_validation_image": str(face_path) if face_path else None, "automatic_approval": False}
 
 
-def continuous_run(config: dict[str, Any], participant: str, resource_root: Path, run: Path, extract: bool, task_ids: tuple[str, ...]) -> dict[str, Any]:
+def continuous_run(config: dict[str, Any], participant: str, resource_root: Path, run: Path, extract: bool, task_ids: tuple[str, ...], progress: ProgressReporter | None = None) -> dict[str, Any]:
     """Validate all robot timelines, then optionally extract supported tasks."""
     alignment_rows: list[dict[str, Any]] = []; qcs: list[dict[str, Any]] = []
     eeg_tables = []; video_tables = []; merged_tables = []
-    for task_id in task_ids:
+    for task_index, task_id in enumerate(task_ids, start=1):
         task = config["tasks"][task_id]
+        if progress:
+            progress.task_start(task_index, len(task_ids), task_id)
         skip_reason = processing_skip_reason(task)
         if skip_reason:
             qc = {
@@ -383,17 +431,25 @@ def continuous_run(config: dict[str, Any], participant: str, resource_root: Path
                 "median_absolute_residual_s": None,
             }
             qcs.append(qc)
-            print(f"{task_id}: skipped: {skip_reason}")
+            if progress:
+                progress.task_skipped(task_id, skip_reason)
+            else:
+                print(f"{task_id}: skipped: {skip_reason}")
             continue
-        qc, pairs, raws = alignment_for_task(task, task_id, str(config.get("raw_participant_dir", "")))
+        qc, pairs, raws = alignment_for_task(task, task_id, str(config.get("raw_participant_dir", "")), progress)
         qcs.append(qc); alignment_rows.extend(pairs)
-        print(f"{task_id}: EEG={qc['eeg_duration_s']:.3f}s, video={qc['video_duration_s']:.3f}s, Status={qc['status_event_count']}, anchors={qc['matched_anchor_count']}, model={qc['method']}, offset={qc['offset_s']}, drift={qc['drift_s_per_s']}, RMSE={qc['rmse_s']}, max={qc['max_residual_s']}, overlap={qc['aligned_overlap_s']:.3f}s")
+        if progress and progress.show_progress:
+            progress.alignment(qc)
+        else:
+            print(f"{task_id}: EEG={qc['eeg_duration_s']:.3f}s, video={qc['video_duration_s']:.3f}s, Status={qc['status_event_count']}, anchors={qc['matched_anchor_count']}, model={qc['method']}, offset={qc['offset_s']}, drift={qc['drift_s_per_s']}, RMSE={qc['rmse_s']}, max={qc['max_residual_s']}, overlap={qc['aligned_overlap_s']:.3f}s")
         if extract and not qc["method"].startswith("unsupported"):
             prepared = dict(task); prepared["_crop"] = config["video_settings"]["crop"]
-            eeg, video, merged = extract_task(participant, task_id, prepared, qc, raws, resource_root)
+            eeg, video, merged = extract_task(participant, task_id, prepared, qc, raws, resource_root, progress)
             if len(eeg): eeg_tables.append(eeg)
             if len(video): video_tables.append(video)
             if len(merged): merged_tables.append(merged)
+        if progress:
+            progress.task_done(task_id)
     align_dir = run / "alignment"; align_dir.mkdir(parents=True, exist_ok=False)
     (align_dir / "alignment_metadata.json").write_text(json.dumps({"tasks": qcs}, indent=2), encoding="utf-8")
     pd = __import__("pandas")
@@ -438,7 +494,7 @@ def main() -> int:
     if not a.run_name or a.run_name in {".", ".."} or "/" in a.run_name or "\\" in a.run_name:
         raise ValueError("--run-name must be one directory name")
     config_path = a.participant_config.resolve(strict=True)
-    config = localize_task_paths(load(config_path), a.raw_root)
+    config = localize_task_paths(load(config_path), a.raw_root, a.platform)
     errors, warnings = validate(config, a.participant)
     if errors: raise ValueError("Validation failed: " + " | ".join(errors))
     for warning in warnings: print(f"WARNING: {warning}")
@@ -458,8 +514,12 @@ def main() -> int:
             (run / "resolved_participant.yaml").write_text(yaml.safe_dump(config, sort_keys=False), encoding="utf-8")
     if a.validate_alignment_only or a.continuous_features:
         task_ids = tuple(a.tasks) if a.tasks else TASKS
-        summary = continuous_run(config, a.participant, a.resource_root.resolve(), run, a.continuous_features, task_ids)
+        progress = ProgressReporter(a.show_progress, a.video_progress, a.eeg_progress, a.timing)
+        progress.participant_start(a.participant, len(task_ids))
+        summary = continuous_run(config, a.participant, a.resource_root.resolve(), run, a.continuous_features, task_ids, progress)
     (run / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    if a.validate_alignment_only or a.continuous_features:
+        progress.participant_done(a.participant, run)
     if a.health_check_only:
         for task_id, task in summary["tasks"].items():
             print(f"{task_id}: EEG={task['eeg']['status']}, video={task['video']['status']}, log={task['vision_log']['status']}")
