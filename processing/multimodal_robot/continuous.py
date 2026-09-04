@@ -424,6 +424,85 @@ def alignment_for_task(task: dict[str, Any], task_id: str, session_date: str, pr
     return qc, pair_rows, raws
 
 
+def has_eeg_segments(task: dict[str, Any]) -> bool:
+    """Return whether a task explicitly declares independent EEG recordings."""
+    eeg = task.get("eeg")
+    return isinstance(eeg, dict) and isinstance(eeg.get("segments"), list)
+
+
+def segment_accepted(qc: dict[str, Any]) -> bool:
+    """Apply the existing task acceptance rule to one independent EEG segment."""
+    return not str(qc["method"]).startswith(("unsupported", "invalid")) and float(qc["aligned_overlap_s"]) >= 2.0
+
+
+def _segment_rejection_reason(qc: dict[str, Any]) -> str | None:
+    if str(qc["method"]).startswith("invalid"):
+        return "synchronization_qc_failed"
+    if str(qc["method"]).startswith("unsupported"):
+        return "synchronization_model_unsupported"
+    if float(qc["aligned_overlap_s"]) < 2.0:
+        return "aligned_overlap_below_2s"
+    return None
+
+
+def alignment_for_segmented_task(task: dict[str, Any], task_id: str, session_date: str, progress: ProgressReporter | None = None) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
+    """Align each explicitly configured EEG BDF independently to one vision log.
+
+    This intentionally never concatenates recordings or assigns time to a
+    recorder-off gap.  Each BDF retains its local sample clock and receives its
+    own alignment model against the shared vision-log clock.
+    """
+    if not has_eeg_segments(task):
+        raise ValueError("Segmented alignment requires eeg.segments")
+    segment_results: list[dict[str, Any]] = []
+    all_pairs: list[dict[str, Any]] = []
+    for segment_id, segment in enumerate(task["eeg"]["segments"], start=1):
+        if not isinstance(segment, dict) or not isinstance(segment.get("file"), str):
+            raise ValueError(f"{task_id}: eeg.segments[{segment_id}] requires a file")
+        segment_task = dict(task)
+        segment_task["eeg"] = segment["file"]
+        qc, pairs, raws = alignment_for_task(segment_task, task_id, session_date, progress)
+        accepted = segment_accepted(qc)
+        segment_qc = {
+            **qc,
+            "segment_id": segment_id,
+            "eeg_file": segment["file"],
+            "accepted": accepted,
+            "rejection_reason": None if accepted else _segment_rejection_reason(qc),
+        }
+        segment_results.append({"qc": segment_qc, "raws": raws})
+        all_pairs.extend({**pair, "segment_id": segment_id} for pair in pairs)
+
+    qcs = [result["qc"] for result in segment_results]
+    accepted_qcs = [qc for qc in qcs if qc["accepted"]]
+    rejected_qcs = [qc for qc in qcs if not qc["accepted"]]
+    task_qc = {
+        "task": task_id,
+        "method": "segmented",
+        "segment_count": len(qcs),
+        "accepted_segment_count": len(accepted_qcs),
+        "rejected_segment_count": len(rejected_qcs),
+        "accepted": bool(accepted_qcs),
+        # Aggregate only segments that passed QC; rejected recordings are
+        # preserved below but never represented as valid task coverage.
+        "eeg_duration_s": float(sum(qc["eeg_duration_s"] for qc in accepted_qcs)),
+        "rejected_eeg_duration_s": float(sum(qc["eeg_duration_s"] for qc in rejected_qcs)),
+        "video_duration_s": qcs[0]["video_duration_s"] if qcs else 0.0,
+        "status_event_count": int(sum(qc["status_event_count"] for qc in qcs)),
+        "original_anchor_count": int(sum(qc["original_anchor_count"] for qc in qcs)),
+        "retained_anchor_count": int(sum(qc["retained_anchor_count"] for qc in accepted_qcs)),
+        "rejected_anchor_count": int(sum(qc["rejected_anchor_count"] for qc in qcs)),
+        "matched_anchor_count": int(sum(qc["matched_anchor_count"] for qc in accepted_qcs)),
+        "aligned_overlap_s": float(sum(qc["aligned_overlap_s"] for qc in accepted_qcs)),
+        "segments": qcs,
+        "rejected_segments": [
+            {"segment_id": qc["segment_id"], "reason": qc["rejection_reason"]}
+            for qc in rejected_qcs
+        ],
+    }
+    return task_qc, all_pairs, segment_results
+
+
 def _metadata(participant: str, task_id: str, task: dict[str, Any], segment_id: int, start: float, end: float, qc: dict[str, Any], eeg_coverage: float, video_coverage: float) -> dict[str, Any]:
     condition = task.get("condition", {}) if isinstance(task.get("condition"), dict) else {}
     return {"participant": participant, "task": task_id, "category": task["category"], "actual_condition": condition.get("actual"), "actual_speed": condition.get("speed_actual"), "segment_id": segment_id, "window_id": f"{task_id}_s{segment_id}_{start:.3f}", "window_start_s": start, "window_end_s": end, "alignment_method": qc["method"], "alignment_qc": "PASS", "eeg_coverage": eeg_coverage, "video_coverage": video_coverage}
@@ -512,3 +591,54 @@ def extract_task(participant: str, task_id: str, task: dict[str, Any], qc: dict[
         progress.features(window_count)
         progress.elapsed("EEG window feature extraction", feature_started_at)
     return eeg_df,video_df,merged
+
+
+def _replace_segment_id(frame: pd.DataFrame, task_id: str, segment_id: int) -> pd.DataFrame:
+    """Relabel an independently extracted single-BDF result with its real ID."""
+    if segment_id == 1 or frame.empty:
+        return frame
+    result = frame.copy()
+    if "segment_id" in result:
+        result["segment_id"] = segment_id
+    if "window_id" in result:
+        result["window_id"] = result["window_id"].str.replace(f"{task_id}_s1_", f"{task_id}_s{segment_id}_", regex=False)
+    return result
+
+
+def _complete_segment_video_windows(video: pd.DataFrame, qc: dict[str, Any]) -> pd.DataFrame:
+    """Keep only complete two-second video intervals within one segment model."""
+    if video.empty:
+        return video
+    video_eeg_start = -float(qc["offset_s"])
+    video_eeg_end = video_eeg_start + float(qc["video_duration_s"])
+    mask = (video["window_start_s"] >= video_eeg_start - 1e-9) & (video["window_end_s"] <= video_eeg_end + 1e-9)
+    return video.loc[mask].copy()
+
+
+def extract_segmented_task(participant: str, task_id: str, task: dict[str, Any], segment_results: list[dict[str, Any]], resource_root: Path, progress: ProgressReporter | None = None) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Extract accepted BDF segments with their own synchronization models.
+
+    The frozen single-segment extractor is called independently for each
+    accepted recording.  This preserves its EEG/video/MediaPipe behavior while
+    preventing a restarted recorder clock from being applied to another BDF.
+    """
+    eeg_tables: list[pd.DataFrame] = []
+    video_tables: list[pd.DataFrame] = []
+    merged_tables: list[pd.DataFrame] = []
+    for result in segment_results:
+        qc = result["qc"]
+        if not qc["accepted"]:
+            continue
+        eeg, video, merged = extract_task(participant, task_id, task, qc, result["raws"], resource_root, progress)
+        complete_video = _complete_segment_video_windows(video, qc)
+        complete_ids = set(complete_video.get("window_id", pd.Series(dtype=str)))
+        complete_merged = merged.loc[merged["window_id"].isin(complete_ids)].copy() if not merged.empty else merged
+        segment_id = int(qc["segment_id"])
+        eeg_tables.append(_replace_segment_id(eeg, task_id, segment_id))
+        video_tables.append(_replace_segment_id(complete_video, task_id, segment_id))
+        merged_tables.append(_replace_segment_id(complete_merged, task_id, segment_id))
+    return (
+        pd.concat(eeg_tables, ignore_index=True) if eeg_tables else pd.DataFrame(),
+        pd.concat(video_tables, ignore_index=True) if video_tables else pd.DataFrame(),
+        pd.concat(merged_tables, ignore_index=True) if merged_tables else pd.DataFrame(),
+    )

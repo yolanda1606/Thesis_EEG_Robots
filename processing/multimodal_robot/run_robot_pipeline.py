@@ -16,7 +16,7 @@ import mne
 import numpy as np
 import yaml
 
-from continuous import ProgressReporter, alignment_for_task, extract_task
+from continuous import ProgressReporter, alignment_for_segmented_task, alignment_for_task, extract_segmented_task, extract_task, has_eeg_segments
 
 HERE = Path(__file__).resolve().parent
 TASKS = ("pick_place", "shape_sorter_observation", "stack", "sisyphus", "shape_sorter_interaction", "shape_sorter_alone")
@@ -436,15 +436,23 @@ def continuous_run(config: dict[str, Any], participant: str, resource_root: Path
             else:
                 print(f"{task_id}: skipped: {skip_reason}")
             continue
-        qc, pairs, raws = alignment_for_task(task, task_id, str(config.get("raw_participant_dir", "")), progress)
+        segmented = has_eeg_segments(task)
+        if segmented:
+            qc, pairs, segment_results = alignment_for_segmented_task(task, task_id, str(config.get("raw_participant_dir", "")), progress)
+            raws = []
+        else:
+            qc, pairs, raws = alignment_for_task(task, task_id, str(config.get("raw_participant_dir", "")), progress)
         qcs.append(qc); alignment_rows.extend(pairs)
         if progress and progress.show_progress:
             progress.alignment(qc)
         else:
             print(f"{task_id}: EEG={qc['eeg_duration_s']:.3f}s, video={qc['video_duration_s']:.3f}s, Status={qc['status_event_count']}, anchors={qc['matched_anchor_count']}, model={qc['method']}, offset={qc['offset_s']}, drift={qc['drift_s_per_s']}, RMSE={qc['rmse_s']}, max={qc['max_residual_s']}, overlap={qc['aligned_overlap_s']:.3f}s")
-        if extract and not qc["method"].startswith("unsupported"):
+        if extract and (qc.get("accepted", True) if segmented else not qc["method"].startswith("unsupported")):
             prepared = dict(task); prepared["_crop"] = config["video_settings"]["crop"]
-            eeg, video, merged = extract_task(participant, task_id, prepared, qc, raws, resource_root, progress)
+            if segmented:
+                eeg, video, merged = extract_segmented_task(participant, task_id, prepared, segment_results, resource_root, progress)
+            else:
+                eeg, video, merged = extract_task(participant, task_id, prepared, qc, raws, resource_root, progress)
             if len(eeg): eeg_tables.append(eeg)
             if len(video): video_tables.append(video)
             if len(merged): merged_tables.append(merged)
