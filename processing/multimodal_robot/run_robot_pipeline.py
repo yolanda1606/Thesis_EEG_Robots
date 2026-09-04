@@ -137,6 +137,19 @@ def multimodal_available(task: dict[str, Any]) -> bool:
     )
 
 
+def processing_skip_reason(task: dict[str, Any]) -> str | None:
+    """Return an explicit configured reason not to process a multimodal task."""
+    for name in ("eeg", "video", "vision_log"):
+        item = task.get(name)
+        if unavailable(item):
+            return f"{name} unavailable: {modality_reason(item)}"
+        if isinstance(item, dict) and item.get("unusable") is True:
+            return f"{name} unusable: {modality_reason(item)}"
+        if not selected_files(item):
+            return f"{name} has no selected file"
+    return None
+
+
 def validate(config: dict[str, Any], participant: str) -> tuple[list[str], list[str]]:
     errors: list[str] = []; warnings: list[str] = []
     if config.get("participant") != participant:
@@ -349,6 +362,29 @@ def continuous_run(config: dict[str, Any], participant: str, resource_root: Path
     eeg_tables = []; video_tables = []; merged_tables = []
     for task_id in task_ids:
         task = config["tasks"][task_id]
+        skip_reason = processing_skip_reason(task)
+        if skip_reason:
+            qc = {
+                "task": task_id,
+                "method": "unsupported_configured_modality",
+                "skip_reason": skip_reason,
+                "eeg_duration_s": None,
+                "video_duration_s": None,
+                "status_event_count": 0,
+                "original_anchor_count": 0,
+                "retained_anchor_count": 0,
+                "rejected_anchor_count": 0,
+                "matched_anchor_count": 0,
+                "aligned_overlap_s": 0.0,
+                "offset_s": None,
+                "drift_s_per_s": None,
+                "rmse_s": None,
+                "max_residual_s": None,
+                "median_absolute_residual_s": None,
+            }
+            qcs.append(qc)
+            print(f"{task_id}: skipped: {skip_reason}")
+            continue
         qc, pairs, raws = alignment_for_task(task, task_id, str(config.get("raw_participant_dir", "")))
         qcs.append(qc); alignment_rows.extend(pairs)
         print(f"{task_id}: EEG={qc['eeg_duration_s']:.3f}s, video={qc['video_duration_s']:.3f}s, Status={qc['status_event_count']}, anchors={qc['matched_anchor_count']}, model={qc['method']}, offset={qc['offset_s']}, drift={qc['drift_s_per_s']}, RMSE={qc['rmse_s']}, max={qc['max_residual_s']}, overlap={qc['aligned_overlap_s']:.3f}s")
@@ -362,7 +398,17 @@ def continuous_run(config: dict[str, Any], participant: str, resource_root: Path
     (align_dir / "alignment_metadata.json").write_text(json.dumps({"tasks": qcs}, indent=2), encoding="utf-8")
     pd = __import__("pandas")
     pd.DataFrame(alignment_rows).to_csv(align_dir / "synchronization_anchors.csv", index=False)
-    summary: dict[str, Any] = {"participant": participant, "mode": "continuous_features" if extract else "alignment_validation", "alignment": qcs}
+    summary: dict[str, Any] = {
+        "participant": participant,
+        "mode": "continuous_features" if extract else "alignment_validation",
+        "alignment": qcs,
+        "eeg_preprocessing": {
+            "reference": "common_average",
+            "filter": {"l_freq_hz": 1.0, "h_freq_hz": 40.0, "method": "butterworth_iir", "order": 4},
+            "ica": "disabled",
+            "continuous_window": {"length_s": 2.0, "step_s": 1.0},
+        },
+    }
     if extract:
         feature_dir = run / "features"; feature_dir.mkdir(parents=True, exist_ok=False)
         eeg_df = pd.concat(eeg_tables, ignore_index=True) if eeg_tables else pd.DataFrame()

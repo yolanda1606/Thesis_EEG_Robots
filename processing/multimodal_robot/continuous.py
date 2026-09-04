@@ -141,15 +141,38 @@ def image_defaults() -> dict[str, Any]:
 
 
 def robot_eeg_config() -> dict[str, Any]:
-    """Minimal frozen-image configuration required by ``_prepare_raw``."""
+    """Robot configuration for continuous no-ICA preparation.
+
+    The shared Image defaults provide the channel mapping and filter settings,
+    but Robot continuous processing intentionally never uses their ICA stage.
+    """
     cfg = image_defaults()
     cfg["allow_single_sample_status"] = True
+    cfg["eeg"]["ica"]["enabled"] = False
     # _prepare_raw/load_eeg_session requires an image-event range even though
     # robot Status values are neither image events nor unique IDs.  Keep the
     # sentinel outside the unsigned 16-bit BDF Status range so its image-only
     # duplicate guard does not reject repeated robot landmarks.
     cfg["events"] = {"image_ranges": {"robot_sentinel": [65536, 65536]}}
     return cfg
+
+
+def prepare_continuous_robot_eeg(raw: mne.io.BaseRaw) -> mne.io.BaseRaw:
+    """Apply the validated Robot continuous no-ICA signal preparation.
+
+    ``raw`` has already been loaded, mapped, and assigned its montage by
+    ``_prepare_raw``.  Keep the recording continuous: no epoching, baseline
+    correction, resampling, AutoReject, or ICA is applied here.
+    """
+    raw.set_eeg_reference(ref_channels="average", projection=False, verbose=False)
+    raw.filter(
+        1.0,
+        40.0,
+        method="iir",
+        iir_params={"order": 4, "ftype": "butter", "output": "sos"},
+        verbose=False,
+    )
+    return raw
 
 
 def _files(item: Any) -> list[Path]:
@@ -346,10 +369,7 @@ def extract_task(participant: str, task_id: str, task: dict[str, Any], qc: dict[
     cap.release()
     eeg_rows: list[dict[str, Any]]=[]; video_rows: list[dict[str, Any]]=[]
     for segment_id, (_, raw) in enumerate(raws, start=1):
-        eeg = raw.copy().pick(list(cfg["channels"]["eeg_mapping"].values()))
-        raw.set_eeg_reference(ref_channels="average", projection=False, verbose=False)
-        raw.filter(1.0, 40.0, method="iir", iir_params={"order":4,"ftype":"butter","output":"sos"}, verbose=False)
-        _continuous_ica_motion_edit(raw, list(cfg["channels"]["eeg_mapping"].values()), cfg)
+        prepare_continuous_robot_eeg(raw)
         if not task.get("bad_channels", []): pass
         duration = raw.n_times/raw.info["sfreq"]
         for start in np.arange(0, duration-2.0+1e-9, 1.0):
