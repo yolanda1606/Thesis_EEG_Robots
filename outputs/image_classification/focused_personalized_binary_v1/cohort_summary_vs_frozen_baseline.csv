@@ -1,0 +1,3 @@
+target,participants,mean_participant_best_ba,median_participant_best_ba,median_candidate_ba,best_ba_ge_060_count,best_ba_ge_060_fraction,best_ba_ge_065_count,best_ba_ge_065_fraction,maximum_ba,median_best_fold_sd,frozen_baseline_mean_best_ba,frozen_baseline_median_best_ba,frozen_baseline_ge_060_count,frozen_baseline_ge_065_count
+arousal,46,0.5846718473807503,0.5842390942390943,0.5078985760971055,16,0.34782608695652173,5,0.10869565217391304,0.7041958041958042,0.09601440236222847,0.568,0.566,10,4
+valence,46,0.5891927893078788,0.5869039661319073,0.5142857142857142,18,0.391304347826087,4,0.08695652173913043,0.7042016806722688,0.0877035633237832,0.576,0.578,14,3
