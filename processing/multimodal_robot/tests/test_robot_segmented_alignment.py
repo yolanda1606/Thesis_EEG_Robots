@@ -40,6 +40,34 @@ def qc(*, method: str, overlap: float, segment_id: int | None = None) -> dict:
 
 
 class TestRobotSegmentedAlignment(unittest.TestCase):
+    def test_isolated_residual_exception_is_explicit_and_preserves_status_model(self):
+        model = {
+            "method": "status_linear", "offset_s": 0.0, "drift_s_per_s": 0.0,
+            "rmse_s": 0.04, "max_residual_s": 0.19,
+            "median_absolute_residual_s": 0.02,
+            "residuals_s": [0.01] * 37 + [0.19],
+        }
+        accepted = continuous._apply_status_acceptance(model, 38, allow_isolated_residual_exception=True)
+        self.assertEqual(accepted["method"], "status_linear")
+        self.assertEqual(accepted["fitted_method"], "status_linear")
+        self.assertEqual(accepted["acceptance_mode"], "isolated_residual_exception")
+        self.assertEqual(accepted["retained_anchors_above_primary_count"], 1)
+
+    def test_isolated_residual_exception_rejects_multiple_excesses_or_segmented_use(self):
+        model = {
+            "method": "status_constant_offset", "offset_s": 0.0, "drift_s_per_s": 0.0,
+            "rmse_s": 0.04, "max_residual_s": 0.18,
+            "median_absolute_residual_s": 0.02,
+            "residuals_s": [0.01] * 36 + [0.15, 0.18],
+        }
+        rejected = continuous._apply_status_acceptance(model, 38, allow_isolated_residual_exception=True)
+        self.assertEqual(rejected["method"], "invalid_residual")
+        self.assertEqual(rejected["acceptance_mode"], "rejected")
+        model["residuals_s"] = [0.01] * 37 + [0.18]
+        segmented = continuous._apply_status_acceptance(model, 38, allow_isolated_residual_exception=False)
+        self.assertEqual(segmented["method"], "invalid_residual")
+        self.assertEqual(segmented["acceptance_mode"], "rejected")
+
     def test_segmented_alignment_keeps_models_and_rejects_only_bad_segment(self):
         task = {
             "eeg": {"segments": [{"file": "one.bdf", "order": 1}, {"file": "two.bdf", "order": 2}]},
@@ -51,6 +79,7 @@ class TestRobotSegmentedAlignment(unittest.TestCase):
         with patch.object(continuous, "alignment_for_task", side_effect=[(failed, [{"task": "stack"}], [(Path("one.bdf"), object())]), (accepted, [{"task": "stack"}], [(Path("two.bdf"), object())])]) as aligned:
             task_qc, pairs, segments = continuous.alignment_for_segmented_task(task, "stack", "P99_2026-01-01")
         self.assertEqual([call.args[0]["eeg"] for call in aligned.call_args_list], ["one.bdf", "two.bdf"])
+        self.assertTrue(all(call.kwargs["allow_isolated_residual_exception"] is False for call in aligned.call_args_list))
         self.assertEqual([item["qc"]["segment_id"] for item in segments], [1, 2])
         self.assertEqual([item["qc"]["accepted"] for item in segments], [False, True])
         self.assertEqual(segments[0]["qc"]["rejection_reason"], "synchronization_qc_failed")

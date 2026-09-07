@@ -37,6 +37,16 @@ from mediapipe.tasks.python import vision
 
 FIELDS = ("participant", "task", "category", "actual_condition", "actual_speed", "segment_id", "window_id", "window_start_s", "window_end_s", "alignment_method", "alignment_qc", "eeg_coverage", "video_coverage")
 
+PRIMARY_MAX_RESIDUAL_S = 0.125
+ISOLATED_RESIDUAL_EXCEPTION = {
+    "minimum_retained_anchors": 20,
+    "maximum_rmse_s": 0.070,
+    "maximum_median_absolute_residual_s": 0.050,
+    "maximum_p95_absolute_residual_s": 0.100,
+    "maximum_anchors_above_primary": 1,
+    "maximum_residual_s": 0.200,
+}
+
 
 @dataclass
 class ProgressReporter:
@@ -331,7 +341,46 @@ def _filename_start(path: Path, session_date: str) -> datetime | None:
     except ValueError: return None
 
 
-def alignment_for_task(task: dict[str, Any], task_id: str, session_date: str, progress: ProgressReporter | None = None) -> tuple[dict[str, Any], list[dict[str, Any]], list[tuple[Path, mne.io.BaseRaw]]]:
+def _apply_status_acceptance(selected: dict[str, Any], retained_anchor_count: int, *, allow_isolated_residual_exception: bool) -> dict[str, Any]:
+    """Apply the primary residual rule and the documented isolated exception.
+
+    The exception is intentionally unavailable to segmented recordings, where
+    each independent recorder segment retains the original strict criterion.
+    ``residuals_s`` is internal fitting evidence and is not exported directly.
+    """
+    residuals = np.abs(np.asarray(selected.pop("residuals_s"), dtype=float))
+    p95 = float(np.quantile(residuals, 0.95))
+    above_primary = int(np.sum(residuals > PRIMARY_MAX_RESIDUAL_S))
+    selected["p95_absolute_residual_s"] = p95
+    selected["retained_anchors_above_primary_count"] = above_primary
+    selected["fitted_method"] = selected["method"]
+    if selected["max_residual_s"] <= PRIMARY_MAX_RESIDUAL_S:
+        selected["acceptance_mode"] = "primary"
+        selected["acceptance_reason"] = "maximum residual is within the primary 0.125 s criterion"
+        return selected
+    criteria = {
+        "retained_anchors": retained_anchor_count >= ISOLATED_RESIDUAL_EXCEPTION["minimum_retained_anchors"],
+        "rmse": selected["rmse_s"] <= ISOLATED_RESIDUAL_EXCEPTION["maximum_rmse_s"],
+        "median_absolute_residual": selected["median_absolute_residual_s"] <= ISOLATED_RESIDUAL_EXCEPTION["maximum_median_absolute_residual_s"],
+        "p95_absolute_residual": p95 <= ISOLATED_RESIDUAL_EXCEPTION["maximum_p95_absolute_residual_s"],
+        "anchors_above_primary": above_primary <= ISOLATED_RESIDUAL_EXCEPTION["maximum_anchors_above_primary"],
+        "maximum_residual": selected["max_residual_s"] <= ISOLATED_RESIDUAL_EXCEPTION["maximum_residual_s"],
+    }
+    selected["isolated_residual_exception_metrics"] = {
+        "criteria": ISOLATED_RESIDUAL_EXCEPTION,
+        "criteria_satisfied": criteria,
+    }
+    if allow_isolated_residual_exception and all(criteria.values()):
+        selected["acceptance_mode"] = "isolated_residual_exception"
+        selected["acceptance_reason"] = "primary maximum residual failed; all isolated-residual exception criteria satisfied"
+        return selected
+    selected["method"] = "invalid_residual"
+    selected["acceptance_mode"] = "rejected"
+    selected["acceptance_reason"] = "primary maximum residual failed; isolated-residual exception was unavailable or criteria were not all satisfied"
+    return selected
+
+
+def alignment_for_task(task: dict[str, Any], task_id: str, session_date: str, progress: ProgressReporter | None = None, *, allow_isolated_residual_exception: bool = True) -> tuple[dict[str, Any], list[dict[str, Any]], list[tuple[Path, mne.io.BaseRaw]]]:
     """Validate task timing and choose an offset/linear mapping conservatively."""
     cfg = robot_eeg_config(); eeg_files = _files(task["eeg"]); video = _files(task["video"])[0]; log = _files(task["vision_log"])[0]
     raws: list[tuple[Path, mne.io.BaseRaw]] = []
@@ -378,13 +427,13 @@ def alignment_for_task(task: dict[str, Any], task_id: str, session_date: str, pr
         constant = y - x; fitted_offset = float(np.median(constant)); final_residuals = constant - fitted_offset
         constant_model = {"offset_s": fitted_offset, "drift_s_per_s": 0.0,
                           "rmse_s": float(np.sqrt(np.mean(final_residuals ** 2))), "max_residual_s": float(np.max(np.abs(final_residuals))),
-                          "median_absolute_residual_s": float(np.median(np.abs(final_residuals)))}
+                          "median_absolute_residual_s": float(np.median(np.abs(final_residuals))), "residuals_s": final_residuals.tolist()}
         selected = {**constant_model, "method": "status_constant_offset"}
         if len(x) >= 2 and np.ptp(x) > 0:
             linear = _linear_model(x, y)
             # Require a meaningful, not merely numerical, improvement.
             if abs(linear["drift_s_per_s"]) >= 1e-5 and linear["rmse_s"] + 0.005 < constant_model["rmse_s"]:
-                selected = {k: v for k, v in linear.items() if k != "residuals_s"} | {"median_absolute_residual_s": float(np.median(np.abs(linear["residuals_s"]))), "method": "status_linear"}
+                selected = linear | {"median_absolute_residual_s": float(np.median(np.abs(linear["residuals_s"]))), "method": "status_linear"}
         offset = selected["offset_s"]
     elif len(log_times):
         # This is only valid when both recordings have explicit absolute starts.
@@ -412,8 +461,11 @@ def alignment_for_task(task: dict[str, Any], task_id: str, session_date: str, pr
             selected = {"method": "unsupported_non_trigger", "offset_s": None, "drift_s_per_s": None, "rmse_s": None, "max_residual_s": None, "median_absolute_residual_s": None}
     else:
         selected = {"method": "unsupported", "offset_s": None, "drift_s_per_s": None, "rmse_s": None, "max_residual_s": None, "median_absolute_residual_s": None}
-    if selected["method"].startswith("status") and selected["max_residual_s"] > cfg["health"]["sync"]["linear_max_residual_warning_s"]:
-        selected["method"] = "invalid_residual"
+    if selected["method"].startswith("status"):
+        selected = _apply_status_acceptance(selected, int(np.sum(retained)), allow_isolated_residual_exception=allow_isolated_residual_exception)
+    else:
+        selected["acceptance_mode"] = "not_status_based"
+        selected["acceptance_reason"] = "isolated-residual exception applies only to Status-based alignment"
     video_eeg_start = -offset if offset is not None else 0.0
     overlap = max(0.0, min(eeg_duration, video_eeg_start + video_duration) - max(0.0, video_eeg_start)) if offset is not None else 0.0
     qc = {"task": task_id, "eeg_duration_s": eeg_duration, "video_duration_s": video_duration, "status_event_count": len(anchors), "original_anchor_count": len(pairs), "retained_anchor_count": int(np.sum(retained)) if pairs else 0, "rejected_anchor_count": int(len(pairs)-np.sum(retained)) if pairs else 0, "matched_anchor_count": int(np.sum(retained)) if pairs else 0, "aligned_overlap_s": overlap, **selected}
@@ -461,7 +513,7 @@ def alignment_for_segmented_task(task: dict[str, Any], task_id: str, session_dat
             raise ValueError(f"{task_id}: eeg.segments[{segment_id}] requires a file")
         segment_task = dict(task)
         segment_task["eeg"] = segment["file"]
-        qc, pairs, raws = alignment_for_task(segment_task, task_id, session_date, progress)
+        qc, pairs, raws = alignment_for_task(segment_task, task_id, session_date, progress, allow_isolated_residual_exception=False)
         accepted = segment_accepted(qc)
         segment_qc = {
             **qc,
