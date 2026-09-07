@@ -1,0 +1,2 @@
+participant,target,outer_folds,low_count,high_count,mean_ba_fixed_050,mean_ba_optimized_threshold,fold_sd_fixed_050,fold_sd_optimized_threshold,median_selected_threshold,ba_change_optimized_minus_fixed
+P28,arousal,5,32,79,0.45077380952380947,0.45702380952380944,0.09705110264671549,0.09865265624638354,0.5,0.006249999999999978

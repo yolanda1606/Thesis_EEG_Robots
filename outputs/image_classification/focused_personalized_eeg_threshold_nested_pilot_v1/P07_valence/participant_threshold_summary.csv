@@ -1,0 +1,2 @@
+participant,target,outer_folds,low_count,high_count,mean_ba_fixed_050,mean_ba_optimized_threshold,fold_sd_fixed_050,fold_sd_optimized_threshold,median_selected_threshold,ba_change_optimized_minus_fixed
+P07,valence,5,24,92,0.46771929824561403,0.4533333333333333,0.05091272201677979,0.09527624219536478,0.6,-0.014385964912280724

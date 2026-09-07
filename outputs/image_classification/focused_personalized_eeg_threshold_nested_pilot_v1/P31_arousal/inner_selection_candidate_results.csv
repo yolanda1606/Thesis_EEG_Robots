@@ -1,0 +1,271 @@
+participant,target,outer_fold,outer_folds,outer_train_size,outer_test_size,low_count,high_count,classifier,feature_family,channel_subset,feature_count_request,analysis_tier,available_feature_count,selection_fold,tuning_best_parameters,tuning_inner_balanced_accuracy,selection_validation_ba_fixed_050,selected_candidate
+P31,arousal,1,5,95,24,61,58,logreg,all_eeg,all_channels,8,primary,120,1,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.42727272727272725,0.4980392156862745,False
+P31,arousal,1,5,95,24,61,58,logreg,all_eeg,all_channels,8,primary,120,2,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.45606060606060606,0.3125,False
+P31,arousal,1,5,95,24,61,58,logreg,all_eeg,all_channels,8,primary,120,3,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.4696969696969697,0.5166666666666666,False
+P31,arousal,1,5,95,24,61,58,svm,all_eeg,all_channels,8,primary,120,1,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.47727272727272724,0.5274509803921569,False
+P31,arousal,1,5,95,24,61,58,svm,all_eeg,all_channels,8,primary,120,2,"{""classifier__C"": 10, ""classifier__class_weight"": ""balanced"", ""classifier__kernel"": ""linear""}",0.5075757575757576,0.34375,False
+P31,arousal,1,5,95,24,61,58,svm,all_eeg,all_channels,8,primary,120,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.5,False
+P31,arousal,1,5,95,24,61,58,gnb,all_eeg,all_channels,8,primary,120,1,"{""classifier__var_smoothing"": 1e-11}",0.4893939393939393,0.6745098039215687,False
+P31,arousal,1,5,95,24,61,58,gnb,all_eeg,all_channels,8,primary,120,2,"{""classifier__var_smoothing"": 1e-11}",0.4257575757575758,0.4375,False
+P31,arousal,1,5,95,24,61,58,gnb,all_eeg,all_channels,8,primary,120,3,"{""classifier__var_smoothing"": 1e-11}",0.48636363636363633,0.5166666666666666,False
+P31,arousal,1,5,95,24,61,58,logreg,all_eeg,all_channels,10,primary,120,1,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.45606060606060606,0.5313725490196078,False
+P31,arousal,1,5,95,24,61,58,logreg,all_eeg,all_channels,10,primary,120,2,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.47272727272727266,0.34375,False
+P31,arousal,1,5,95,24,61,58,logreg,all_eeg,all_channels,10,primary,120,3,"{""classifier__C"": 0.1, ""classifier__class_weight"": ""balanced""}",0.45454545454545453,0.5520833333333333,False
+P31,arousal,1,5,95,24,61,58,svm,all_eeg,all_channels,10,primary,120,1,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.4803030303030303,0.5,False
+P31,arousal,1,5,95,24,61,58,svm,all_eeg,all_channels,10,primary,120,2,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.3125,False
+P31,arousal,1,5,95,24,61,58,svm,all_eeg,all_channels,10,primary,120,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.5,0.5229166666666667,False
+P31,arousal,1,5,95,24,61,58,gnb,all_eeg,all_channels,10,primary,120,1,"{""classifier__var_smoothing"": 1e-11}",0.503030303030303,0.5490196078431372,False
+P31,arousal,1,5,95,24,61,58,gnb,all_eeg,all_channels,10,primary,120,2,"{""classifier__var_smoothing"": 1e-11}",0.4545454545454546,0.40625,False
+P31,arousal,1,5,95,24,61,58,gnb,all_eeg,all_channels,10,primary,120,3,"{""classifier__var_smoothing"": 1e-11}",0.45454545454545453,0.5520833333333333,False
+P31,arousal,1,5,95,24,61,58,logreg,paper_compact,all_channels,8,secondary,64,1,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.5393939393939394,0.5901960784313726,False
+P31,arousal,1,5,95,24,61,58,logreg,paper_compact,all_channels,8,secondary,64,2,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.5651515151515152,0.3125,False
+P31,arousal,1,5,95,24,61,58,logreg,paper_compact,all_channels,8,secondary,64,3,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.5484848484848485,0.48333333333333334,False
+P31,arousal,1,5,95,24,61,58,svm,paper_compact,all_channels,8,secondary,64,1,"{""classifier__C"": 10, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.553030303030303,0.5862745098039216,False
+P31,arousal,1,5,95,24,61,58,svm,paper_compact,all_channels,8,secondary,64,2,"{""classifier__C"": 10, ""classifier__class_weight"": ""balanced"", ""classifier__kernel"": ""linear""}",0.5666666666666667,0.28125,False
+P31,arousal,1,5,95,24,61,58,svm,paper_compact,all_channels,8,secondary,64,3,"{""classifier__C"": 10, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5636363636363636,0.41041666666666665,False
+P31,arousal,1,5,95,24,61,58,gnb,paper_compact,all_channels,8,secondary,64,1,"{""classifier__var_smoothing"": 1e-11}",0.5242424242424243,0.5529411764705883,False
+P31,arousal,1,5,95,24,61,58,gnb,paper_compact,all_channels,8,secondary,64,2,"{""classifier__var_smoothing"": 1e-11}",0.4666666666666666,0.40625,False
+P31,arousal,1,5,95,24,61,58,gnb,paper_compact,all_channels,8,secondary,64,3,"{""classifier__var_smoothing"": 1e-11}",0.48181818181818176,0.5791666666666666,False
+P31,arousal,1,5,95,24,61,58,logreg,paper_compact,all_channels,10,secondary,64,1,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.537878787878788,0.5862745098039216,False
+P31,arousal,1,5,95,24,61,58,logreg,paper_compact,all_channels,10,secondary,64,2,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced""}",0.5818181818181819,0.3125,False
+P31,arousal,1,5,95,24,61,58,logreg,paper_compact,all_channels,10,secondary,64,3,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced""}",0.5181818181818182,0.4875,False
+P31,arousal,1,5,95,24,61,58,svm,paper_compact,all_channels,10,secondary,64,1,"{""classifier__C"": 10, ""classifier__class_weight"": ""balanced"", ""classifier__kernel"": ""linear""}",0.5409090909090909,0.5235294117647059,False
+P31,arousal,1,5,95,24,61,58,svm,paper_compact,all_channels,10,secondary,64,2,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.5636363636363636,0.3125,False
+P31,arousal,1,5,95,24,61,58,svm,paper_compact,all_channels,10,secondary,64,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.5333333333333333,0.5458333333333334,False
+P31,arousal,1,5,95,24,61,58,gnb,paper_compact,all_channels,10,secondary,64,1,"{""classifier__var_smoothing"": 1e-11}",0.49393939393939396,0.5745098039215686,False
+P31,arousal,1,5,95,24,61,58,gnb,paper_compact,all_channels,10,secondary,64,2,"{""classifier__var_smoothing"": 1e-11}",0.496969696969697,0.40625,False
+P31,arousal,1,5,95,24,61,58,gnb,paper_compact,all_channels,10,secondary,64,3,"{""classifier__var_smoothing"": 1e-11}",0.5151515151515151,0.48541666666666666,False
+P31,arousal,1,5,95,24,61,58,logreg,paper_compact,frontal_central,8,secondary,32,1,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.5090909090909091,0.5823529411764705,False
+P31,arousal,1,5,95,24,61,58,logreg,paper_compact,frontal_central,8,secondary,32,2,"{""classifier__C"": 0.1, ""classifier__class_weight"": ""balanced""}",0.4712121212121212,0.53125,False
+P31,arousal,1,5,95,24,61,58,logreg,paper_compact,frontal_central,8,secondary,32,3,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.5151515151515151,0.51875,False
+P31,arousal,1,5,95,24,61,58,svm,paper_compact,frontal_central,8,secondary,32,1,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5272727272727273,0.6078431372549019,False
+P31,arousal,1,5,95,24,61,58,svm,paper_compact,frontal_central,8,secondary,32,2,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.5,False
+P31,arousal,1,5,95,24,61,58,svm,paper_compact,frontal_central,8,secondary,32,3,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5303030303030303,0.5,False
+P31,arousal,1,5,95,24,61,58,gnb,paper_compact,frontal_central,8,secondary,32,1,"{""classifier__var_smoothing"": 1e-11}",0.506060606060606,0.5745098039215686,False
+P31,arousal,1,5,95,24,61,58,gnb,paper_compact,frontal_central,8,secondary,32,2,"{""classifier__var_smoothing"": 1e-11}",0.403030303030303,0.4375,False
+P31,arousal,1,5,95,24,61,58,gnb,paper_compact,frontal_central,8,secondary,32,3,"{""classifier__var_smoothing"": 1e-11}",0.5015151515151515,0.45,False
+P31,arousal,1,5,95,24,61,58,logreg,paper_compact,frontal_central,10,secondary,32,1,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.5393939393939394,0.611764705882353,True
+P31,arousal,1,5,95,24,61,58,logreg,paper_compact,frontal_central,10,secondary,32,2,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.4515151515151515,0.5625,True
+P31,arousal,1,5,95,24,61,58,logreg,paper_compact,frontal_central,10,secondary,32,3,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced""}",0.5318181818181817,0.55,True
+P31,arousal,1,5,95,24,61,58,svm,paper_compact,frontal_central,10,secondary,32,1,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.5757575757575758,0.4862745098039216,False
+P31,arousal,1,5,95,24,61,58,svm,paper_compact,frontal_central,10,secondary,32,2,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.546969696969697,0.5,False
+P31,arousal,1,5,95,24,61,58,svm,paper_compact,frontal_central,10,secondary,32,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.5499999999999999,0.6104166666666666,False
+P31,arousal,1,5,95,24,61,58,gnb,paper_compact,frontal_central,10,secondary,32,1,"{""classifier__var_smoothing"": 1e-11}",0.5227272727272728,0.5450980392156862,False
+P31,arousal,1,5,95,24,61,58,gnb,paper_compact,frontal_central,10,secondary,32,2,"{""classifier__var_smoothing"": 1e-11}",0.4333333333333333,0.53125,False
+P31,arousal,1,5,95,24,61,58,gnb,paper_compact,frontal_central,10,secondary,32,3,"{""classifier__var_smoothing"": 1e-11}",0.48484848484848486,0.3875,False
+P31,arousal,2,5,95,24,61,58,logreg,all_eeg,all_channels,8,primary,120,1,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced""}",0.5348484848484849,0.46875,False
+P31,arousal,2,5,95,24,61,58,logreg,all_eeg,all_channels,8,primary,120,2,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.6227272727272727,0.49411764705882355,False
+P31,arousal,2,5,95,24,61,58,logreg,all_eeg,all_channels,8,primary,120,3,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.5712121212121212,0.44791666666666663,False
+P31,arousal,2,5,95,24,61,58,svm,all_eeg,all_channels,8,primary,120,1,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5666666666666667,0.4375,False
+P31,arousal,2,5,95,24,61,58,svm,all_eeg,all_channels,8,primary,120,2,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.6378787878787878,0.4980392156862745,False
+P31,arousal,2,5,95,24,61,58,svm,all_eeg,all_channels,8,primary,120,3,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5848484848484848,0.35,False
+P31,arousal,2,5,95,24,61,58,gnb,all_eeg,all_channels,8,primary,120,1,"{""classifier__var_smoothing"": 1e-11}",0.5348484848484848,0.4375,False
+P31,arousal,2,5,95,24,61,58,gnb,all_eeg,all_channels,8,primary,120,2,"{""classifier__var_smoothing"": 1e-11}",0.5606060606060607,0.40980392156862744,False
+P31,arousal,2,5,95,24,61,58,gnb,all_eeg,all_channels,8,primary,120,3,"{""classifier__var_smoothing"": 1e-11}",0.5272727272727273,0.45416666666666666,False
+P31,arousal,2,5,95,24,61,58,logreg,all_eeg,all_channels,10,primary,120,1,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.5651515151515152,0.46875,False
+P31,arousal,2,5,95,24,61,58,logreg,all_eeg,all_channels,10,primary,120,2,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.5772727272727273,0.46862745098039216,False
+P31,arousal,2,5,95,24,61,58,logreg,all_eeg,all_channels,10,primary,120,3,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.6,0.3833333333333333,False
+P31,arousal,2,5,95,24,61,58,svm,all_eeg,all_channels,10,primary,120,1,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.6090909090909091,0.5,False
+P31,arousal,2,5,95,24,61,58,svm,all_eeg,all_channels,10,primary,120,2,"{""classifier__C"": 10, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.6075757575757575,0.49411764705882355,False
+P31,arousal,2,5,95,24,61,58,svm,all_eeg,all_channels,10,primary,120,3,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5909090909090909,0.5,False
+P31,arousal,2,5,95,24,61,58,gnb,all_eeg,all_channels,10,primary,120,1,"{""classifier__var_smoothing"": 1e-11}",0.5666666666666668,0.46875,False
+P31,arousal,2,5,95,24,61,58,gnb,all_eeg,all_channels,10,primary,120,2,"{""classifier__var_smoothing"": 1e-11}",0.543939393939394,0.46862745098039216,False
+P31,arousal,2,5,95,24,61,58,gnb,all_eeg,all_channels,10,primary,120,3,"{""classifier__var_smoothing"": 1e-11}",0.543939393939394,0.45208333333333334,False
+P31,arousal,2,5,95,24,61,58,logreg,paper_compact,all_channels,8,secondary,64,1,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced""}",0.4727272727272727,0.5,False
+P31,arousal,2,5,95,24,61,58,logreg,paper_compact,all_channels,8,secondary,64,2,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.4954545454545454,0.4725490196078431,False
+P31,arousal,2,5,95,24,61,58,logreg,paper_compact,all_channels,8,secondary,64,3,"{""classifier__C"": 0.1, ""classifier__class_weight"": ""balanced""}",0.49848484848484853,0.42083333333333334,False
+P31,arousal,2,5,95,24,61,58,svm,paper_compact,all_channels,8,secondary,64,1,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5136363636363637,0.5,False
+P31,arousal,2,5,95,24,61,58,svm,paper_compact,all_channels,8,secondary,64,2,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5242424242424243,0.4725490196078431,False
+P31,arousal,2,5,95,24,61,58,svm,paper_compact,all_channels,8,secondary,64,3,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5333333333333333,0.6020833333333333,False
+P31,arousal,2,5,95,24,61,58,gnb,paper_compact,all_channels,8,secondary,64,1,"{""classifier__var_smoothing"": 1e-11}",0.46515151515151515,0.46875,False
+P31,arousal,2,5,95,24,61,58,gnb,paper_compact,all_channels,8,secondary,64,2,"{""classifier__var_smoothing"": 1e-11}",0.4803030303030303,0.4607843137254902,False
+P31,arousal,2,5,95,24,61,58,gnb,paper_compact,all_channels,8,secondary,64,3,"{""classifier__var_smoothing"": 1e-11}",0.48484848484848486,0.45625,False
+P31,arousal,2,5,95,24,61,58,logreg,paper_compact,all_channels,10,secondary,64,1,"{""classifier__C"": 0.1, ""classifier__class_weight"": ""balanced""}",0.5166666666666667,0.5,False
+P31,arousal,2,5,95,24,61,58,logreg,paper_compact,all_channels,10,secondary,64,2,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.44696969696969696,0.5313725490196078,False
+P31,arousal,2,5,95,24,61,58,logreg,paper_compact,all_channels,10,secondary,64,3,"{""classifier__C"": 0.1, ""classifier__class_weight"": ""balanced""}",0.5424242424242425,0.45416666666666666,False
+P31,arousal,2,5,95,24,61,58,svm,paper_compact,all_channels,10,secondary,64,1,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5318181818181819,0.53125,True
+P31,arousal,2,5,95,24,61,58,svm,paper_compact,all_channels,10,secondary,64,2,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.49393939393939396,0.5941176470588235,True
+P31,arousal,2,5,95,24,61,58,svm,paper_compact,all_channels,10,secondary,64,3,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5121212121212121,0.5333333333333333,True
+P31,arousal,2,5,95,24,61,58,gnb,paper_compact,all_channels,10,secondary,64,1,"{""classifier__var_smoothing"": 1e-11}",0.496969696969697,0.5625,False
+P31,arousal,2,5,95,24,61,58,gnb,paper_compact,all_channels,10,secondary,64,2,"{""classifier__var_smoothing"": 1e-11}",0.4803030303030304,0.4901960784313726,False
+P31,arousal,2,5,95,24,61,58,gnb,paper_compact,all_channels,10,secondary,64,3,"{""classifier__var_smoothing"": 1e-11}",0.5,0.39166666666666666,False
+P31,arousal,2,5,95,24,61,58,logreg,paper_compact,frontal_central,8,secondary,32,1,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced""}",0.5363636363636364,0.46875,False
+P31,arousal,2,5,95,24,61,58,logreg,paper_compact,frontal_central,8,secondary,32,2,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.4803030303030303,0.5980392156862745,False
+P31,arousal,2,5,95,24,61,58,logreg,paper_compact,frontal_central,8,secondary,32,3,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.496969696969697,0.5166666666666666,False
+P31,arousal,2,5,95,24,61,58,svm,paper_compact,frontal_central,8,secondary,32,1,"{""classifier__C"": 10, ""classifier__class_weight"": ""balanced"", ""classifier__kernel"": ""linear""}",0.6,0.40625,False
+P31,arousal,2,5,95,24,61,58,svm,paper_compact,frontal_central,8,secondary,32,2,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5606060606060607,0.5,False
+P31,arousal,2,5,95,24,61,58,svm,paper_compact,frontal_central,8,secondary,32,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.5,False
+P31,arousal,2,5,95,24,61,58,gnb,paper_compact,frontal_central,8,secondary,32,1,"{""classifier__var_smoothing"": 1e-11}",0.48484848484848486,0.375,False
+P31,arousal,2,5,95,24,61,58,gnb,paper_compact,frontal_central,8,secondary,32,2,"{""classifier__var_smoothing"": 1e-11}",0.6,0.4647058823529412,False
+P31,arousal,2,5,95,24,61,58,gnb,paper_compact,frontal_central,8,secondary,32,3,"{""classifier__var_smoothing"": 1e-11}",0.3878787878787879,0.42291666666666666,False
+P31,arousal,2,5,95,24,61,58,logreg,paper_compact,frontal_central,10,secondary,32,1,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.5681818181818182,0.40625,False
+P31,arousal,2,5,95,24,61,58,logreg,paper_compact,frontal_central,10,secondary,32,2,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.49242424242424243,0.5352941176470588,False
+P31,arousal,2,5,95,24,61,58,logreg,paper_compact,frontal_central,10,secondary,32,3,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.4954545454545454,0.41875,False
+P31,arousal,2,5,95,24,61,58,svm,paper_compact,frontal_central,10,secondary,32,1,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.6287878787878788,0.40625,False
+P31,arousal,2,5,95,24,61,58,svm,paper_compact,frontal_central,10,secondary,32,2,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5287878787878788,0.5,False
+P31,arousal,2,5,95,24,61,58,svm,paper_compact,frontal_central,10,secondary,32,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5075757575757577,0.6083333333333334,False
+P31,arousal,2,5,95,24,61,58,gnb,paper_compact,frontal_central,10,secondary,32,1,"{""classifier__var_smoothing"": 1e-11}",0.5166666666666666,0.375,False
+P31,arousal,2,5,95,24,61,58,gnb,paper_compact,frontal_central,10,secondary,32,2,"{""classifier__var_smoothing"": 1e-11}",0.5848484848484848,0.5274509803921569,False
+P31,arousal,2,5,95,24,61,58,gnb,paper_compact,frontal_central,10,secondary,32,3,"{""classifier__var_smoothing"": 1e-11}",0.40606060606060607,0.45416666666666666,False
+P31,arousal,3,5,95,24,61,58,logreg,all_eeg,all_channels,8,primary,120,1,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.4257575757575757,0.4375,False
+P31,arousal,3,5,95,24,61,58,logreg,all_eeg,all_channels,8,primary,120,2,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced""}",0.42727272727272725,0.4137254901960784,False
+P31,arousal,3,5,95,24,61,58,logreg,all_eeg,all_channels,8,primary,120,3,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.4575757575757576,0.3208333333333333,False
+P31,arousal,3,5,95,24,61,58,svm,all_eeg,all_channels,8,primary,120,1,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.375,False
+P31,arousal,3,5,95,24,61,58,svm,all_eeg,all_channels,8,primary,120,2,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.4545454545454546,0.5,False
+P31,arousal,3,5,95,24,61,58,svm,all_eeg,all_channels,8,primary,120,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.5,False
+P31,arousal,3,5,95,24,61,58,gnb,all_eeg,all_channels,8,primary,120,1,"{""classifier__var_smoothing"": 1e-11}",0.409090909090909,0.4375,False
+P31,arousal,3,5,95,24,61,58,gnb,all_eeg,all_channels,8,primary,120,2,"{""classifier__var_smoothing"": 1e-11}",0.4787878787878788,0.44705882352941173,False
+P31,arousal,3,5,95,24,61,58,gnb,all_eeg,all_channels,8,primary,120,3,"{""classifier__var_smoothing"": 1e-11}",0.42727272727272725,0.41666666666666663,False
+P31,arousal,3,5,95,24,61,58,logreg,all_eeg,all_channels,10,primary,120,1,"{""classifier__C"": 0.01, ""classifier__class_weight"": ""balanced""}",0.5227272727272728,0.375,False
+P31,arousal,3,5,95,24,61,58,logreg,all_eeg,all_channels,10,primary,120,2,"{""classifier__C"": 0.01, ""classifier__class_weight"": ""balanced""}",0.4924242424242424,0.38431372549019605,False
+P31,arousal,3,5,95,24,61,58,logreg,all_eeg,all_channels,10,primary,120,3,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.4439393939393939,0.3208333333333333,False
+P31,arousal,3,5,95,24,61,58,svm,all_eeg,all_channels,10,primary,120,1,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.506060606060606,0.5,True
+P31,arousal,3,5,95,24,61,58,svm,all_eeg,all_channels,10,primary,120,2,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.45909090909090905,0.5,True
+P31,arousal,3,5,95,24,61,58,svm,all_eeg,all_channels,10,primary,120,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.5,True
+P31,arousal,3,5,95,24,61,58,gnb,all_eeg,all_channels,10,primary,120,1,"{""classifier__var_smoothing"": 1e-11}",0.47727272727272724,0.46875,False
+P31,arousal,3,5,95,24,61,58,gnb,all_eeg,all_channels,10,primary,120,2,"{""classifier__var_smoothing"": 1e-11}",0.496969696969697,0.44705882352941173,False
+P31,arousal,3,5,95,24,61,58,gnb,all_eeg,all_channels,10,primary,120,3,"{""classifier__var_smoothing"": 1e-11}",0.396969696969697,0.42083333333333334,False
+P31,arousal,3,5,95,24,61,58,logreg,paper_compact,all_channels,8,secondary,64,1,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.38030303030303036,0.34375,False
+P31,arousal,3,5,95,24,61,58,logreg,paper_compact,all_channels,8,secondary,64,2,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.4636363636363636,0.46862745098039216,False
+P31,arousal,3,5,95,24,61,58,logreg,paper_compact,all_channels,8,secondary,64,3,"{""classifier__C"": 0.1, ""classifier__class_weight"": ""balanced""}",0.48939393939393944,0.35416666666666663,False
+P31,arousal,3,5,95,24,61,58,svm,paper_compact,all_channels,8,secondary,64,1,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.34375,False
+P31,arousal,3,5,95,24,61,58,svm,paper_compact,all_channels,8,secondary,64,2,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.4803030303030303,0.5392156862745098,False
+P31,arousal,3,5,95,24,61,58,svm,paper_compact,all_channels,8,secondary,64,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.503030303030303,0.38541666666666663,False
+P31,arousal,3,5,95,24,61,58,gnb,paper_compact,all_channels,8,secondary,64,1,"{""classifier__var_smoothing"": 1e-11}",0.44090909090909086,0.375,False
+P31,arousal,3,5,95,24,61,58,gnb,paper_compact,all_channels,8,secondary,64,2,"{""classifier__var_smoothing"": 1e-11}",0.4621212121212121,0.41764705882352937,False
+P31,arousal,3,5,95,24,61,58,gnb,paper_compact,all_channels,8,secondary,64,3,"{""classifier__var_smoothing"": 1e-11}",0.42727272727272725,0.3875,False
+P31,arousal,3,5,95,24,61,58,logreg,paper_compact,all_channels,10,secondary,64,1,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced""}",0.4257575757575757,0.46875,False
+P31,arousal,3,5,95,24,61,58,logreg,paper_compact,all_channels,10,secondary,64,2,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.4636363636363636,0.4764705882352941,False
+P31,arousal,3,5,95,24,61,58,logreg,paper_compact,all_channels,10,secondary,64,3,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.48939393939393944,0.41875,False
+P31,arousal,3,5,95,24,61,58,svm,paper_compact,all_channels,10,secondary,64,1,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.46875,False
+P31,arousal,3,5,95,24,61,58,svm,paper_compact,all_channels,10,secondary,64,2,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.44999999999999996,0.5392156862745098,False
+P31,arousal,3,5,95,24,61,58,svm,paper_compact,all_channels,10,secondary,64,3,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5045454545454545,0.3833333333333333,False
+P31,arousal,3,5,95,24,61,58,gnb,paper_compact,all_channels,10,secondary,64,1,"{""classifier__var_smoothing"": 1e-11}",0.4393939393939394,0.46875,False
+P31,arousal,3,5,95,24,61,58,gnb,paper_compact,all_channels,10,secondary,64,2,"{""classifier__var_smoothing"": 1e-11}",0.4166666666666667,0.38431372549019605,False
+P31,arousal,3,5,95,24,61,58,gnb,paper_compact,all_channels,10,secondary,64,3,"{""classifier__var_smoothing"": 1e-11}",0.5045454545454545,0.48333333333333334,False
+P31,arousal,3,5,95,24,61,58,logreg,paper_compact,frontal_central,8,secondary,32,1,"{""classifier__C"": 0.01, ""classifier__class_weight"": ""balanced""}",0.4287878787878788,0.40625,False
+P31,arousal,3,5,95,24,61,58,logreg,paper_compact,frontal_central,8,secondary,32,2,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.37727272727272726,0.4392156862745098,False
+P31,arousal,3,5,95,24,61,58,logreg,paper_compact,frontal_central,8,secondary,32,3,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.5818181818181819,0.45208333333333334,False
+P31,arousal,3,5,95,24,61,58,svm,paper_compact,frontal_central,8,secondary,32,1,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.5,False
+P31,arousal,3,5,95,24,61,58,svm,paper_compact,frontal_central,8,secondary,32,2,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.4954545454545454,0.44705882352941173,False
+P31,arousal,3,5,95,24,61,58,svm,paper_compact,frontal_central,8,secondary,32,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.596969696969697,0.5,False
+P31,arousal,3,5,95,24,61,58,gnb,paper_compact,frontal_central,8,secondary,32,1,"{""classifier__var_smoothing"": 1e-11}",0.4696969696969697,0.40625,False
+P31,arousal,3,5,95,24,61,58,gnb,paper_compact,frontal_central,8,secondary,32,2,"{""classifier__var_smoothing"": 1e-11}",0.3303030303030303,0.45686274509803926,False
+P31,arousal,3,5,95,24,61,58,gnb,paper_compact,frontal_central,8,secondary,32,3,"{""classifier__var_smoothing"": 1e-11}",0.5151515151515151,0.41666666666666663,False
+P31,arousal,3,5,95,24,61,58,logreg,paper_compact,frontal_central,10,secondary,32,1,"{""classifier__C"": 0.1, ""classifier__class_weight"": ""balanced""}",0.4287878787878788,0.40625,False
+P31,arousal,3,5,95,24,61,58,logreg,paper_compact,frontal_central,10,secondary,32,2,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.34545454545454546,0.5019607843137255,False
+P31,arousal,3,5,95,24,61,58,logreg,paper_compact,frontal_central,10,secondary,32,3,"{""classifier__C"": 0.01, ""classifier__class_weight"": ""balanced""}",0.5818181818181819,0.41875,False
+P31,arousal,3,5,95,24,61,58,svm,paper_compact,frontal_central,10,secondary,32,1,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.5,False
+P31,arousal,3,5,95,24,61,58,svm,paper_compact,frontal_central,10,secondary,32,2,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.4787878787878788,0.6039215686274509,False
+P31,arousal,3,5,95,24,61,58,svm,paper_compact,frontal_central,10,secondary,32,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5818181818181819,0.34375,False
+P31,arousal,3,5,95,24,61,58,gnb,paper_compact,frontal_central,10,secondary,32,1,"{""classifier__var_smoothing"": 1e-11}",0.503030303030303,0.375,False
+P31,arousal,3,5,95,24,61,58,gnb,paper_compact,frontal_central,10,secondary,32,2,"{""classifier__var_smoothing"": 1e-11}",0.3621212121212121,0.43137254901960786,False
+P31,arousal,3,5,95,24,61,58,gnb,paper_compact,frontal_central,10,secondary,32,3,"{""classifier__var_smoothing"": 1e-11}",0.5318181818181819,0.41666666666666663,False
+P31,arousal,4,5,95,24,61,58,logreg,all_eeg,all_channels,8,primary,120,1,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.3636363636363636,0.4375,False
+P31,arousal,4,5,95,24,61,58,logreg,all_eeg,all_channels,8,primary,120,2,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.5272727272727272,0.5,False
+P31,arousal,4,5,95,24,61,58,logreg,all_eeg,all_channels,8,primary,120,3,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.3287878787878788,0.5520833333333333,False
+P31,arousal,4,5,95,24,61,58,svm,all_eeg,all_channels,8,primary,120,1,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.45,0.5,False
+P31,arousal,4,5,95,24,61,58,svm,all_eeg,all_channels,8,primary,120,2,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.556060606060606,0.5625,False
+P31,arousal,4,5,95,24,61,58,svm,all_eeg,all_channels,8,primary,120,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.4090909090909091,0.5,False
+P31,arousal,4,5,95,24,61,58,gnb,all_eeg,all_channels,8,primary,120,1,"{""classifier__var_smoothing"": 1e-11}",0.37878787878787884,0.4375,False
+P31,arousal,4,5,95,24,61,58,gnb,all_eeg,all_channels,8,primary,120,2,"{""classifier__var_smoothing"": 1e-11}",0.4136363636363636,0.46875,False
+P31,arousal,4,5,95,24,61,58,gnb,all_eeg,all_channels,8,primary,120,3,"{""classifier__var_smoothing"": 1e-11}",0.2818181818181818,0.48541666666666666,False
+P31,arousal,4,5,95,24,61,58,logreg,all_eeg,all_channels,10,primary,120,1,"{""classifier__C"": 0.01, ""classifier__class_weight"": ""balanced""}",0.37727272727272726,0.4375,False
+P31,arousal,4,5,95,24,61,58,logreg,all_eeg,all_channels,10,primary,120,2,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.5272727272727272,0.5,False
+P31,arousal,4,5,95,24,61,58,logreg,all_eeg,all_channels,10,primary,120,3,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.24848484848484845,0.5520833333333333,False
+P31,arousal,4,5,95,24,61,58,svm,all_eeg,all_channels,10,primary,120,1,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.42424242424242425,0.4375,False
+P31,arousal,4,5,95,24,61,58,svm,all_eeg,all_channels,10,primary,120,2,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced"", ""classifier__kernel"": ""linear""}",0.509090909090909,0.46875,False
+P31,arousal,4,5,95,24,61,58,svm,all_eeg,all_channels,10,primary,120,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.393939393939394,0.5,False
+P31,arousal,4,5,95,24,61,58,gnb,all_eeg,all_channels,10,primary,120,1,"{""classifier__var_smoothing"": 1e-11}",0.34545454545454546,0.4375,False
+P31,arousal,4,5,95,24,61,58,gnb,all_eeg,all_channels,10,primary,120,2,"{""classifier__var_smoothing"": 1e-11}",0.4621212121212121,0.375,False
+P31,arousal,4,5,95,24,61,58,gnb,all_eeg,all_channels,10,primary,120,3,"{""classifier__var_smoothing"": 1e-11}",0.253030303030303,0.45208333333333334,False
+P31,arousal,4,5,95,24,61,58,logreg,paper_compact,all_channels,8,secondary,64,1,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.39393939393939387,0.34375,False
+P31,arousal,4,5,95,24,61,58,logreg,paper_compact,all_channels,8,secondary,64,2,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.43030303030303035,0.40625,False
+P31,arousal,4,5,95,24,61,58,logreg,paper_compact,all_channels,8,secondary,64,3,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.2863636363636364,0.32291666666666663,False
+P31,arousal,4,5,95,24,61,58,svm,paper_compact,all_channels,8,secondary,64,1,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.46060606060606063,0.34375,False
+P31,arousal,4,5,95,24,61,58,svm,paper_compact,all_channels,8,secondary,64,2,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.4378787878787878,0.5,False
+P31,arousal,4,5,95,24,61,58,svm,paper_compact,all_channels,8,secondary,64,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.42424242424242425,0.5,False
+P31,arousal,4,5,95,24,61,58,gnb,paper_compact,all_channels,8,secondary,64,1,"{""classifier__var_smoothing"": 1e-11}",0.39545454545454545,0.40625,False
+P31,arousal,4,5,95,24,61,58,gnb,paper_compact,all_channels,8,secondary,64,2,"{""classifier__var_smoothing"": 1e-11}",0.4515151515151515,0.40625,False
+P31,arousal,4,5,95,24,61,58,gnb,paper_compact,all_channels,8,secondary,64,3,"{""classifier__var_smoothing"": 1e-11}",0.28484848484848485,0.29166666666666663,False
+P31,arousal,4,5,95,24,61,58,logreg,paper_compact,all_channels,10,secondary,64,1,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.40757575757575754,0.375,False
+P31,arousal,4,5,95,24,61,58,logreg,paper_compact,all_channels,10,secondary,64,2,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.3984848484848485,0.4375,False
+P31,arousal,4,5,95,24,61,58,logreg,paper_compact,all_channels,10,secondary,64,3,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.29848484848484846,0.48333333333333334,False
+P31,arousal,4,5,95,24,61,58,svm,paper_compact,all_channels,10,secondary,64,1,"{""classifier__C"": 10, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.4378787878787878,0.375,False
+P31,arousal,4,5,95,24,61,58,svm,paper_compact,all_channels,10,secondary,64,2,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.47575757575757577,0.4375,False
+P31,arousal,4,5,95,24,61,58,svm,paper_compact,all_channels,10,secondary,64,3,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.42727272727272725,0.38958333333333334,False
+P31,arousal,4,5,95,24,61,58,gnb,paper_compact,all_channels,10,secondary,64,1,"{""classifier__var_smoothing"": 1e-11}",0.49242424242424243,0.375,False
+P31,arousal,4,5,95,24,61,58,gnb,paper_compact,all_channels,10,secondary,64,2,"{""classifier__var_smoothing"": 1e-11}",0.48333333333333334,0.34375,False
+P31,arousal,4,5,95,24,61,58,gnb,paper_compact,all_channels,10,secondary,64,3,"{""classifier__var_smoothing"": 1e-11}",0.3,0.3208333333333333,False
+P31,arousal,4,5,95,24,61,58,logreg,paper_compact,frontal_central,8,secondary,32,1,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.4893939393939393,0.46875,True
+P31,arousal,4,5,95,24,61,58,logreg,paper_compact,frontal_central,8,secondary,32,2,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.4454545454545455,0.59375,True
+P31,arousal,4,5,95,24,61,58,logreg,paper_compact,frontal_central,8,secondary,32,3,"{""classifier__C"": 0.01, ""classifier__class_weight"": ""balanced""}",0.3606060606060606,0.5520833333333333,True
+P31,arousal,4,5,95,24,61,58,svm,paper_compact,frontal_central,8,secondary,32,1,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5318181818181819,0.46875,False
+P31,arousal,4,5,95,24,61,58,svm,paper_compact,frontal_central,8,secondary,32,2,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.46060606060606063,0.46875,False
+P31,arousal,4,5,95,24,61,58,svm,paper_compact,frontal_central,8,secondary,32,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.4696969696969697,0.5,False
+P31,arousal,4,5,95,24,61,58,gnb,paper_compact,frontal_central,8,secondary,32,1,"{""classifier__var_smoothing"": 1e-11}",0.5409090909090909,0.40625,False
+P31,arousal,4,5,95,24,61,58,gnb,paper_compact,frontal_central,8,secondary,32,2,"{""classifier__var_smoothing"": 1e-11}",0.41363636363636364,0.46875,False
+P31,arousal,4,5,95,24,61,58,gnb,paper_compact,frontal_central,8,secondary,32,3,"{""classifier__var_smoothing"": 1e-11}",0.37575757575757573,0.65,False
+P31,arousal,4,5,95,24,61,58,logreg,paper_compact,frontal_central,10,secondary,32,1,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.5045454545454545,0.46875,False
+P31,arousal,4,5,95,24,61,58,logreg,paper_compact,frontal_central,10,secondary,32,2,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced""}",0.4136363636363636,0.5,False
+P31,arousal,4,5,95,24,61,58,logreg,paper_compact,frontal_central,10,secondary,32,3,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.34848484848484845,0.51875,False
+P31,arousal,4,5,95,24,61,58,svm,paper_compact,frontal_central,10,secondary,32,1,"{""classifier__C"": 10, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5393939393939394,0.46875,False
+P31,arousal,4,5,95,24,61,58,svm,paper_compact,frontal_central,10,secondary,32,2,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.49242424242424243,0.40625,False
+P31,arousal,4,5,95,24,61,58,svm,paper_compact,frontal_central,10,secondary,32,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.48484848484848486,0.5,False
+P31,arousal,4,5,95,24,61,58,gnb,paper_compact,frontal_central,10,secondary,32,1,"{""classifier__var_smoothing"": 1e-11}",0.5242424242424243,0.46875,False
+P31,arousal,4,5,95,24,61,58,gnb,paper_compact,frontal_central,10,secondary,32,2,"{""classifier__var_smoothing"": 1e-11}",0.3333333333333333,0.375,False
+P31,arousal,4,5,95,24,61,58,gnb,paper_compact,frontal_central,10,secondary,32,3,"{""classifier__var_smoothing"": 1e-11}",0.3924242424242424,0.5583333333333333,False
+P31,arousal,5,5,96,23,61,58,logreg,all_eeg,all_channels,8,primary,120,1,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.5136363636363636,0.4375,False
+P31,arousal,5,5,96,23,61,58,logreg,all_eeg,all_channels,8,primary,120,2,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.4348484848484849,0.4375,False
+P31,arousal,5,5,96,23,61,58,logreg,all_eeg,all_channels,8,primary,120,3,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.4681818181818182,0.4274509803921569,False
+P31,arousal,5,5,96,23,61,58,svm,all_eeg,all_channels,8,primary,120,1,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced"", ""classifier__kernel"": ""linear""}",0.5166666666666666,0.40625,False
+P31,arousal,5,5,96,23,61,58,svm,all_eeg,all_channels,8,primary,120,2,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.5,False
+P31,arousal,5,5,96,23,61,58,svm,all_eeg,all_channels,8,primary,120,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.4984848484848485,0.5529411764705883,False
+P31,arousal,5,5,96,23,61,58,gnb,all_eeg,all_channels,8,primary,120,1,"{""classifier__var_smoothing"": 1e-11}",0.48484848484848486,0.4375,False
+P31,arousal,5,5,96,23,61,58,gnb,all_eeg,all_channels,8,primary,120,2,"{""classifier__var_smoothing"": 1e-11}",0.3878787878787879,0.5,False
+P31,arousal,5,5,96,23,61,58,gnb,all_eeg,all_channels,8,primary,120,3,"{""classifier__var_smoothing"": 1e-11}",0.4545454545454546,0.5196078431372549,False
+P31,arousal,5,5,96,23,61,58,logreg,all_eeg,all_channels,10,primary,120,1,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.5151515151515151,0.46875,False
+P31,arousal,5,5,96,23,61,58,logreg,all_eeg,all_channels,10,primary,120,2,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.5136363636363637,0.4375,False
+P31,arousal,5,5,96,23,61,58,logreg,all_eeg,all_channels,10,primary,120,3,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.48484848484848486,0.4647058823529412,False
+P31,arousal,5,5,96,23,61,58,svm,all_eeg,all_channels,10,primary,120,1,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.5,False
+P31,arousal,5,5,96,23,61,58,svm,all_eeg,all_channels,10,primary,120,2,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.5136363636363637,0.4375,False
+P31,arousal,5,5,96,23,61,58,svm,all_eeg,all_channels,10,primary,120,3,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.4833333333333334,0.4607843137254902,False
+P31,arousal,5,5,96,23,61,58,gnb,all_eeg,all_channels,10,primary,120,1,"{""classifier__var_smoothing"": 1e-11}",0.48484848484848486,0.375,False
+P31,arousal,5,5,96,23,61,58,gnb,all_eeg,all_channels,10,primary,120,2,"{""classifier__var_smoothing"": 1e-11}",0.43333333333333335,0.5,False
+P31,arousal,5,5,96,23,61,58,gnb,all_eeg,all_channels,10,primary,120,3,"{""classifier__var_smoothing"": 1e-11}",0.4712121212121212,0.5568627450980392,False
+P31,arousal,5,5,96,23,61,58,logreg,paper_compact,all_channels,8,secondary,64,1,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.5484848484848485,0.4375,False
+P31,arousal,5,5,96,23,61,58,logreg,paper_compact,all_channels,8,secondary,64,2,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.3924242424242424,0.5,False
+P31,arousal,5,5,96,23,61,58,logreg,paper_compact,all_channels,8,secondary,64,3,"{""classifier__C"": 0.01, ""classifier__class_weight"": ""balanced""}",0.5015151515151516,0.4019607843137255,False
+P31,arousal,5,5,96,23,61,58,svm,paper_compact,all_channels,8,secondary,64,1,"{""classifier__C"": 10, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5621212121212121,0.40625,False
+P31,arousal,5,5,96,23,61,58,svm,paper_compact,all_channels,8,secondary,64,2,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.5,False
+P31,arousal,5,5,96,23,61,58,svm,paper_compact,all_channels,8,secondary,64,3,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced"", ""classifier__kernel"": ""linear""}",0.5484848484848485,0.49411764705882355,False
+P31,arousal,5,5,96,23,61,58,gnb,paper_compact,all_channels,8,secondary,64,1,"{""classifier__var_smoothing"": 1e-11}",0.5363636363636363,0.46875,False
+P31,arousal,5,5,96,23,61,58,gnb,paper_compact,all_channels,8,secondary,64,2,"{""classifier__var_smoothing"": 1e-11}",0.37727272727272726,0.53125,False
+P31,arousal,5,5,96,23,61,58,gnb,paper_compact,all_channels,8,secondary,64,3,"{""classifier__var_smoothing"": 1e-11}",0.42727272727272725,0.4607843137254902,False
+P31,arousal,5,5,96,23,61,58,logreg,paper_compact,all_channels,10,secondary,64,1,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.6136363636363636,0.53125,False
+P31,arousal,5,5,96,23,61,58,logreg,paper_compact,all_channels,10,secondary,64,2,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.4227272727272727,0.4375,False
+P31,arousal,5,5,96,23,61,58,logreg,paper_compact,all_channels,10,secondary,64,3,"{""classifier__C"": 0.1, ""classifier__class_weight"": ""balanced""}",0.5015151515151516,0.4647058823529412,False
+P31,arousal,5,5,96,23,61,58,svm,paper_compact,all_channels,10,secondary,64,1,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.6727272727272727,0.53125,False
+P31,arousal,5,5,96,23,61,58,svm,paper_compact,all_channels,10,secondary,64,2,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.5,False
+P31,arousal,5,5,96,23,61,58,svm,paper_compact,all_channels,10,secondary,64,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.5015151515151516,0.5019607843137255,False
+P31,arousal,5,5,96,23,61,58,gnb,paper_compact,all_channels,10,secondary,64,1,"{""classifier__var_smoothing"": 1e-11}",0.5696969696969697,0.53125,False
+P31,arousal,5,5,96,23,61,58,gnb,paper_compact,all_channels,10,secondary,64,2,"{""classifier__var_smoothing"": 1e-11}",0.37878787878787873,0.53125,False
+P31,arousal,5,5,96,23,61,58,gnb,paper_compact,all_channels,10,secondary,64,3,"{""classifier__var_smoothing"": 1e-11}",0.4424242424242424,0.4901960784313726,False
+P31,arousal,5,5,96,23,61,58,logreg,paper_compact,frontal_central,8,secondary,32,1,"{""classifier__C"": 1, ""classifier__class_weight"": ""balanced""}",0.5651515151515152,0.53125,False
+P31,arousal,5,5,96,23,61,58,logreg,paper_compact,frontal_central,8,secondary,32,2,"{""classifier__C"": 0.01, ""classifier__class_weight"": ""balanced""}",0.40454545454545454,0.53125,False
+P31,arousal,5,5,96,23,61,58,logreg,paper_compact,frontal_central,8,secondary,32,3,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.5181818181818182,0.5019607843137255,False
+P31,arousal,5,5,96,23,61,58,svm,paper_compact,frontal_central,8,secondary,32,1,"{""classifier__C"": 10, ""classifier__class_weight"": ""balanced"", ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.6136363636363636,0.4375,False
+P31,arousal,5,5,96,23,61,58,svm,paper_compact,frontal_central,8,secondary,32,2,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.5,False
+P31,arousal,5,5,96,23,61,58,svm,paper_compact,frontal_central,8,secondary,32,3,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5348484848484849,0.5098039215686274,False
+P31,arousal,5,5,96,23,61,58,gnb,paper_compact,frontal_central,8,secondary,32,1,"{""classifier__var_smoothing"": 1e-11}",0.5681818181818182,0.53125,False
+P31,arousal,5,5,96,23,61,58,gnb,paper_compact,frontal_central,8,secondary,32,2,"{""classifier__var_smoothing"": 1e-11}",0.4166666666666667,0.53125,False
+P31,arousal,5,5,96,23,61,58,gnb,paper_compact,frontal_central,8,secondary,32,3,"{""classifier__var_smoothing"": 1e-11}",0.4742424242424243,0.4019607843137255,False
+P31,arousal,5,5,96,23,61,58,logreg,paper_compact,frontal_central,10,secondary,32,1,"{""classifier__C"": 0.1, ""classifier__class_weight"": null}",0.5803030303030303,0.5,False
+P31,arousal,5,5,96,23,61,58,logreg,paper_compact,frontal_central,10,secondary,32,2,"{""classifier__C"": 1, ""classifier__class_weight"": null}",0.403030303030303,0.59375,False
+P31,arousal,5,5,96,23,61,58,logreg,paper_compact,frontal_central,10,secondary,32,3,"{""classifier__C"": 0.01, ""classifier__class_weight"": null}",0.5803030303030303,0.5019607843137255,False
+P31,arousal,5,5,96,23,61,58,svm,paper_compact,frontal_central,10,secondary,32,1,"{""classifier__C"": 10, ""classifier__class_weight"": null, ""classifier__gamma"": 0.01, ""classifier__kernel"": ""rbf""}",0.5818181818181819,0.5,True
+P31,arousal,5,5,96,23,61,58,svm,paper_compact,frontal_central,10,secondary,32,2,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__gamma"": 0.001, ""classifier__kernel"": ""rbf""}",0.5,0.5,True
+P31,arousal,5,5,96,23,61,58,svm,paper_compact,frontal_central,10,secondary,32,3,"{""classifier__C"": 1, ""classifier__class_weight"": null, ""classifier__kernel"": ""linear""}",0.5651515151515152,0.6137254901960785,True
+P31,arousal,5,5,96,23,61,58,gnb,paper_compact,frontal_central,10,secondary,32,1,"{""classifier__var_smoothing"": 1e-11}",0.5045454545454545,0.46875,False
+P31,arousal,5,5,96,23,61,58,gnb,paper_compact,frontal_central,10,secondary,32,2,"{""classifier__var_smoothing"": 1e-11}",0.43333333333333335,0.46875,False
+P31,arousal,5,5,96,23,61,58,gnb,paper_compact,frontal_central,10,secondary,32,3,"{""classifier__var_smoothing"": 1e-11}",0.48939393939393944,0.4901960784313726,False
