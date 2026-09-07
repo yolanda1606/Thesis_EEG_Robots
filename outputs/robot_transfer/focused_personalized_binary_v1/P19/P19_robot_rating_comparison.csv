@@ -1,0 +1,13 @@
+task,target,robot_rating,robot_rating_class,robot_condition
+pick_place,valence,5.0,HIGH,SLOW
+pick_place,arousal,5.0,HIGH,SLOW
+shape_sorter_observation,valence,5.0,HIGH,FAST
+shape_sorter_observation,arousal,5.0,HIGH,FAST
+stack,valence,4.0,HIGH,FAULTY
+stack,arousal,4.0,HIGH,FAULTY
+sisyphus,valence,4.0,HIGH,N/A
+sisyphus,arousal,5.0,HIGH,N/A
+shape_sorter_interaction,valence,6.0,HIGH,N/A
+shape_sorter_interaction,arousal,6.0,HIGH,N/A
+shape_sorter_alone,valence,5.0,HIGH,N/A
+shape_sorter_alone,arousal,3.0,LOW,N/A

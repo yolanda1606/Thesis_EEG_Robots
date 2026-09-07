@@ -1,0 +1,17 @@
+{
+  "purpose": "Image-only calibrated probability deployment layer for frozen EEG SVM transfer models",
+  "command": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/bin/python processing/multimodal_image/modeling/calibrate_frozen_eeg_transfer_svms.py",
+  "top3_csv": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/image_classification/focused_personalized_binary_v1/top3_models_per_participant_target.csv",
+  "top3_csv_sha256": "01650f1abd5427f97aa315e314c348f4dcbb608bfa54aea1ef04dd65039607cd",
+  "model_root": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/image_classification/focused_personalized_binary_v1/final_transfer_models",
+  "svm_rows_expected": 85,
+  "success_count": 85,
+  "failure_count": 0,
+  "robot_data_used": false,
+  "original_frozen_artifacts_modified": false,
+  "selection_or_hyperparameter_optimization_performed": false,
+  "calibration_method": "Image-only cross-validated Platt sigmoid calibration with fixed selected features and frozen SVM parameters",
+  "hard_prediction_requirement": "A reconstructed full-Image fixed SVM must exactly reproduce original frozen hard predictions before calibration.",
+  "later_robot_output_requirement": "Report original frozen SVM hard class separately from calibrated P(HIGH).",
+  "results_file": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/image_classification/focused_personalized_binary_v1/final_transfer_probability_calibration_v1/calibration_results.csv"
+}

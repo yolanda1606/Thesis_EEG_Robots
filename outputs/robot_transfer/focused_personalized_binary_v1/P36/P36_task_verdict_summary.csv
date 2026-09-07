@@ -1,0 +1,13 @@
+task,task_display,target,consensus_median_probability,consensus_verdict,models_voting_high,models_voting_low,unanimous_task_verdict,window_unanimous_agreement_rate,robot_rating,robot_rating_class,consensus_matches_robot_rating,models_with_shift_warning
+pick_place,PnP,arousal,0.8647741043349048,HIGH,3,0,True,0.71875,5.0,HIGH,True,
+shape_sorter_alone,SSAlone,arousal,0.8902461774705294,HIGH,3,0,True,0.6818181818181818,2.0,LOW,False,
+shape_sorter_interaction,SSInt,arousal,0.8975034649490901,HIGH,3,0,True,0.782051282051282,3.0,LOW,False,
+shape_sorter_observation,SSObs,arousal,0.8136561017263012,HIGH,3,0,True,0.5188679245283019,6.0,HIGH,True,
+sisyphus,Sisyphus,arousal,0.8732593410566973,HIGH,3,0,True,0.6821705426356589,7.0,HIGH,True,
+stack,St,arousal,0.6498528493809819,HIGH,3,0,True,0.3088235294117647,4.0,HIGH,True,
+pick_place,PnP,valence,0.5037680944499344,HIGH,2,1,False,0.625,5.0,HIGH,True,
+shape_sorter_alone,SSAlone,valence,0.6269706482180106,HIGH,3,0,True,0.5454545454545454,4.0,HIGH,True,
+shape_sorter_interaction,SSInt,valence,0.6585418746564476,HIGH,3,0,True,0.6794871794871795,5.0,HIGH,True,
+shape_sorter_observation,SSObs,valence,0.7598834035216935,HIGH,3,0,True,0.7830188679245284,6.0,HIGH,True,
+sisyphus,Sisyphus,valence,0.7319519795110363,HIGH,3,0,True,0.7674418604651163,7.0,HIGH,True,
+stack,St,valence,0.5675674678257605,HIGH,3,0,True,0.5147058823529411,5.0,HIGH,True,
