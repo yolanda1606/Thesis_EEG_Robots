@@ -254,23 +254,83 @@ def probability_summary(predictions: pd.DataFrame) -> pd.DataFrame:
     ).reset_index()
 
 
-def agreement(predictions: pd.DataFrame) -> pd.DataFrame:
-    rows = []
-    for (target, task), part in predictions.groupby(["target", "task"], sort=False):
-        wide = part.pivot(index=KEYS, columns="model_rank", values=["predicted_class", "high_probability"])
-        ranks = sorted(part.model_rank.unique())
-        labels, probabilities = wide["predicted_class"][ranks], wide["high_probability"][ranks]
+def complete_top3_windows(predictions: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Align ranks and retain only windows with all three valid frozen outputs."""
+    complete_rows: list[pd.DataFrame] = []
+    completeness_rows: list[dict[str, Any]] = []
+    for (participant, target, task), part in predictions.groupby(["participant", "target", "task"], sort=False):
+        probabilities = part.pivot(index=KEYS, columns="model_rank", values="high_probability").reindex(columns=[1, 2, 3])
+        hard_predictions = part.pivot(index=KEYS, columns="model_rank", values="original_hard_prediction").reindex(columns=[1, 2, 3])
+        complete_mask = probabilities.notna().all(axis=1) & hard_predictions.notna().all(axis=1)
+        n_candidate = int(len(probabilities))
+        n_complete = int(complete_mask.sum())
+        completeness_rows.append({
+            "participant": participant, "target": target, "task": task,
+            "n_candidate_windows": n_candidate,
+            "n_complete_top3_windows": n_complete,
+            "n_incomplete_top3_windows": n_candidate - n_complete,
+            "fraction_complete_top3_windows": n_complete / n_candidate if n_candidate else np.nan,
+        })
+        if not n_complete:
+            continue
+        probability_complete = probabilities.loc[complete_mask]
+        hard_complete = hard_predictions.loc[complete_mask]
+        frame = probability_complete.index.to_frame(index=False)
+        frame["target"] = target
+        frame["window_center_s"] = (frame["window_start_s"] + frame["window_end_s"]) / 2
+        for rank in [1, 2, 3]:
+            frame[f"rank{rank}_high_probability"] = probability_complete[rank].to_numpy()
+            frame[f"rank{rank}_hard_prediction"] = hard_complete[rank].astype(int).to_numpy()
+        frame["top3_consensus_probability"] = probability_complete.median(axis=1).to_numpy()
+        frame["top3_probability_min"] = probability_complete.min(axis=1).to_numpy()
+        frame["top3_probability_max"] = probability_complete.max(axis=1).to_numpy()
+        frame["top3_probability_range"] = frame["top3_probability_max"] - frame["top3_probability_min"]
+        frame["top3_consensus_class"] = np.where(frame["top3_consensus_probability"] >= 0.5, "HIGH", "LOW")
+        frame["all_three_hard_agree"] = hard_complete.nunique(axis=1).eq(1).to_numpy()
+        complete_rows.append(frame)
+    complete = pd.concat(complete_rows, ignore_index=True) if complete_rows else pd.DataFrame(
+        columns=[*KEYS, "target", "window_center_s", "rank1_high_probability", "rank2_high_probability", "rank3_high_probability",
+                 "rank1_hard_prediction", "rank2_hard_prediction", "rank3_hard_prediction", "top3_consensus_probability",
+                 "top3_probability_min", "top3_probability_max", "top3_probability_range", "top3_consensus_class",
+                 "all_three_hard_agree"]
+    )
+    if not complete.empty:
+        complete = complete.sort_values(
+            ["participant", "target", "task", "segment_id", "window_center_s"], kind="stable"
+        ).reset_index(drop=True)
+    return complete, pd.DataFrame(completeness_rows)
+
+
+def agreement(complete: pd.DataFrame, completeness: pd.DataFrame) -> pd.DataFrame:
+    """Summarize only the explicit complete-top-three window set."""
+    rows: list[dict[str, Any]] = []
+    for item in completeness.itertuples(index=False):
+        part = complete[(complete.target.eq(item.target)) & (complete.task.eq(item.task))]
         row: dict[str, Any] = {
-            "target": target, "task": task, "n_all_three_windows": len(wide),
-            "unanimous_agreement_rate": float((labels.nunique(axis=1) == 1).mean()),
-            "unanimous_high_rate": float((labels == 1).all(axis=1).mean()),
-            "unanimous_low_rate": float((labels == 0).all(axis=1).mean()),
-            "disagreement_rate": float((labels.nunique(axis=1) > 1).mean()),
-            "majority_vote_high_fraction": float((labels.sum(axis=1) >= 2).mean()),
+            "participant": item.participant, "target": item.target, "task": item.task,
+            "n_candidate_windows": item.n_candidate_windows,
+            "n_complete_top3_windows": item.n_complete_top3_windows,
+            "n_incomplete_top3_windows": item.n_incomplete_top3_windows,
+            "fraction_complete_top3_windows": item.fraction_complete_top3_windows,
+            "n_all_three_windows": item.n_complete_top3_windows,
         }
-        for left, right in [(1, 2), (1, 3), (2, 3)]:
-            row[f"class_agreement_{left}_{right}"] = float((labels[left] == labels[right]).mean())
-            row[f"probability_correlation_{left}_{right}"] = float(probabilities[left].corr(probabilities[right]))
+        if part.empty:
+            for name in ["unanimous_agreement_rate", "unanimous_high_rate", "unanimous_low_rate", "disagreement_rate",
+                         "majority_vote_high_fraction", "class_agreement_1_2", "class_agreement_1_3", "class_agreement_2_3",
+                         "probability_correlation_1_2", "probability_correlation_1_3", "probability_correlation_2_3"]:
+                row[name] = np.nan
+        else:
+            hard = part[["rank1_hard_prediction", "rank2_hard_prediction", "rank3_hard_prediction"]]
+            row.update({
+                "unanimous_agreement_rate": float(part["all_three_hard_agree"].mean()),
+                "unanimous_high_rate": float((hard == 1).all(axis=1).mean()),
+                "unanimous_low_rate": float((hard == 0).all(axis=1).mean()),
+                "disagreement_rate": float((~part["all_three_hard_agree"]).mean()),
+                "majority_vote_high_fraction": float((hard.sum(axis=1) >= 2).mean()),
+            })
+            for left, right in [(1, 2), (1, 3), (2, 3)]:
+                row[f"class_agreement_{left}_{right}"] = float((hard[f"rank{left}_hard_prediction"] == hard[f"rank{right}_hard_prediction"]).mean())
+                row[f"probability_correlation_{left}_{right}"] = float(part[f"rank{left}_high_probability"].corr(part[f"rank{right}_high_probability"]))
         rows.append(row)
     return pd.DataFrame(rows)
 
@@ -293,42 +353,48 @@ def robot_ratings(participant: str) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def verdicts(summary: pd.DataFrame, agreement_data: pd.DataFrame, ratings: pd.DataFrame, shift: pd.DataFrame) -> pd.DataFrame:
-    rows = []
-    for (target, task), part in summary.groupby(["target", "task"], sort=False):
-        part = part.sort_values("model_rank")
-        medians = part.median_high_probability.to_numpy()
-        consensus = float(np.median(medians))
-        verdict = "HIGH" if consensus >= 0.5 else "LOW"
-        rating = ratings[(ratings.target == target) & (ratings.task == task)].iloc[0]
-        agreement_row = agreement_data[(agreement_data.target == target) & (agreement_data.task == task)].iloc[0]
-        shift_part = shift[(shift.target == target) & (shift.task == task)].copy()
-        shift_part["shift_warning"] = shift_part.median_nearest_image_distance > 10.0
-        rows.append({
-            "task": task, "task_display": DISPLAY_TASKS[task], "target": target,
-            "consensus_median_probability": consensus, "consensus_verdict": verdict,
-            "models_voting_high": int((medians >= 0.5).sum()), "models_voting_low": int((medians < 0.5).sum()),
-            "unanimous_task_verdict": bool(len(set(medians >= 0.5)) == 1),
-            "window_unanimous_agreement_rate": agreement_row.unanimous_agreement_rate,
-            "robot_rating": rating.robot_rating, "robot_rating_class": rating.robot_rating_class,
-            "consensus_matches_robot_rating": bool(verdict == rating.robot_rating_class),
-            "models_with_shift_warning": ";".join("R" + str(value) for value in shift_part.loc[shift_part.shift_warning, "model_rank"]),
-        })
-    return pd.DataFrame(rows)
+def selected_configured_paths(item: Any) -> list[Path]:
+    """Match the canonical Robot pipeline's selected_files() path convention."""
+    if isinstance(item, str):
+        return [Path(item)]
+    if not isinstance(item, dict):
+        return []
+    if "segments" in item:
+        segments = item["segments"]
+        if not isinstance(segments, list):
+            return []
+        return [
+            Path(value)
+            for segment in segments
+            for value in [segment.get("file") if isinstance(segment, dict) else segment]
+            if isinstance(value, str)
+        ]
+    return [Path(item["file"])] if isinstance(item.get("file"), str) else []
 
 
-def event_table(config_path: Path) -> tuple[pd.DataFrame, list[dict[str, str]]]:
+def event_table(config_path: Path) -> tuple[pd.DataFrame, list[dict[str, Any]]]:
+    """Resolve the exact semantic events later supplied to trigger plotting."""
     config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
     events = []
     sources = []
     meaningful = ("START", "END", "GRASP", "RELEASE", "COLLISION", "WRONG LOCATION", "MID-AIR DROP")
     for task, specification in config["tasks"].items():
-        metrics_relative = specification.get("robot_metrics")
-        vision_relative = specification.get("vision_log")
-        if not metrics_relative:
+        metrics_item = specification.get("robot_metrics")
+        vision_item = specification.get("vision_log")
+        metric_paths = selected_configured_paths(metrics_item)
+        vision_paths = selected_configured_paths(vision_item)
+        if not metric_paths:
+            reason = metrics_item.get("reason", "no selected robot-metrics path") if isinstance(metrics_item, dict) else "no selected robot-metrics path"
+            sources.append({"task": task, "vision_log": str((ROOT / "data" / vision_paths[0]).resolve()) if len(vision_paths) == 1 else None,
+                            "robot_metrics": None, "status": "not_available", "reason": str(reason)})
             continue
-        metrics_path = ROOT / "data" / metrics_relative
-        vision_path = ROOT / "data" / vision_relative
+        if len(metric_paths) != 1 or len(vision_paths) != 1:
+            sources.append({"task": task, "vision_log": str(vision_paths[0].resolve()) if len(vision_paths) == 1 else None,
+                            "robot_metrics": str(metric_paths[0].resolve()) if len(metric_paths) == 1 else None,
+                            "status": "not_resolved", "reason": "semantic event resolution requires exactly one selected vision log and robot-metrics file"})
+            continue
+        metrics_path = ROOT / "data" / metric_paths[0]
+        vision_path = ROOT / "data" / vision_paths[0]
         metrics = pd.read_csv(metrics_path)
         definitions = metrics.loc[metrics.Event_Trigger.ne(0), ["Event_Trigger", "Controller_Type", "Waypoint_Stage"]].drop_duplicates("Event_Trigger")
         definitions["Event_Trigger"] = definitions.Event_Trigger.astype(str)
@@ -342,9 +408,22 @@ def event_table(config_path: Path) -> tuple[pd.DataFrame, list[dict[str, str]]]:
                 continue
             stage = str(definition["Waypoint_Stage"])
             if any(term in stage.upper() for term in meaningful):
-                events.append({"task": task, "time_s": float(row.Experiment_Time), "trigger_code": str(row.Trigger), "event_label": stage})
-        sources.append({"task": task, "vision_log": str(vision_path.resolve()), "robot_metrics": str(metrics_path.resolve())})
-    return pd.DataFrame(events), sources
+                upper = stage.upper()
+                category = "start" if "START" in upper else "end" if "END" in upper else (
+                    "fault" if any(word in upper for word in ["COLLISION", "WRONG", "MID-AIR"]) else "normal"
+                )
+                event_time = float(row.Experiment_Time)
+                events.append({
+                    "participant": str(config["participant"]), "task": task, "segment_id": pd.NA,
+                    "event_time_s": event_time, "time_coordinate": "task_local_time_s",
+                    "trigger_code": str(row.Trigger), "semantic_label": stage,
+                    "semantic_category": category,
+                    # Plotting aliases retain the established visual semantics unchanged.
+                    "time_s": event_time, "event_label": stage,
+                })
+        sources.append({"task": task, "vision_log": str(vision_path.resolve()), "robot_metrics": str(metrics_path.resolve()), "status": "resolved", "reason": ""})
+    columns = ["participant", "task", "segment_id", "event_time_s", "time_coordinate", "trigger_code", "semantic_label", "semantic_category", "time_s", "event_label"]
+    return pd.DataFrame(events, columns=columns), sources
 
 
 def robot_conditions(config_path: Path) -> dict[str, str]:
@@ -362,45 +441,66 @@ def robot_conditions(config_path: Path) -> dict[str, str]:
     return conditions
 
 
-def task_statistics(predictions: pd.DataFrame, ratings: pd.DataFrame, conditions: dict[str, str]) -> pd.DataFrame:
-    """Compute descriptive top-three consensus and agreement statistics by task."""
-    rows = []
-    for (participant, target, task), part in predictions.groupby(["participant", "target", "task"], sort=False):
-        probabilities = part.pivot(index=KEYS, columns="model_rank", values="high_probability").dropna().sort_index()
-        hard = part.pivot(index=KEYS, columns="model_rank", values="original_hard_prediction").reindex(probabilities.index)
-        consensus = probabilities.median(axis=1)
-        ranges = probabilities.max(axis=1) - probabilities.min(axis=1)
-        pair_diffs = pd.DataFrame({
-            "r1_r2": (probabilities[1] - probabilities[2]).abs(),
-            "r1_r3": (probabilities[1] - probabilities[3]).abs(),
-            "r2_r3": (probabilities[2] - probabilities[3]).abs(),
-        })
+def task_statistics(complete: pd.DataFrame, agreement_data: pd.DataFrame, ratings: pd.DataFrame,
+                    conditions: dict[str, str], shift: pd.DataFrame) -> pd.DataFrame:
+    """Compute final consensus-first task statistics from complete top-three windows only."""
+    rows: list[dict[str, Any]] = []
+    for agreement_row in agreement_data.itertuples(index=False):
+        target, task = agreement_row.target, agreement_row.task
+        part = complete[(complete.target.eq(target)) & (complete.task.eq(task))]
         rating = ratings[(ratings.target.eq(target)) & (ratings.task.eq(task))]
-        if sorted(probabilities.columns) != [1, 2, 3] or len(rating) != 1:
-            raise ValueError(f"{participant} {target} {task}: expected ranks 1–3 and one Robot rating")
+        if len(rating) != 1:
+            raise ValueError(f"{agreement_row.participant} {target} {task}: expected one Robot rating")
         rating_row = rating.iloc[0]
-        median_probability = float(consensus.median())
-        rows.append({
-            "participant": participant, "target": target, "task": task, "task_display": DISPLAY_TASKS[task],
-            "robot_condition": conditions.get(task, "N/A"), "n_consensus_windows": int(len(consensus)),
-            "median_top3_consensus_probability": median_probability,
-            "mean_top3_consensus_probability": float(consensus.mean()),
-            "fraction_consensus_windows_ge_0_5": float((consensus >= 0.5).mean()),
-            "descriptive_task_verdict": "HIGH" if median_probability >= 0.5 else "LOW",
-            "mean_top3_probability_range": float(ranges.mean()),
-            "median_top3_probability_range": float(ranges.median()),
-            "mean_pairwise_absolute_probability_difference": float(pair_diffs.mean(axis=1).mean()),
-            "fraction_unanimous_low_windows": float((hard == 0).all(axis=1).mean()),
-            "fraction_unanimous_high_windows": float((hard == 1).all(axis=1).mean()),
-            "fraction_unanimous_top3_windows": float((hard.nunique(axis=1) == 1).mean()),
-            "majority_vote_high_fraction": float((hard.sum(axis=1) >= 2).mean()),
-            "probability_correlation_r1_r2": float(probabilities[1].corr(probabilities[2])),
-            "probability_correlation_r1_r3": float(probabilities[1].corr(probabilities[3])),
-            "probability_correlation_r2_r3": float(probabilities[2].corr(probabilities[3])),
-            "robot_rating_1_to_7": float(rating_row.robot_rating),
-            "robot_rating_class": rating_row.robot_rating_class,
-            "verdict_matches_robot_rating": bool(("HIGH" if median_probability >= 0.5 else "LOW") == rating_row.robot_rating_class),
-        })
+        shift_part = shift[(shift.target.eq(target)) & (shift.task.eq(task))]
+        shift_warning = shift_part["median_nearest_image_distance"] > 10.0
+        row: dict[str, Any] = {
+            "participant": agreement_row.participant, "target": target, "task": task, "task_display": DISPLAY_TASKS[task],
+            "robot_condition": conditions.get(task, "N/A"), "robot_rating": float(rating_row.robot_rating),
+            "robot_rating_1_to_7": float(rating_row.robot_rating), "robot_rating_class": rating_row.robot_rating_class,
+            "n_candidate_windows": agreement_row.n_candidate_windows,
+            "n_complete_top3_windows": agreement_row.n_complete_top3_windows,
+            "n_incomplete_top3_windows": agreement_row.n_incomplete_top3_windows,
+            "fraction_complete_top3_windows": agreement_row.fraction_complete_top3_windows,
+            "n_consensus_windows": agreement_row.n_complete_top3_windows,
+            "unanimous_agreement_rate": agreement_row.unanimous_agreement_rate,
+            "unanimous_high_rate": agreement_row.unanimous_high_rate,
+            "unanimous_low_rate": agreement_row.unanimous_low_rate,
+            "fraction_unanimous_top3_windows": agreement_row.unanimous_agreement_rate,
+            "fraction_unanimous_high_windows": agreement_row.unanimous_high_rate,
+            "fraction_unanimous_low_windows": agreement_row.unanimous_low_rate,
+            "majority_vote_high_fraction": agreement_row.majority_vote_high_fraction,
+            "models_with_shift_warning": ";".join("R" + str(value) for value in shift_part.loc[shift_warning, "model_rank"]),
+        }
+        if part.empty:
+            row.update({
+                "median_top3_consensus_probability": np.nan, "mean_top3_consensus_probability": np.nan,
+                "fraction_consensus_windows_ge_0_5": np.nan, "descriptive_task_verdict": pd.NA,
+                "consensus_verdict": pd.NA, "verdict_matches_robot_rating": pd.NA,
+                "consensus_matches_robot_rating": pd.NA, "mean_top3_probability_range": np.nan,
+                "median_top3_probability_range": np.nan, "mean_pairwise_absolute_probability_difference": np.nan,
+            })
+        else:
+            consensus = part["top3_consensus_probability"]
+            median_probability = float(consensus.median())
+            verdict = "HIGH" if median_probability >= 0.5 else "LOW"
+            pair_differences = pd.DataFrame({
+                "r1_r2": (part["rank1_high_probability"] - part["rank2_high_probability"]).abs(),
+                "r1_r3": (part["rank1_high_probability"] - part["rank3_high_probability"]).abs(),
+                "r2_r3": (part["rank2_high_probability"] - part["rank3_high_probability"]).abs(),
+            })
+            row.update({
+                "median_top3_consensus_probability": median_probability,
+                "mean_top3_consensus_probability": float(consensus.mean()),
+                "fraction_consensus_windows_ge_0_5": float((consensus >= 0.5).mean()),
+                "descriptive_task_verdict": verdict, "consensus_verdict": verdict,
+                "verdict_matches_robot_rating": bool(verdict == rating_row.robot_rating_class),
+                "consensus_matches_robot_rating": bool(verdict == rating_row.robot_rating_class),
+                "mean_top3_probability_range": float(part["top3_probability_range"].mean()),
+                "median_top3_probability_range": float(part["top3_probability_range"].median()),
+                "mean_pairwise_absolute_probability_difference": float(pair_differences.mean(axis=1).mean()),
+            })
+        rows.append(row)
     return pd.DataFrame(rows).sort_values(["target", "task"]).reset_index(drop=True)
 
 
@@ -414,26 +514,34 @@ def event_style(label: str) -> tuple[str, str]:
     return "#2166ac", "-"
 
 
-def plot_task_trigger_consensus(predictions: pd.DataFrame, statistics: pd.DataFrame, events: pd.DataFrame,
+def plot_task_trigger_consensus(consensus_windows: pd.DataFrame, statistics: pd.DataFrame, events: pd.DataFrame,
                                 participant: str, figures: Path) -> None:
     """Save one wide, annotated semantic-trigger plot per target and task."""
-    for target, data in predictions.groupby("target", sort=False):
+    for target, data in consensus_windows.groupby("target", sort=False):
         for task in [item for item in TASK_ORDER if item in set(data.task)]:
             part = data[data.task.eq(task)].copy()
-            part["window_center_s"] = (part.window_start_s + part.window_end_s) / 2
-            probabilities = part.pivot(index="window_center_s", columns="model_rank", values="high_probability").dropna().sort_index()
+            segment_parts = consensus_segments(part)
+            can_overlay_triggers = len(segment_parts) == 1
             task_events = events[events.task.eq(task)]
-            event_types = list(task_events.event_label.drop_duplicates())
+            event_types = list(task_events.event_label.drop_duplicates()) if can_overlay_triggers else []
             figure_width = 16 if len(event_types) >= 5 or task in {"stack", "sisyphus"} else 13
             fig, axis = plt.subplots(figsize=(figure_width, 5.2))
-            axis.fill_between(probabilities.index, probabilities.min(axis=1), probabilities.max(axis=1), color="0.35", alpha=0.18, label="Top-3 range")
-            axis.plot(probabilities.index, probabilities.median(axis=1), color="0.15", lw=1.8, label="Top-3 median")
+            for index, segment in enumerate(segment_parts):
+                axis.fill_between(segment.window_center_s, segment.top3_probability_min, segment.top3_probability_max,
+                                  color="0.35", alpha=0.18, label="Top-3 range" if index == 0 else None)
+                axis.plot(segment.window_center_s, segment.top3_consensus_probability, color="0.15", lw=1.8,
+                          label="Top-3 median" if index == 0 else None)
             labels_seen: set[str] = set()
-            for event in task_events.itertuples(index=False):
-                label = event.event_label if event.event_label not in labels_seen else None
-                color, linestyle = event_style(event.event_label)
-                axis.axvline(event.time_s, color=color, ls=linestyle, lw=0.9, alpha=0.8, label=label)
-                labels_seen.add(event.event_label)
+            if can_overlay_triggers:
+                for event in task_events.itertuples(index=False):
+                    label = event.event_label if event.event_label not in labels_seen else None
+                    color, linestyle = event_style(event.event_label)
+                    axis.axvline(event.time_s, color=color, ls=linestyle, lw=0.9, alpha=0.8, label=label)
+                    labels_seen.add(event.event_label)
+            else:
+                axis.text(0.01, 0.03, "Trigger overlay omitted: segment-local times lack a verified task-global mapping.",
+                          transform=axis.transAxes, ha="left", va="bottom", fontsize=6.5,
+                          bbox={"boxstyle": "round,pad=0.25", "facecolor": "white", "edgecolor": "0.6", "alpha": 0.9})
             stat = statistics[(statistics.target.eq(target)) & (statistics.task.eq(task))].iloc[0]
             annotation = (
                 f"Self-report: {stat.robot_rating_1_to_7:.0f}/7 ({stat.robot_rating_class})\n"
@@ -460,10 +568,12 @@ def segments(frame: pd.DataFrame) -> list[pd.DataFrame]:
     return [part for _, part in frame.assign(_segment=breaks.cumsum()).groupby("_segment")]
 
 
-def consensus_wide(predictions: pd.DataFrame, task: str) -> pd.DataFrame:
-    data = predictions[predictions.task.eq(task)].copy()
-    data["window_center_s"] = (data.window_start_s + data.window_end_s) / 2
-    return data.pivot(index="window_center_s", columns="model_rank", values="high_probability").dropna().sort_index()
+def consensus_segments(frame: pd.DataFrame) -> list[pd.DataFrame]:
+    """Return independently plotted consensus segments in numeric time order."""
+    return [
+        segment.sort_values("window_center_s", kind="stable")
+        for _, segment in frame.groupby("segment_id", sort=True)
+    ]
 
 
 def model_legend_label(rank_data: pd.DataFrame, rank: int) -> str:
@@ -483,7 +593,7 @@ def model_legend_label(rank_data: pd.DataFrame, rank: int) -> str:
     return " · ".join(parts)
 
 
-def plot_target(predictions: pd.DataFrame, target: str, participant: str, figures: Path) -> None:
+def plot_target(predictions: pd.DataFrame, consensus_windows: pd.DataFrame, target: str, participant: str, figures: Path) -> None:
     data = predictions[predictions.target.eq(target)].copy()
     tasks = [task for task in TASK_ORDER if task in set(data.task)]
     colors = {1: "#1b9e77", 2: "#377eb8", 3: "#984ea3"}
@@ -508,11 +618,15 @@ def plot_target(predictions: pd.DataFrame, target: str, participant: str, figure
     plt.close(fig)
 
     def consensus_plot() -> None:
+        consensus_data = consensus_windows[consensus_windows.target.eq(target)].copy()
         fig, axes = plt.subplots(len(tasks), 1, figsize=(9, 1.75 * len(tasks)))
         for axis, task in zip(np.atleast_1d(axes), tasks):
-            wide = consensus_wide(data, task)
-            axis.fill_between(wide.index, wide.min(axis=1), wide.max(axis=1), color="0.35", alpha=0.18, label="Top-3 range")
-            axis.plot(wide.index, wide.median(axis=1), color="0.15", lw=1.8, label="Top-3 median")
+            part = consensus_data[consensus_data.task.eq(task)]
+            for index, segment in enumerate(consensus_segments(part)):
+                axis.fill_between(segment.window_center_s, segment.top3_probability_min, segment.top3_probability_max,
+                                  color="0.35", alpha=0.18, label="Top-3 range" if index == 0 else None)
+                axis.plot(segment.window_center_s, segment.top3_consensus_probability, color="0.15", lw=1.8,
+                          label="Top-3 median" if index == 0 else None)
             axis.axhline(0.5, color="black", ls=":", lw=0.8)
             axis.set_ylim(0, 1); axis.set_ylabel(DISPLAY_TASKS[task]); axis.set_title(DISPLAY_TASKS[task], loc="left", fontsize=9)
         axes[-1].set_xlabel("Time within task (s)")
@@ -554,16 +668,23 @@ def main() -> int:
         raise FileExistsError(f"Refusing to overwrite existing output directory: {args.output_dir}")
     predictions, shift_windows, shift_tasks = run_inference(models, robot, args.image_reference_csv)
     summary = probability_summary(predictions)
-    agreement_data = agreement(predictions)
+    consensus_windows, completeness = complete_top3_windows(predictions)
+    agreement_data = agreement(consensus_windows, completeness)
     ratings = robot_ratings(args.participant)
     conditions = robot_conditions(args.participant_config)
     ratings = ratings.assign(robot_condition=ratings.task.map(conditions).fillna("N/A"))
-    verdict_data = verdicts(summary, agreement_data, ratings, shift_tasks)
-    task_analysis = task_statistics(predictions, ratings, conditions)
+    task_analysis = task_statistics(consensus_windows, agreement_data, ratings, conditions, shift_tasks)
+    verdict_data = task_analysis[[
+        "task", "task_display", "target", "n_candidate_windows", "n_complete_top3_windows", "n_incomplete_top3_windows",
+        "fraction_complete_top3_windows", "median_top3_consensus_probability", "consensus_verdict",
+        "unanimous_agreement_rate", "robot_rating", "robot_rating_class", "consensus_matches_robot_rating",
+        "models_with_shift_warning",
+    ]].copy()
     args.output_dir.mkdir(parents=True)
     figures = args.output_dir / "figures"
     figures.mkdir()
     predictions.to_csv(args.output_dir / f"{args.participant}_window_predictions.csv", index=False)
+    consensus_windows.to_csv(args.output_dir / f"{args.participant}_window_consensus.csv", index=False)
     summary.to_csv(args.output_dir / f"{args.participant}_task_probability_summary.csv", index=False)
     agreement_data.to_csv(args.output_dir / f"{args.participant}_model_agreement.csv", index=False)
     shift_windows.to_csv(args.output_dir / f"{args.participant}_selected_feature_shift_window_diagnostics.csv", index=False)
@@ -571,9 +692,11 @@ def main() -> int:
     verdict_data.to_csv(args.output_dir / f"{args.participant}_task_verdict_summary.csv", index=False)
     ratings.to_csv(args.output_dir / f"{args.participant}_robot_rating_comparison.csv", index=False)
     task_analysis.to_csv(args.output_dir / f"{args.participant}_task_consensus_analysis.csv", index=False)
+    semantic_events_path = args.output_dir / f"{args.participant}_semantic_events.csv"
+    events.to_csv(semantic_events_path, index=False)
     for target in ["valence", "arousal"]:
-        plot_target(predictions, target, args.participant, figures)
-    plot_task_trigger_consensus(predictions, task_analysis, events, args.participant, figures)
+        plot_target(predictions, consensus_windows, target, args.participant, figures)
+    plot_task_trigger_consensus(consensus_windows, task_analysis, events, args.participant, figures)
     manifest = {
         "participant": args.participant,
         "purpose": "Final frozen EEG-only Image-to-Robot transfer",
@@ -587,11 +710,16 @@ def main() -> int:
         "feature_compatibility": compatibility,
         "event_sources": event_sources,
         "semantic_event_count": int(len(events)),
+        "semantic_events_csv": str(semantic_events_path.resolve()),
+        "semantic_events_csv_sha256": sha256(semantic_events_path),
+        "semantic_events_csv_row_count": int(len(events)),
+        "task_probability_definition": "median_windows(median_models(P(HIGH))) over complete ranks 1-3 windows only",
+        "top3_window_requirement": "All three frozen ranks must have finite P(HIGH) and a frozen hard prediction.",
         "historical_logic_excluded": ["Stage-B selection", "model preparation/refitting", "GridSearchCV", "ICA/no-ICA comparison", "Face inference", "Multimodal inference"],
         "ratings_use": "Descriptive post-inference comparison only; never used for model selection.",
     }
     (args.output_dir / f"{args.participant}_transfer_manifest.json").write_text(json.dumps(manifest, indent=2, default=str) + "\n", encoding="utf-8")
-    compact = verdict_data[["task_display", "target", "consensus_median_probability", "consensus_verdict", "window_unanimous_agreement_rate", "robot_rating", "robot_rating_class", "consensus_matches_robot_rating", "models_with_shift_warning"]].copy()
+    compact = task_analysis[["task_display", "target", "median_top3_consensus_probability", "descriptive_task_verdict", "unanimous_agreement_rate", "robot_rating", "robot_rating_class", "verdict_matches_robot_rating", "models_with_shift_warning"]].copy()
     compact.columns = ["Task", "Target", "Median P(HIGH)", "Verdict", "Agreement", "Robot rating", "Rating class", "Match", "Shift warnings"]
     (args.output_dir / f"{args.participant}_transfer_summary.md").write_text(
         f"# {args.participant} final frozen EEG-only Image-to-Robot transfer\n\n"

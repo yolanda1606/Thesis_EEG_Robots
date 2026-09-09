@@ -18,7 +18,16 @@ import numpy as np
 import pandas as pd
 import yaml
 
-from run_final_frozen_eeg_transfer import DISPLAY_TASKS, TASK_ORDER, event_table, plot_target
+from run_final_frozen_eeg_transfer import (
+    DISPLAY_TASKS,
+    TASK_ORDER,
+    agreement,
+    complete_top3_windows,
+    event_table,
+    plot_target,
+    plot_task_trigger_consensus,
+    task_statistics as final_task_statistics,
+)
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -61,7 +70,8 @@ def attach_frozen_plot_metadata(predictions: pd.DataFrame, manifest: dict) -> pd
     return predictions.merge(metadata, on=["target", "model_rank"], how="left", validate="many_to_one")
 
 
-def task_statistics(predictions: pd.DataFrame, ratings: pd.DataFrame, conditions: dict[str, str]) -> pd.DataFrame:
+def legacy_task_statistics(predictions: pd.DataFrame, ratings: pd.DataFrame, conditions: dict[str, str]) -> pd.DataFrame:
+    """Historical-only implementation retained for audit; it is never invoked."""
     rows = []
     for (participant, target, task), part in predictions.groupby(["participant", "target", "task"], sort=False):
         probabilities = part.pivot(index=KEYS, columns="model_rank", values="high_probability").dropna().sort_index()
@@ -114,8 +124,8 @@ def event_style(label: str) -> tuple[str, str]:
     return "#2166ac", "-"
 
 
-def plot_task_trigger_consensus(predictions: pd.DataFrame, statistics: pd.DataFrame, events: pd.DataFrame, participant: str, figures: Path) -> None:
-    """Save one wide annotated trigger figure for every target/task combination."""
+def legacy_plot_task_trigger_consensus(predictions: pd.DataFrame, statistics: pd.DataFrame, events: pd.DataFrame, participant: str, figures: Path) -> None:
+    """Historical-only plotting helper retained for audit; it is never invoked."""
     for target, data in predictions.groupby("target", sort=False):
         tasks = [task for task in TASK_ORDER if task in set(data.task)]
         for task in tasks:
@@ -207,17 +217,19 @@ def main() -> int:
     conditions = robot_conditions(args.participant_config.resolve())
     ratings = ratings.assign(robot_condition=ratings.task.map(conditions).fillna("N/A"))
     ratings.to_csv(transfer_dir / f"{participant}_robot_rating_comparison.csv", index=False)
-    statistics = task_statistics(predictions, ratings, conditions)
+    shift = pd.read_csv(transfer_dir / f"{participant}_selected_feature_shift_task_summary.csv")
+    consensus_windows, completeness = complete_top3_windows(predictions)
+    statistics = final_task_statistics(consensus_windows, agreement(consensus_windows, completeness), ratings, conditions, shift)
     statistics.to_csv(transfer_dir / f"{participant}_task_consensus_analysis.csv", index=False)
     events, _ = event_table(args.participant_config.resolve())
     figures = transfer_dir / "figures"
     for target in ["valence", "arousal"]:
-        plot_target(predictions, target, participant, figures)
+        plot_target(predictions, consensus_windows, target, participant, figures)
     for target in sorted(predictions.target.unique()):
         obsolete = figures / f"{participant}_{target}_probability_consensus_triggers.png"
         if obsolete.exists():
             obsolete.unlink()
-    plot_task_trigger_consensus(predictions, statistics, events, participant, figures)
+    plot_task_trigger_consensus(consensus_windows, statistics, events, participant, figures)
     compact = statistics[["task_display", "robot_condition", "target", "median_top3_consensus_probability", "mean_top3_consensus_probability", "fraction_consensus_windows_ge_0_5", "descriptive_task_verdict", "mean_top3_probability_range", "median_top3_probability_range", "mean_pairwise_absolute_probability_difference", "fraction_unanimous_low_windows", "fraction_unanimous_high_windows", "fraction_unanimous_top3_windows", "majority_vote_high_fraction", "robot_rating_1_to_7", "robot_rating_class", "verdict_matches_robot_rating"]].copy()
     compact.columns = ["Task", "Robot condition", "Target", "Median P(HIGH)", "Mean P(HIGH)", "Consensus windows ≥0.5", "Verdict", "Mean range", "Median range", "Mean pairwise |ΔP|", "Unanimous LOW", "Unanimous HIGH", "Unanimous", "Majority HIGH", "Self-report (1–7)", "Rating class", "Verdict match"]
     historical_section = (historical_comparison(manifest, historical_dir)
