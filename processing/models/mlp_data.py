@@ -12,7 +12,7 @@ from sklearn.model_selection import StratifiedGroupKFold
 os.environ.setdefault("MNE_DONTWRITE_HOME", "true")
 import mne
 
-from processing.multimodal_image.modeling import train_classification
+from processing.multimodal_image.modeling.core import train_classification
 
 
 DEFAULT_NO_ICA_SOURCE_RUN = "{participant_lower}_no_ica"

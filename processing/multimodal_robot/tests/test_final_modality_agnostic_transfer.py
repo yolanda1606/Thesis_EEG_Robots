@@ -8,7 +8,7 @@ from pathlib import Path
 import pandas as pd
 
 
-SCRIPT = Path(__file__).resolve().parents[1] / "inference" / "run_final_modality_agnostic_transfer.py"
+SCRIPT = Path(__file__).resolve().parents[1] / "transfer" / "run_final_modality_agnostic_transfer.py"
 SPEC = importlib.util.spec_from_file_location("modality_transfer", SCRIPT)
 assert SPEC is not None and SPEC.loader is not None
 transfer = importlib.util.module_from_spec(SPEC)

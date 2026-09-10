@@ -6,7 +6,7 @@ from collections.abc import Callable
 import numpy as np
 import torch
 
-from processing.multimodal_image.modeling import train_classification
+from processing.multimodal_image.modeling.core import train_classification
 
 
 class TinyMLP(torch.nn.Module):

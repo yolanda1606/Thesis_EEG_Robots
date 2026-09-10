@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+PROJECT_ROOT = Path(__file__).resolve().parents[4]
 OLD_PATH = PROJECT_ROOT / "outputs/image_classification/no_ica/results_summary.csv"
 NEW_PATH = PROJECT_ROOT / "outputs/image_classification/focused_personalized_binary_v1/configuration_summary_all_modalities.csv"
 OUTPUT = PROJECT_ROOT / "outputs/image_classification/focused_vs_old_eeg_comparison"

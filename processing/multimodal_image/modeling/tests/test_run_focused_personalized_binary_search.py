@@ -9,9 +9,8 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[4]
-MODEL_DIR = ROOT / "processing" / "multimodal_image" / "modeling"
-sys.path.insert(0, str(MODEL_DIR))
-import run_focused_personalized_binary_search as focused
+sys.path.insert(0, str(ROOT))
+from processing.multimodal_image.modeling.search import run_focused_personalized_binary_search as focused
 
 
 class TestFocusedPersonalizedBinarySearch(unittest.TestCase):

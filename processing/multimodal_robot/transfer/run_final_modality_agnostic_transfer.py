@@ -28,7 +28,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from processing.multimodal_robot.inference.run_final_frozen_eeg_transfer import (
+from processing.multimodal_robot.transfer.run_final_frozen_eeg_transfer import (
     DISPLAY_TASKS,
     KEYS,
     TASK_ORDER,

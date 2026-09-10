@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from itertools import combinations
 from pathlib import Path
 from typing import Any
@@ -20,10 +21,10 @@ import pandas as pd
 from scipy.spatial.distance import pdist
 from scipy.stats import rankdata
 
-import train_classification as baseline
-
-
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+PROJECT_ROOT = Path(__file__).resolve().parents[4]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+from processing.multimodal_image.modeling.core import train_classification as baseline
 DEFAULT_RESULTS = PROJECT_ROOT / "outputs/image_classification/focused_personalized_binary_v1"
 DEFAULT_OUTPUT = PROJECT_ROOT / "outputs/image_classification"
 ALL_EEG_COLUMNS = list(baseline.EEG_COLUMNS)

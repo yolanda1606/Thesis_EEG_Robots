@@ -15,7 +15,7 @@ from typing import Any
 import pandas as pd
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+PROJECT_ROOT = Path(__file__).resolve().parents[4]
 OUTPUT_ROOT = PROJECT_ROOT / "outputs"
 SUMMARY_ROOT = OUTPUT_ROOT / "modeling_summary"
 INVENTORY_COLUMNS = [

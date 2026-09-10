@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[4]
 DEFAULT_SOURCE = ROOT / "outputs/image_classification/focused_personalized_binary_v1/top3_models_per_participant_target.csv"
 DEFAULT_OUTPUT = ROOT / "outputs/image_classification/focused_personalized_binary_v1/frozen_top3_analysis"
 TARGET_ORDER = ["valence", "arousal"]

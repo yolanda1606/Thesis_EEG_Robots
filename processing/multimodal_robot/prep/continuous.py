@@ -26,7 +26,7 @@ from scipy.signal import butter, sosfiltfilt, welch
 from scipy.stats import pearsonr
 from sklearn.exceptions import ConvergenceWarning
 
-IMAGE_ROOT = Path(__file__).resolve().parents[1] / "multimodal_image"
+IMAGE_ROOT = Path(__file__).resolve().parents[2] / "multimodal_image"
 if str(IMAGE_ROOT) not in sys.path:
     sys.path.insert(0, str(IMAGE_ROOT))
 from src.eeg import _prepare_raw

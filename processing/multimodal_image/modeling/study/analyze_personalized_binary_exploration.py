@@ -17,7 +17,7 @@ from pathlib import Path
 import pandas as pd
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+PROJECT_ROOT = Path(__file__).resolve().parents[4]
 OUTPUT_ROOT = PROJECT_ROOT / "outputs" / "image_classification"
 EXPERIMENTS = {
     "no_ica": "balanced_accuracy_mean",

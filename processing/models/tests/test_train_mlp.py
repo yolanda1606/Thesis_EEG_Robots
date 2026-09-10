@@ -42,7 +42,7 @@ from processing.models.train_mlp import (
     EEG_INPUT_CONFIGURATIONS,
     select_eeg_input_features,
 )
-from processing.multimodal_image.modeling import train_classification
+from processing.multimodal_image.modeling.core import train_classification
 from processing.models.mlp_data import (
     FACE_FEATURE_NAMES,
     modality_rating_columns,

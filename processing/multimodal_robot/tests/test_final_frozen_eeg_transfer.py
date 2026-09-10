@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(ROOT / "processing" / "multimodal_robot" / "inference"))
+sys.path.insert(0, str(ROOT / "processing" / "multimodal_robot" / "transfer"))
 import run_final_frozen_eeg_transfer as transfer
 
 

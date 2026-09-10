@@ -31,10 +31,10 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
-import train_classification as baseline
-
-
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+PROJECT_ROOT = Path(__file__).resolve().parents[4]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+from processing.multimodal_image.modeling.core import train_classification as baseline
 DEFAULT_OUTPUT = PROJECT_ROOT / "outputs/image_classification/focused_personalized_binary_v1"
 DEFAULT_EXTENSION_OUTPUT = DEFAULT_OUTPUT / "face_multimodal_extension_v1"
 DEFAULT_SOURCE_RUN = "{participant_lower}_no_ica"

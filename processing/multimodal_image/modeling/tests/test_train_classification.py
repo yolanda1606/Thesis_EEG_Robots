@@ -13,7 +13,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(ROOT))
-from processing.multimodal_image.modeling import train_classification as tc
+from processing.multimodal_image.modeling.core import train_classification as tc
 
 
 def synthetic_table(rows: int = 12) -> pd.DataFrame:

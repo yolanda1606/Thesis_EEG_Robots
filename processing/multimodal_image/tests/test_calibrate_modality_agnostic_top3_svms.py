@@ -20,6 +20,7 @@ from sklearn.svm import SVC
 SCRIPT = (
     Path(__file__).resolve().parents[1]
     / "modeling"
+    / "calib"
     / "calibrate_modality_agnostic_top3_svms.py"
 )
 SPEC = importlib.util.spec_from_file_location("modality_calibration", SCRIPT)

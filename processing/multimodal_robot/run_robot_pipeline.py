@@ -16,7 +16,7 @@ import mne
 import numpy as np
 import yaml
 
-from continuous import ProgressReporter, alignment_for_segmented_task, alignment_for_task, extract_segmented_task, extract_task, has_eeg_segments
+from prep.continuous import ProgressReporter, alignment_for_segmented_task, alignment_for_task, extract_segmented_task, extract_task, has_eeg_segments
 
 HERE = Path(__file__).resolve().parent
 TASKS = ("pick_place", "shape_sorter_observation", "stack", "sisyphus", "shape_sorter_interaction", "shape_sorter_alone")

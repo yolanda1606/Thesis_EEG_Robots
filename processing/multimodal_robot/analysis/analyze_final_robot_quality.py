@@ -22,7 +22,7 @@ import pandas as pd
 import yaml
 
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 PARTICIPANTS = tuple(f"P{i:02d}" for i in range(1, 47))
 TASKS = ("pick_place", "shape_sorter_observation", "stack", "sisyphus",
          "shape_sorter_interaction", "shape_sorter_alone")

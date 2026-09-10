@@ -12,7 +12,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[3]
 ROBOT_ROOT = ROOT / "processing" / "multimodal_robot"
 sys.path.insert(0, str(ROBOT_ROOT))
-import continuous
+from prep import continuous
 import run_robot_pipeline as pipeline
 
 

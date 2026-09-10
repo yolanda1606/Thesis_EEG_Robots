@@ -26,7 +26,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[4]
 TARGET_COLUMNS = {"valence": "valence_rating", "arousal": "arousal_rating"}
 EXPECTED_MODALITIES = {"eeg", "face", "multimodal"}
 KEY_COLUMNS = ["participant", "target", "transfer_rank"]
