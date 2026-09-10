@@ -1,0 +1,33 @@
+{
+  "purpose": "Plot-only thesis-palette test for Robot ratings",
+  "style_config": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/visualization/thesis_palette.yaml",
+  "reads_predictions_or_models": false,
+  "statistics_recomputed": false,
+  "original_robot_ratings_figure_dir": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_ratings/figures",
+  "original_robot_ratings_png_sha256_before": {
+    "class_balance_by_task.png": "69f526a70e118aa6397da7102e0a97606b63c3254ded7e2733c35ca69d319edb",
+    "experience_vs_fault_deltas.png": "3667df73351a77766463ee49f7baba7fcbe1857cf2ddb1abb83bcca665fbe656",
+    "class_balance_by_task_type.png": "ef19f0df1fb803cb92aa1645ea2d7b751d3dc643d349bdf0a3033f46dfc35315",
+    "task_type_distributions.png": "0ce8905fe7b545d66439f3d718582211cafc9c5dd06329735aa3a3bf5bcbb07f",
+    "speed_effect_paired.png": "6a3382d31be8cae5f2d111e6c9e541bb03604a0d30992bf2f204bf81f9de5447",
+    "age_vs_fault_deltas.png": "fd9d168ca8e8970f02911b1502dee8a80a19a50e0f717dc9a7e53e91f3363ae2",
+    "task_rating_distributions.png": "0d4e3c132ded63b8fa5c87f22245ec96b7cebbb22873c5b150e5e09e06a68ad1",
+    "task_rating_distributions_no_trajectories.png": "8758ebb8708523067b4e6b6e219576883bf6eab77b233f7662e29a5963de2aaf",
+    "class_balance_overall.png": "b07ff27a8dcffb0fccf4668e2c153990f6dbd836e686fb8f6dbe054e12bf8b65",
+    "task_type_distributions_no_trajectories.png": "8df3ab021f03abc3c5b442e9dcd932f8b9fd4d8278b5b9b29e6c382d015fc6af",
+    "fault_effect_paired.png": "cc240857b8319b3b11a126e2711494e0381aebb7bbd2f92022023cd59a8bc0be",
+    "valence_arousal_space.png": "11dfde245362f75c5a35269d9926a39047a7d8df45edd6c9a5cd0d610e4ddd72"
+  },
+  "new_figures": [
+    "age_vs_fault_deltas.png",
+    "class_balance_by_task.png",
+    "class_balance_by_task_type.png",
+    "class_balance_overall.png",
+    "experience_vs_fault_deltas.png",
+    "fault_effect_paired.png",
+    "speed_effect_paired.png",
+    "task_rating_distributions_no_trajectories.png",
+    "task_type_distributions_no_trajectories.png",
+    "valence_arousal_space.png"
+  ]
+}

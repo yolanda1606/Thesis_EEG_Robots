@@ -39,6 +39,12 @@ BRANCHES = {
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, default=ROOT / "outputs/robot_transfer/cohort_analysis")
+    parser.add_argument(
+        "--task-target-only",
+        action="store_true",
+        help=("Read the existing cohort_task_level.csv and create only the "
+              "task × target metrics CSV and balanced-accuracy figure."),
+    )
     return parser.parse_args()
 
 
@@ -170,6 +176,113 @@ def metric_tables(cohort: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.
     return pd.DataFrame(overall), pd.DataFrame(target), pd.DataFrame(task)
 
 
+def task_target_metrics(cohort: pd.DataFrame) -> pd.DataFrame:
+    """Summarize frozen deployment predictions for each branch × task × target.
+
+    The input is the saved participant-level cohort table.  This deliberately
+    does not revisit transfer outputs or recalculate any prediction.
+    """
+    required = {
+        "branch", "task", "target", "actual_high", "predicted_high",
+        "predicted_probability", "correct", "absolute_margin",
+    }
+    missing = required - set(cohort.columns)
+    if missing:
+        raise ValueError(
+            "cohort_task_level.csv: missing required columns "
+            f"{sorted(missing)}"
+        )
+    expected = pd.MultiIndex.from_product(
+        [["eeg_only", "modality_agnostic"], TASK_ORDER, ["valence", "arousal"]],
+        names=["branch", "task", "target"],
+    )
+    observed = pd.MultiIndex.from_frame(cohort[["branch", "task", "target"]].drop_duplicates())
+    unexpected = observed.difference(expected)
+    missing_combinations = expected.difference(observed)
+    if len(unexpected) or len(missing_combinations):
+        raise ValueError(
+            "cohort_task_level.csv does not contain exactly the expected "
+            "branch × task × target combinations; "
+            f"unexpected={list(unexpected)}, missing={list(missing_combinations)}"
+        )
+
+    rows = []
+    for branch, task, target in expected:
+        frame = cohort.loc[
+            (cohort["branch"] == branch)
+            & (cohort["task"] == task)
+            & (cohort["target"] == target)
+        ]
+        row = metric_row(frame, branch, "task_target", task)
+        row.update({
+            "task": task,
+            "task_display": TASK_LABELS[task],
+            "target": target,
+            "mean_task_consensus_p_high": float(frame["predicted_probability"].mean()),
+            "median_task_consensus_p_high": float(frame["predicted_probability"].median()),
+        })
+        rows.append(row)
+    columns = [
+        "branch", "task", "task_display", "target", "n_valid",
+        "actual_high_count", "actual_low_count", "correct_count", "wrong_count",
+        "accuracy", "balanced_accuracy", "sensitivity_high", "specificity_low",
+        "precision_high", "f1_high", "tp", "tn", "fp", "fn", "brier_score",
+        "mean_task_consensus_p_high", "median_task_consensus_p_high",
+        "mean_absolute_margin", "median_absolute_margin",
+    ]
+    return pd.DataFrame(rows).loc[:, columns]
+
+
+def save_task_target_balanced_accuracy_figure(path: Path, metrics: pd.DataFrame) -> None:
+    """Save a branch-panel plot comparing target balanced accuracy per task."""
+    branches = ["eeg_only", "modality_agnostic"]
+    targets = ["valence", "arousal"]
+    colors = {"valence": "#377eb8", "arousal": "#e41a1c"}
+    task_labels = [TASK_LABELS[task] for task in TASK_ORDER]
+    positions = np.arange(len(TASK_ORDER))
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.8), sharey=True)
+    for axis, branch in zip(axes, branches):
+        data = metrics.loc[metrics["branch"] == branch]
+        for offset, target in zip((-0.19, 0.19), targets):
+            values = (
+                data.loc[data["target"] == target]
+                .set_index("task")
+                .reindex(TASK_ORDER)["balanced_accuracy"]
+            )
+            axis.bar(positions + offset, values, width=0.36, color=colors[target], label=target.title())
+        axis.axhline(0.5, color="0.35", linewidth=0.9, linestyle="--")
+        axis.set_title(branch.replace("_", " ").title())
+        axis.set_xticks(positions, task_labels)
+        axis.set_xlabel("Task")
+        axis.set_ylim(0, 1)
+        axis.grid(axis="y", alpha=0.25)
+    axes[0].set_ylabel("Balanced accuracy")
+    axes[1].legend(title="Target", loc="upper right")
+    fig.suptitle("Deployment balanced accuracy by task, target, and branch", y=1.02)
+    fig.tight_layout()
+    fig.savefig(path, dpi=220, bbox_inches="tight")
+    plt.close(fig)
+
+
+def create_task_target_artifacts(output: Path) -> pd.DataFrame:
+    """Create the requested task-target artifacts from the saved cohort table."""
+    cohort_path = output / "cohort_task_level.csv"
+    metrics_path = output / "task_target_metrics.csv"
+    figure_path = output / "fig_task_target_balanced_accuracy.png"
+    if not cohort_path.is_file():
+        raise FileNotFoundError(f"Missing existing task-level cohort table: {cohort_path}")
+    existing = [path for path in (metrics_path, figure_path) if path.exists()]
+    if existing:
+        raise FileExistsError(
+            "Refusing to overwrite existing task-target artifacts: "
+            + ", ".join(str(path) for path in existing)
+        )
+    metrics = task_target_metrics(pd.read_csv(cohort_path))
+    metrics.to_csv(metrics_path, index=False)
+    save_task_target_balanced_accuracy_figure(figure_path, metrics)
+    return metrics
+
+
 def grouped_mean(cohort: pd.DataFrame, metrics: list[str], dimensions: list[str]) -> pd.DataFrame:
     return cohort.groupby(dimensions, dropna=False)[metrics].agg(["count", "mean", "median"]).stack(0).reset_index().rename(columns={"level_" + str(len(dimensions)): "metric"})
 
@@ -241,6 +354,17 @@ def save_figures(output: Path, cohort: pd.DataFrame, overall: pd.DataFrame, targ
 
 def main() -> int:
     args = parse_args(); output = args.output_dir.resolve()
+    if args.task_target_only:
+        metrics = create_task_target_artifacts(output)
+        print(json.dumps({
+            "output": str(output),
+            "task_target_rows": len(metrics),
+            "artifacts": [
+                str(output / "task_target_metrics.csv"),
+                str(output / "fig_task_target_balanced_accuracy.png"),
+            ],
+        }, indent=2))
+        return 0
     if output.exists(): raise FileExistsError(f"Refusing to overwrite existing cohort analysis directory: {output}")
     cohort = pd.concat([normalize_branch(branch, source) for branch, source in BRANCHES.items()], ignore_index=True)
     overall, target, task = metric_tables(cohort)

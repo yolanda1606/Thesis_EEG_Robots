@@ -1,0 +1,17 @@
+{
+  "purpose": "Read-only frozen Robot-transfer context analysis",
+  "cohort_input": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/cohort_analysis/cohort_task_level.csv",
+  "condition_metadata": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/configs/participants",
+  "uses_saved_frozen_predictor_outputs": true,
+  "runs_inference_or_loads_models": false,
+  "condition_counts": {
+    "CONTROL_FAST": 46,
+    "FAULTY_FAST": 46,
+    "CONTROL_SLOW": 45,
+    "FAULTY_SLOW": 1
+  },
+  "fault_paired_n": 46,
+  "speed_paired_n": 45,
+  "participant_level_aggregation": true,
+  "window_independence_used": false
+}

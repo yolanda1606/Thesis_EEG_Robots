@@ -1,0 +1,7 @@
+variable,level,n,missing_n,mean,sd,median,q1,q3,iqr,min,max,note
+age,continuous,46,0,25.891304347826086,3.321500737582103,25.0,24.0,27.0,3.0,21.0,37.0,Original recorded age; analyzed continuously.
+gender,Female,21,0,,,,,,,,,Original recorded category; no categories were merged or recoded.
+gender,Male,25,0,,,,,,,,,Original recorded category; no categories were merged or recoded.
+prior_robot_experience,No,23,0,,,,,,,,,Original recorded category; no categories were merged or recoded.
+prior_robot_experience,Yes,23,0,,,,,,,,,Original recorded category; no categories were merged or recoded.
+experience_free_text,free_text,46,0,,,,,,,,,Preserved without ordinal recoding; '-' appears 22 times.

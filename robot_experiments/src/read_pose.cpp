@@ -1,6 +1,6 @@
 #include <iostream>
 #include <franka/robot.h>
-#include <franka/exception.h> // <--- Add this line!
+#include <franka/exception.h> 
 
 int main() {
     try {

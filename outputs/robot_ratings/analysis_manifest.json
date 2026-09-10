@@ -1,0 +1,24 @@
+{
+  "purpose": "Read-only Robot participant ratings analysis",
+  "raw_ratings_source": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data/Robot Ratings - Robot Ratings.csv",
+  "participant_metadata_source": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/configs/participants",
+  "uses_actual_condition_fields": [
+    "condition.actual",
+    "condition.speed_actual"
+  ],
+  "uses_predictions": false,
+  "participant_count": 46,
+  "raw_rating_rows": 276,
+  "long_rating_rows": 552,
+  "actual_observation_condition_counts": {
+    "FAULTY_FAST": 46,
+    "CONTROL_FAST": 46,
+    "CONTROL_SLOW": 45,
+    "FAULTY_SLOW": 1
+  },
+  "primary_contrast_paired_n": {
+    "fault_effect": 46,
+    "speed_effect": 45
+  },
+  "bootstrap_seed": 20260910
+}

@@ -1,0 +1,13 @@
+{
+  "purpose": "Read-only frozen Image-to-Robot feature-shift deployment analysis",
+  "cohort_input": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/cohort_analysis/cohort_task_level.csv",
+  "runs_inference_or_loads_models": false,
+  "uses_saved_frozen_cohort_and_shift_outputs": true,
+  "n_task_rows": 1072,
+  "branches": [
+    "eeg_only",
+    "modality_agnostic"
+  ],
+  "participant_cluster_bootstrap_resamples": 100,
+  "window_independence_used": false
+}

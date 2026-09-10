@@ -1,0 +1,20 @@
+{
+  "purpose": "Exploratory demographics and descriptive validation-label balance for Robot ratings only",
+  "uses_eeg_or_predictions": false,
+  "demographic_source": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data/Thesis Organization - Participant Info.csv",
+  "demographic_linkage": "Reconstructed under explicit authorization: # 1 \u2192 P01 through # 46 \u2192 P46",
+  "linkage_evidence": [
+    "P01/P02 direct IDs",
+    "P14 FAULTY_SLOW corroboration",
+    "acquisition chronology"
+  ],
+  "linkage_limitations": [
+    "Rows 26\u201332 schedule/acquisition differences",
+    "rows 27/28 demographic-sheet Group conflicts"
+  ],
+  "experimental_metadata_source": "Canonical participant YAMLs only; demographic-sheet Group excluded",
+  "age_test": "Spearman rho with deterministic percentile-bootstrap 95% CI",
+  "categorical_tests": "Mann\u2013Whitney U with Cliff's delta",
+  "fdr": "Benjamini\u2013Hochberg within each demographic family across 12 measures",
+  "class_rule": "LOW < 4; HIGH >= 4"
+}

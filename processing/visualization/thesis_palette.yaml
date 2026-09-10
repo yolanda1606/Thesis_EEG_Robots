@@ -1,0 +1,43 @@
+# Thesis-wide visualization palette. Edit raw colors or semantic roles here,
+# then rerun an appropriate plotting-only script.
+# Archived first palette test: light_blue #8fd7d7, medium_blue #00b0be,
+# light_pink #ff8ca1, medium_pink #f45f74, light_green #bdd373,
+# medium_green #98c127, light_orange #ffcd8e, medium_orange #ffb255.
+palette:
+  pink: "#FF1F5B"
+  green: "#00CD6C"
+  blue: "#009ADE"
+  blue_light: "#80CDEF"  # 50% white tint of GeoDataViz blue; class-balance LOW level.
+  purple: "#AF58BA"
+  yellow: "#FFC61E"
+  orange: "#F28522"
+
+semantic_roles:
+  emotion:
+    valence: {main: pink, light: pink}
+    arousal: {main: blue, light: blue}
+  condition:
+    faulty: {main: orange, light: orange}
+    control_fast: {main: green, light: green}
+    control_slow: {main: blue, light: blue}
+  class:
+    low: {main: blue_light, light: blue_light}
+    high: {main: blue, light: blue}
+  task_identity:
+    pick_place: pink
+    shape_sorter_observation: blue
+    stack: green
+    sisyphus: orange
+    shape_sorter_interaction: purple
+    shape_sorter_alone: yellow
+  neutral:
+    text: "#262626"
+    grid: "#d9d9d9"
+    reference: "#737373"
+    connector: "#9e9e9e"
+    edge: "#404040"
+
+# Reserved semantic namespaces for future figure families:
+# branch: {eeg_only: ..., modality_agnostic: ...}
+# classifier_rank: {rank_1: ..., rank_2: ..., rank_3: ...}
+# event: {fault: ..., normal: ...}
