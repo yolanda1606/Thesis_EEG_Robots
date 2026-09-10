@@ -48,3 +48,6 @@ outputs/robot_transfer/focused_personalized_binary_v1/pilot_comparison_v1.zip
 outputs/robot_transfer/focused_personalized_binary_v1/pilot_comparison_v1/
 outputs/robot_transfer/focused_personalized_binary_v2/
 outputs/robot_transfer/modality_agnostic/
+
+# Archived output artifacts may include large files that were intentionally ignored.
+outputs/archive/
