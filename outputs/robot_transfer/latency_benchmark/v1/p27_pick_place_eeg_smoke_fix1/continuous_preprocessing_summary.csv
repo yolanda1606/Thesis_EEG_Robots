@@ -1,0 +1,2 @@
+participant,task,raw_duration_s,valid_window_count,car_filter_total_ms,amortized_preprocessing_ms_per_window
+P27,pick_place,42.036,3,9.944045,3.3146816666666665

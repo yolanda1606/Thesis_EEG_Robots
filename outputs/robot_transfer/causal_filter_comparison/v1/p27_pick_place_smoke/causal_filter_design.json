@@ -1,0 +1,24 @@
+{
+  "sample_rate_hz": 250.0,
+  "cutoffs_hz": [
+    1.0,
+    40.0
+  ],
+  "nominal_butterworth_order": 4,
+  "forward_bandpass_transfer_order": 8,
+  "sos_section_count": 4,
+  "implementation": "scipy.signal.sosfilt",
+  "state_policy": "scipy.signal.sosfilt_zi scaled by first post-CAR sample; zf carried across chunks",
+  "state_reset_policy": "reset only at independent BDF/recording boundaries",
+  "warmup_seconds_preregistered": 2.0,
+  "warmup_sensitivity_seconds": [
+    1.58,
+    3.0
+  ],
+  "canonical_reference": "MNE phase='zero' SOS forward-backward filtering; effective band-pass order 16",
+  "chunk_ms": 100.0,
+  "chunk_samples": 25,
+  "tasks": [
+    "pick_place"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "purpose": "Offline replay computational latency only; excludes acquisition, Bluetooth, RealSense driver and live synchronization.",
+  "participant": "P27",
+  "task": "pick_place",
+  "mode": "eeg_only",
+  "raw_eeg": "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data/P27_2026-07-08/Pick and Place/EEG/UnicornRecorder_08_07_2026_16_28_35.bdf",
+  "window_policy": "2 s windows with 1 s step from canonically continuous CAR + 1-40 Hz fourth-order Butterworth IIR preprocessing; ICA disabled",
+  "preprocessing_timing_policy": "continuous recording measured once; amortized value is not online per-window latency",
+  "per_window_exclusions": [
+    "BDF loading",
+    "video opening",
+    "alignment fitting",
+    "configuration loading",
+    "model loading/hashing",
+    "MediaPipe construction",
+    "CSV/manifest writing"
+  ],
+  "face_attribution": "sequential canonical VIDEO-mode frame times are summed for every overlapping 2-s window; this is descriptive replay attribution",
+  "compatibility": {
+    "performed": true,
+    "tolerance": 1e-09,
+    "pass": false,
+    "row_count": 2538,
+    "maximum_absolute_difference": 1.8189894035458565e-12
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "participant": "P27",
+  "tasks": [
+    "pick_place"
+  ],
+  "canonical_validation_pass": true,
+  "warmup_seconds": 2.0,
+  "warmup_sensitivity_seconds": [
+    1.58,
+    3.0
+  ],
+  "frozen_inference_total_ms": 203.646339,
+  "no_training_or_refitting": true
+}
