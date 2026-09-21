@@ -1,0 +1,19 @@
+{
+  "participant": "P27",
+  "tasks": [
+    "pick_place",
+    "shape_sorter_observation",
+    "stack",
+    "sisyphus",
+    "shape_sorter_interaction",
+    "shape_sorter_alone"
+  ],
+  "canonical_validation_pass": true,
+  "warmup_seconds": 2.0,
+  "warmup_sensitivity_seconds": [
+    1.58,
+    3.0
+  ],
+  "frozen_inference_total_ms": 164.173782,
+  "no_training_or_refitting": true
+}

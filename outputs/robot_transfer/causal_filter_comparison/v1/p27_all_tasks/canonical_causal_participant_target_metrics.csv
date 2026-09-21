@@ -1,0 +1,5 @@
+participant,target,branch,n_tasks,actual_high_count,actual_low_count,balanced_accuracy
+P27,arousal,canonical,6,6,0,
+P27,arousal,causal,6,6,0,
+P27,valence,canonical,6,6,0,
+P27,valence,causal,6,6,0,
