@@ -38,6 +38,8 @@ from processing.multimodal_robot.run_robot_pipeline import load, localize_task_p
 from processing.multimodal_robot.transfer import run_final_frozen_eeg_transfer as transfer
 
 TASKS = ("pick_place", "shape_sorter_observation", "stack", "sisyphus", "shape_sorter_interaction", "shape_sorter_alone")
+CANONICAL_VALIDATION_ATOL = 1e-9
+CANONICAL_VALIDATION_RTOL = 1e-15
 
 
 def args() -> argparse.Namespace:
@@ -111,7 +113,10 @@ def canonical_validation(participant: str, task_name: str, segment: int, raw, ca
     for name in features:
         diff = (check[f"{name}_replay"] - check[f"{name}_canonical"]).abs()
         output.extend({**{key: check.at[index, key] for key in KEYS + ["channel"]}, "feature": name,
-                       "absolute_difference": value, "pass": bool(np.isfinite(value) and value <= 1e-9)} for index, value in diff.items())
+                       "absolute_difference": value,
+                       "pass": bool(np.isclose(check.at[index, f"{name}_replay"], check.at[index, f"{name}_canonical"],
+                                                 rtol=CANONICAL_VALIDATION_RTOL, atol=CANONICAL_VALIDATION_ATOL, equal_nan=False))}
+                      for index, value in diff.items())
     return pd.DataFrame(output)
 
 
@@ -197,7 +202,7 @@ def main() -> int:
     latency["total_causal_compute_amortized_ms"] = latency.eeg_feature_ms + latency.frozen_inference_amortized_ms
     latency.to_csv(output/"causal_window_latency.csv",index=False); validation.to_csv(output/"canonical_replay_validation.csv",index=False)
     json.dump(filter_design_metadata(causal_sos()) | {"chunk_ms":a.chunk_ms,"chunk_samples":chunk_samples,"tasks":a.tasks}, (output/"causal_filter_design.json").open("w"),indent=2)
-    json.dump({"participant":a.participant,"tasks":a.tasks,"canonical_validation_pass":bool(validation.empty or validation["pass"].all()),"warmup_seconds":WARMUP_SECONDS,"warmup_sensitivity_seconds":SENSITIVITY_WARMUP_SECONDS,"frozen_inference_total_ms":inference_ms,"no_training_or_refitting":True}, (output/"causal_run_manifest.json").open("w"),indent=2)
+    json.dump({"participant":a.participant,"tasks":a.tasks,"canonical_validation_pass":bool(validation.empty or validation["pass"].all()),"canonical_validation_atol":CANONICAL_VALIDATION_ATOL,"canonical_validation_rtol":CANONICAL_VALIDATION_RTOL,"warmup_seconds":WARMUP_SECONDS,"warmup_sensitivity_seconds":SENSITIVITY_WARMUP_SECONDS,"frozen_inference_total_ms":inference_ms,"no_training_or_refitting":True}, (output/"causal_run_manifest.json").open("w"),indent=2)
     figures(output, family, timing, probability_detail)
     print(f"Causal replay complete: {output}"); return 0
 

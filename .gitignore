@@ -51,3 +51,7 @@ outputs/robot_transfer/modality_agnostic/
 
 # Archived output artifacts may include large files that were intentionally ignored.
 outputs/archive/
+
+# Causal Robot replay participant-level generated outputs
+outputs/robot_transfer/causal_filter_comparison/v1/cohort/
+outputs/robot_transfer/causal_filter_comparison/v1/cohort_summary.archived_pre_overall/

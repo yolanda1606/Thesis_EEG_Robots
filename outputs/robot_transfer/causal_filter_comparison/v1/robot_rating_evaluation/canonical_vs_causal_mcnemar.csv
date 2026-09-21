@@ -1,0 +1,4 @@
+scope,target,N,both_correct,canonical_only_correct,causal_only_correct,both_wrong,method,discordant_pairs,p_value
+overall,,536,262,19,27,228,exact two-sided McNemar binomial test,46,0.3019956131896606
+target,arousal,268,132,8,12,116,exact two-sided McNemar binomial test,20,0.5034446716308594
+target,valence,268,130,11,15,112,exact two-sided McNemar binomial test,26,0.557197093963623

@@ -1,0 +1,2 @@
+scope,total_chunks,total_prediction_windows,filter_median_ms,filter_p95_ms,filter_max_ms,filter_chunks_over_100ms,filter_proportion_over_100ms,eeg_feature_median_ms,eeg_feature_p95_ms,eeg_feature_max_ms,total_compute_median_ms,total_compute_p95_ms,total_compute_max_ms,participant_filter_median_min_ms,participant_filter_median_max_ms
+offline_replay_only,131823,12499,0.032781,0.0535319,48.445525,0,0.0,3.43523,5.099090299999998,56.946197,3.507093696031746,5.1741263131255915,57.02319553190596,0.031751,0.049761

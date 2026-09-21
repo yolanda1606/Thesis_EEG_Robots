@@ -9,6 +9,9 @@ from scipy import signal
 from processing.multimodal_robot.analysis.causal_streaming.causal_filter import (
     SAMPLE_RATE_HZ, causal_sos, causal_warmup_excluded, filter_stream, initial_state,
 )
+from processing.multimodal_robot.analysis.causal_streaming.run_causal_robot_replay import (
+    CANONICAL_VALIDATION_ATOL, CANONICAL_VALIDATION_RTOL,
+)
 
 
 class CausalStreamingTests(unittest.TestCase):
@@ -39,6 +42,13 @@ class CausalStreamingTests(unittest.TestCase):
         self.assertTrue(causal_warmup_excluded(1.0))
         self.assertFalse(causal_warmup_excluded(2.0))
         self.assertEqual(SAMPLE_RATE_HZ, 250.0)
+
+    def test_canonical_validation_accepts_roundoff_but_rejects_meaningful_difference(self) -> None:
+        reference = 2.1038082477099076e8
+        self.assertTrue(np.isclose(reference + 2.9802322387695312e-8, reference,
+                                   rtol=CANONICAL_VALIDATION_RTOL, atol=CANONICAL_VALIDATION_ATOL))
+        self.assertFalse(np.isclose(reference + 1e-4, reference,
+                                    rtol=CANONICAL_VALIDATION_RTOL, atol=CANONICAL_VALIDATION_ATOL))
 
 
 if __name__ == "__main__":
