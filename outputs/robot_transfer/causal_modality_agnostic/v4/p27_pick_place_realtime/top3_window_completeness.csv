@@ -1,0 +1,3 @@
+participant,target,task,n_candidate_windows,n_complete_top3_windows,n_incomplete_top3_windows,fraction_complete_top3_windows
+P27,arousal,pick_place,21,19,2,0.9047619047619048
+P27,valence,pick_place,21,19,2,0.9047619047619048
