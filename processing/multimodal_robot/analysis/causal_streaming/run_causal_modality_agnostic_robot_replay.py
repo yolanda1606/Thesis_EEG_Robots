@@ -402,9 +402,10 @@ def delivery_accounting(window_timing: pd.DataFrame, consensus_predictions: pd.D
                         realtime_schedule: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Report validity and timing jointly without changing scheduler semantics."""
     scheduled = realtime_schedule.loc[realtime_schedule.job_type.eq("prediction_update")].copy()
-    schedule_columns = KEYS + ["deadline_s", "completion_s", "waiting_ms", "response_ms", "lateness_ms", "deadline_met"]
+    scheduler_keys = ["participant", "task", "segment_id", "window_id"]
+    schedule_columns = scheduler_keys + ["deadline_s", "completion_s", "waiting_ms", "response_ms", "lateness_ms", "deadline_met"]
     scheduled = scheduled.loc[:, schedule_columns]
-    base = window_timing.loc[:, KEYS + ["valid_model_count"]].merge(scheduled, on=KEYS, how="left", validate="one_to_one")
+    base = window_timing.loc[:, KEYS + ["valid_model_count"]].merge(scheduled, on=scheduler_keys, how="left", validate="one_to_one")
     present = consensus_predictions.loc[:, KEYS + ["target"]].drop_duplicates()
     flags = present.assign(valid_consensus=True).pivot(index=KEYS, columns="target", values="valid_consensus").reset_index()
     flags = flags.rename(columns={"valence": "valid_valence_consensus", "arousal": "valid_arousal_consensus"})

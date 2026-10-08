@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 from processing.multimodal_robot.analysis.causal_streaming.run_causal_modality_agnostic_robot_replay import (
-    CALIBRATION_SECONDS, ambiguous_segment_mapping_reason, delivery_accounting, face_window_features, fixed_offset_calibration,
+    CALIBRATION_SECONDS, ambiguous_segment_mapping_reason, build_realtime_schedule, delivery_accounting, face_window_features, fixed_offset_calibration,
     prediction_window_starts, route_source, single_worker_schedule,
     timed_window_consensus, validate_frame_telemetry, validate_route_schema,
 )
@@ -106,11 +106,13 @@ class CausalModalityAgnosticReplayTests(unittest.TestCase):
     def test_delivery_accounting_preserves_invalid_windows_in_the_denominator(self) -> None:
         keys={"participant":"P27","task":"pick_place","segment_id":1,"window_id":"w1","window_start_s":1.,"window_end_s":3.}
         second={**keys,"window_id":"w2","window_start_s":2.,"window_end_s":4.}
-        timing=pd.DataFrame([{**keys,"valid_model_count":6},{**second,"valid_model_count":3}])
+        timing=pd.DataFrame([{**keys,"valid_model_count":6,"prediction_compute_ms":100.},
+                             {**second,"valid_model_count":3,"prediction_compute_ms":1200.}])
         consensus_rows=pd.DataFrame([{**keys,"target":"valence"},{**keys,"target":"arousal"},
                                      {**second,"target":"valence"}])
-        schedule=pd.DataFrame([{**keys,"job_type":"prediction_update","deadline_s":4.,"completion_s":3.1,"waiting_ms":0.,"response_ms":100.,"lateness_ms":0.,"deadline_met":True},
-                               {**second,"job_type":"prediction_update","deadline_s":5.,"completion_s":5.2,"waiting_ms":0.,"response_ms":1200.,"lateness_ms":200.,"deadline_met":False}])
+        schedule=build_realtime_schedule(pd.DataFrame(),pd.DataFrame(),timing)
+        self.assertNotIn("window_start_s",schedule.columns)
+        self.assertNotIn("window_end_s",schedule.columns)
         delivery, summary=delivery_accounting(timing,consensus_rows,schedule)
         self.assertEqual(delivery.complete_paired_consensus.tolist(),[True,False])
         self.assertEqual(delivery.complete_paired_delivered_on_time.tolist(),[True,False])
