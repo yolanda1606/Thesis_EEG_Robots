@@ -1,0 +1,62 @@
+participant: P10
+started_utc: 2026-09-21T12:46:39.266108+00:00
+ended_utc: 2026-09-21T12:48:53.207214+00:00
+return_code: 0
+command: /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/bin/python /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/analysis/causal_streaming/run_causal_modality_agnostic_robot_replay.py --participant P10 --participant-config /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/configs/participants/P10.yaml --raw-root /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data --tasks pick_place shape_sorter_observation stack sisyphus shape_sorter_interaction shape_sorter_alone --output-dir /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/causal_modality_agnostic/v1/cohort/P10 --canonical-root /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/modality_agnostic/P10 --image-reference-csv /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P10/Image_Experiment/runs/p10_no_ica/merged/p10_image_trial_dataset.csv --alignment-metadata /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P10/Robot_Experiment/runs/p10_robot_final_features/alignment/alignment_metadata.json
+
+exception:
+
+
+stdout:
+P10 fixed-offset causal modality-agnostic replay complete: /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/causal_modality_agnostic/v1/cohort/P10
+
+
+stderr:
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) ACC X, ACC Y, ACC Z, CNT, DT, GYR X, GYR Y, GYR Z, VALID has changed from V to NA.
+  raw.set_channel_types(channel_types, verbose=False)
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) Status has changed from NA to V.
+  raw.set_channel_types(channel_types, verbose=False)
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+W0000 00:00:1789994800.888674   50840 face_landmarker_graph.cc:174] Sets FaceBlendshapesGraph acceleration to xnnpack by default.
+I0000 00:00:1789994800.920180   50840 gl_context_egl.cc:85] Successfully initialized EGL. Major : 1 Minor: 5
+I0000 00:00:1789994800.972755   50890 gl_context.cc:385] GL version: 3.2 (OpenGL ES 3.2 NVIDIA 550.90.07), renderer: NVIDIA RTX A5000/PCIe/SSE2
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+W0000 00:00:1789994801.004485   50855 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1789994801.031742   50861 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) ACC X, ACC Y, ACC Z, CNT, DT, GYR X, GYR Y, GYR Z, VALID has changed from V to NA.
+  raw.set_channel_types(channel_types, verbose=False)
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) Status has changed from NA to V.
+  raw.set_channel_types(channel_types, verbose=False)
+W0000 00:00:1789994818.844385   50954 face_landmarker_graph.cc:174] Sets FaceBlendshapesGraph acceleration to xnnpack by default.
+I0000 00:00:1789994818.851479   50954 gl_context_egl.cc:85] Successfully initialized EGL. Major : 1 Minor: 5
+I0000 00:00:1789994818.883698   51004 gl_context.cc:385] GL version: 3.2 (OpenGL ES 3.2 NVIDIA 550.90.07), renderer: NVIDIA RTX A5000/PCIe/SSE2
+W0000 00:00:1789994818.890212   50968 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1789994818.908169   50975 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) ACC X, ACC Y, ACC Z, CNT, DT, GYR X, GYR Y, GYR Z, VALID has changed from V to NA.
+  raw.set_channel_types(channel_types, verbose=False)
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) Status has changed from NA to V.
+  raw.set_channel_types(channel_types, verbose=False)
+W0000 00:00:1789994845.538588   51069 face_landmarker_graph.cc:174] Sets FaceBlendshapesGraph acceleration to xnnpack by default.
+I0000 00:00:1789994845.546611   51069 gl_context_egl.cc:85] Successfully initialized EGL. Major : 1 Minor: 5
+I0000 00:00:1789994845.579332   51119 gl_context.cc:385] GL version: 3.2 (OpenGL ES 3.2 NVIDIA 550.90.07), renderer: NVIDIA RTX A5000/PCIe/SSE2
+W0000 00:00:1789994845.581301   51080 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1789994845.604246   51091 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) ACC X, ACC Y, ACC Z, CNT, DT, GYR X, GYR Y, GYR Z, VALID has changed from V to NA.
+  raw.set_channel_types(channel_types, verbose=False)
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) Status has changed from NA to V.
+  raw.set_channel_types(channel_types, verbose=False)
+W0000 00:00:1789994878.223764   51183 face_landmarker_graph.cc:174] Sets FaceBlendshapesGraph acceleration to xnnpack by default.
+I0000 00:00:1789994878.232037   51183 gl_context_egl.cc:85] Successfully initialized EGL. Major : 1 Minor: 5
+I0000 00:00:1789994878.266430   51233 gl_context.cc:385] GL version: 3.2 (OpenGL ES 3.2 NVIDIA 550.90.07), renderer: NVIDIA RTX A5000/PCIe/SSE2
+W0000 00:00:1789994878.271440   51189 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1789994878.295400   51208 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) ACC X, ACC Y, ACC Z, CNT, DT, GYR X, GYR Y, GYR Z, VALID has changed from V to NA.
+  raw.set_channel_types(channel_types, verbose=False)
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) Status has changed from NA to V.
+  raw.set_channel_types(channel_types, verbose=False)
+W0000 00:00:1789994887.483897   51297 face_landmarker_graph.cc:174] Sets FaceBlendshapesGraph acceleration to xnnpack by default.
+I0000 00:00:1789994887.491759   51297 gl_context_egl.cc:85] Successfully initialized EGL. Major : 1 Minor: 5
+I0000 00:00:1789994887.522514   51347 gl_context.cc:385] GL version: 3.2 (OpenGL ES 3.2 NVIDIA 550.90.07), renderer: NVIDIA RTX A5000/PCIe/SSE2
+W0000 00:00:1789994887.527713   51311 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1789994887.551242   51318 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+

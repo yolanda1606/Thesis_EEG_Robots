@@ -1,0 +1,9 @@
+participant,task,target,canonical_final_P_task,canonical_final_verdict,canonical_paired_P_task,canonical_paired_verdict,causal_P_task,n_complete_causal_windows,causal_verdict,final_verdict_agree,paired_verdict_agree
+P44,pick_place,arousal,1.9750606729063877e-05,LOW,0.043819241986138846,LOW,0.040648720999285556,2,LOW,True,True
+P44,shape_sorter_interaction,arousal,0.0105724324416307,LOW,0.005132861405916,LOW,0.0029146815889631752,61,LOW,True,True
+P44,shape_sorter_observation,arousal,0.0300811084912197,LOW,0.071050473159286,LOW,0.06250329171644263,39,LOW,True,True
+P44,sisyphus,arousal,0.006994839059186,LOW,0.006994839059186,LOW,0.0014961264625038845,79,LOW,True,True
+P44,pick_place,valence,0.7486376870268486,HIGH,0.7448448825755325,HIGH,0.7443829929283068,2,HIGH,True,True
+P44,shape_sorter_interaction,valence,0.7573634343291986,HIGH,0.7638884398063395,HIGH,0.7642159470370322,61,HIGH,True,True
+P44,shape_sorter_observation,valence,0.7483502489728842,HIGH,0.7464011026422732,HIGH,0.7466193916503037,39,HIGH,True,True
+P44,sisyphus,valence,0.7299104724014073,HIGH,0.7299104724014073,HIGH,0.7314858975772546,79,HIGH,True,True

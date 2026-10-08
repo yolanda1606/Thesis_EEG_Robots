@@ -1,0 +1,11 @@
+participant,target,task,n_candidate_windows,n_complete_top3_windows,n_incomplete_top3_windows,fraction_complete_top3_windows
+P43,arousal,pick_place,20,19,1,0.95
+P43,valence,pick_place,20,19,1,0.95
+P43,arousal,shape_sorter_observation,37,37,0,1.0
+P43,valence,shape_sorter_observation,37,37,0,1.0
+P43,arousal,stack,49,48,1,0.9795918367346939
+P43,valence,stack,49,48,1,0.9795918367346939
+P43,arousal,sisyphus,70,68,2,0.9714285714285714
+P43,valence,sisyphus,70,68,2,0.9714285714285714
+P43,arousal,shape_sorter_interaction,58,57,1,0.9827586206896551
+P43,valence,shape_sorter_interaction,58,57,1,0.9827586206896551

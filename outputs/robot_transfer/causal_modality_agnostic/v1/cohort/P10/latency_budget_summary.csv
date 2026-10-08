@@ -1,0 +1,7 @@
+scope,count,deadline_ms,n_le_deadline,proportion_le_deadline,n_gt_deadline,proportion_gt_deadline
+overall,258,1000.0,254,0.9844961240310077,4,0.015503875968992248
+pick_place,20,1000.0,19,0.95,1,0.05
+shape_sorter_observation,41,1000.0,40,0.975609756097561,1,0.024390243902439025
+stack,50,1000.0,49,0.98,1,0.02
+sisyphus,75,1000.0,75,1.0,0,0.0
+shape_sorter_interaction,72,1000.0,71,0.9861111111111112,1,0.013888888888888888

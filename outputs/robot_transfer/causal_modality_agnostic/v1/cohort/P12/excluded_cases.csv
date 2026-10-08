@@ -1,0 +1,2 @@
+participant,task,segment_id,reason,canonical_alignment_type,eeg_path,video_path,vision_log_path
+P12,shape_sorter_alone,1,no_status_alignment,filename_fallback,/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data/P12_2026-06-04/Shape Sorter Alone/EEG/UnicornRecorder_04_06_2026_15_41_11.bdf,/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data/P12_2026-06-04/Shape Sorter Alone/vision_video_15-41-21_SHAPE_ALONE.avi,/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data/P12_2026-06-04/Shape Sorter Alone/vision_log_15-41-21_SHAPE_ALONE.csv
