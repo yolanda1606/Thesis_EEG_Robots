@@ -1,0 +1,49 @@
+participant: P27
+started_utc: 2026-10-08T15:05:11.412278+00:00
+ended_utc: 2026-10-08T15:05:30.647354+00:00
+return_code: 1
+command: /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/bin/python /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/analysis/causal_streaming/run_causal_modality_agnostic_robot_replay.py --participant P27 --participant-config /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/configs/participants/P27.yaml --raw-root /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data --tasks pick_place --output-dir /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/causal_modality_agnostic/v5/p27_pick_place_manual/P27 --canonical-root /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/modality_agnostic/P27 --image-reference-csv /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P27/Image_Experiment/runs/p27_no_ica/merged/p27_image_trial_dataset.csv --alignment-metadata /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P27/Robot_Experiment/runs/p27_robot_final_features/alignment/alignment_metadata.json --reference-causal-output /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/causal_modality_agnostic/v1/cohort/P27
+
+exception:
+CalledProcessError(1, ['/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/bin/python', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/analysis/causal_streaming/run_causal_modality_agnostic_robot_replay.py', '--participant', 'P27', '--participant-config', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/configs/participants/P27.yaml', '--raw-root', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data', '--tasks', 'pick_place', '--output-dir', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/causal_modality_agnostic/v5/p27_pick_place_manual/P27', '--canonical-root', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/modality_agnostic/P27', '--image-reference-csv', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P27/Image_Experiment/runs/p27_no_ica/merged/p27_image_trial_dataset.csv', '--alignment-metadata', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P27/Robot_Experiment/runs/p27_robot_final_features/alignment/alignment_metadata.json', '--reference-causal-output', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/causal_modality_agnostic/v1/cohort/P27'])
+
+stdout:
+
+
+stderr:
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) ACC X, ACC Y, ACC Z, CNT, DT, GYR X, GYR Y, GYR Z, VALID has changed from V to NA.
+  raw.set_channel_types(channel_types, verbose=False)
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) Status has changed from NA to V.
+  raw.set_channel_types(channel_types, verbose=False)
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+W0000 00:00:1791471913.144570   35625 face_landmarker_graph.cc:174] Sets FaceBlendshapesGraph acceleration to xnnpack by default.
+I0000 00:00:1791471913.175391   35625 gl_context_egl.cc:85] Successfully initialized EGL. Major : 1 Minor: 5
+I0000 00:00:1791471913.228477   35675 gl_context.cc:385] GL version: 3.2 (OpenGL ES 3.2 NVIDIA 550.90.07), renderer: NVIDIA RTX A5000/PCIe/SSE2
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+W0000 00:00:1791471913.262311   35640 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1791471913.291414   35646 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+Traceback (most recent call last):
+  File "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/analysis/causal_streaming/run_causal_modality_agnostic_robot_replay.py", line 707, in <module>
+    if __name__ == "__main__": raise SystemExit(main())
+  File "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/analysis/causal_streaming/run_causal_modality_agnostic_robot_replay.py", line 642, in main
+    delivery_by_window, delivery_summary = delivery_accounting(latency, consensus_predictions, realtime_schedule)
+  File "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/analysis/causal_streaming/run_causal_modality_agnostic_robot_replay.py", line 406, in delivery_accounting
+    scheduled = scheduled.loc[:, schedule_columns]
+  File "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/lib/python3.10/site-packages/pandas/core/indexing.py", line 1185, in __getitem__
+    return self._getitem_tuple(key)
+  File "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/lib/python3.10/site-packages/pandas/core/indexing.py", line 1378, in _getitem_tuple
+    return self._getitem_tuple_same_dim(tup)
+  File "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/lib/python3.10/site-packages/pandas/core/indexing.py", line 1021, in _getitem_tuple_same_dim
+    retval = getattr(retval, self.name)._getitem_axis(key, axis=i)
+  File "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/lib/python3.10/site-packages/pandas/core/indexing.py", line 1421, in _getitem_axis
+    return self._getitem_iterable(key, axis=axis)
+  File "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/lib/python3.10/site-packages/pandas/core/indexing.py", line 1361, in _getitem_iterable
+    keyarr, indexer = self._get_listlike_indexer(key, axis)
+  File "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/lib/python3.10/site-packages/pandas/core/indexing.py", line 1559, in _get_listlike_indexer
+    keyarr, indexer = ax._get_indexer_strict(key, axis_name)
+  File "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/lib/python3.10/site-packages/pandas/core/indexes/base.py", line 6212, in _get_indexer_strict
+    self._raise_if_missing(keyarr, indexer, axis_name)
+  File "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/lib/python3.10/site-packages/pandas/core/indexes/base.py", line 6264, in _raise_if_missing
+    raise KeyError(f"{not_found} not in index")
+KeyError: "['window_start_s', 'window_end_s'] not in index"
+

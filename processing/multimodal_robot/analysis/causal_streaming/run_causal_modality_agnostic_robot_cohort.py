@@ -267,7 +267,8 @@ def preflight_participant(participant: str, paths: dict[str, Path], task_names: 
             "reference_causal_output": str(paths["reference_causal_output"])}
 
 
-def runner_command(participant: str, paths: dict[str, Path], task_names: tuple[str, ...], reference: str) -> list[str]:
+def runner_command(participant: str, paths: dict[str, Path], task_names: tuple[str, ...], reference: str,
+                   validation_mode: str = "strict_historical") -> list[str]:
     command = [
         sys.executable, str(Path(replay.__file__).resolve()), "--participant", participant,
         "--participant-config", str(paths["participant_config"]), "--raw-root", str(paths["raw_root"]),
@@ -275,6 +276,7 @@ def runner_command(participant: str, paths: dict[str, Path], task_names: tuple[s
         "--canonical-root", str(paths["canonical_root"]),
         "--image-reference-csv", str(paths["image_reference_csv"]),
         "--alignment-metadata", str(paths["alignment_metadata"]),
+        "--validation-mode", validation_mode,
     ]
     if reference == "available":
         command.extend(["--reference-causal-output", str(paths["reference_causal_output"])])
@@ -311,6 +313,7 @@ def write_status(output_root: Path, rows: list[dict[str, object]]) -> None:
 
 def run_participants(participants: tuple[str, ...], output_root: Path, raw_root: Path, reference_root: Path,
                      task_names: tuple[str, ...], *, dry_run: bool, resume: bool,
+                     validation_mode: str = "strict_historical",
                      execute: Callable[..., object] = subprocess.run,
                      writer: Callable[[str], None] = print) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
     """Preflight and, unless dry-run, run each participant serially."""
@@ -328,7 +331,7 @@ def run_participants(participants: tuple[str, ...], output_root: Path, raw_root:
             base.update({"eligible_task_cases": len({str(case["task"]) for case in eligible}),
                          "eligible_segments": len(eligible), "excluded_segments": len(cases) - len(eligible),
                          "modalities": ",".join(audit["modalities"]), "reference_status": audit["reference_status"]})
-            command = runner_command(participant, paths, task_names, str(audit["reference_status"]))
+            command = runner_command(participant, paths, task_names, str(audit["reference_status"]), validation_mode)
             if not eligible:
                 status = "skipped_no_eligible"
                 writer(f"[{index}/{len(participants)}] {participant} no eligible Status-anchored cases")
@@ -398,6 +401,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--tasks", nargs="+", choices=TASKS, default=list(TASKS))
     parser.add_argument("--dry-run", action="store_true", help="Resolve eligibility/assets only; no EEG/video replay or inference.")
     parser.add_argument("--resume", action="store_true", help="Skip only participant outputs that pass v5 manifest/artifact/schema validation.")
+    parser.add_argument("--validation-mode", choices=replay.VALIDATION_MODES, default="strict_historical",
+                        help="Replay validation policy; corrected_timestamp permits only membership-derived timestamp differences from v1.")
     parser.add_argument("--preflight-report", type=Path,
                         help="Explicit optional JSON report beneath --output-root; dry-run otherwise writes nothing.")
     return parser.parse_args()
@@ -406,7 +411,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args(); participants = selected_participants(args.participants, args.all)
     output_root = validate_v5_output_root(args.output_root, resume=args.resume)
-    rows, cases = run_participants(participants, output_root, args.raw_root.resolve(), args.reference_root.resolve(), tuple(args.tasks), dry_run=args.dry_run, resume=args.resume)
+    rows, cases = run_participants(participants, output_root, args.raw_root.resolve(), args.reference_root.resolve(), tuple(args.tasks), dry_run=args.dry_run, resume=args.resume, validation_mode=args.validation_mode)
     if args.dry_run:
         frame = pd.DataFrame(cases); eligible = frame.loc[frame.eligible]
         task_count, reasons = task_eligibility_summary(frame)

@@ -52,6 +52,8 @@ WINDOW_SECONDS = 2.0
 WINDOW_STEP_SECONDS = 1.0
 CHUNK_MS = 100.0
 KEYS = ["participant", "task", "segment_id", "window_id", "window_start_s", "window_end_s"]
+REFERENCE_DIAGNOSTIC_EXAMPLE_LIMIT = 5
+VALIDATION_MODES = ("strict_historical", "corrected_timestamp")
 
 
 def parse_args() -> argparse.Namespace:
@@ -66,6 +68,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--alignment-metadata", type=Path)
     parser.add_argument("--reference-causal-output", type=Path,
                         help="Existing causal replay directory used only to validate frozen P(HIGH) and consensus equivalence.")
+    parser.add_argument("--validation-mode", choices=VALIDATION_MODES, default="strict_historical",
+                        help="strict_historical rejects every v1 difference; corrected_timestamp permits only face/multimodal differences in windows whose membership changed from the legacy trailing-frame fallback.")
     return parser.parse_args()
 
 
@@ -158,6 +162,32 @@ def face_window_features(frames: pd.DataFrame, start_s: float, end_s: float) -> 
     return result
 
 
+def source_video_timestamp(
+    frame_index: int,
+    source_fps: float,
+    log_times: dict[int, float],
+    previous_video_time_s: float | None,
+) -> tuple[float, str]:
+    """Return the causal source-video timestamp and its provenance.
+
+    Vision-log timestamps remain authoritative whenever available.  If a video
+    has trailing frames without a corresponding log row, continue from the
+    last observed log-clock timestamp by one source-frame interval.  This does
+    not use a later log entry or fit a new synchronization model.
+    """
+    mapped_time = log_times.get(frame_index + 1)
+    if mapped_time is not None:
+        return float(mapped_time), "vision_log"
+    if previous_video_time_s is not None:
+        return float(previous_video_time_s + 1.0 / source_fps), "source_fps_continuation"
+    return float(frame_index / source_fps), "source_fps_no_vision_log"
+
+
+def historical_source_video_timestamp(frame_index: int, source_fps: float, log_times: dict[int, float]) -> float:
+    """Return the v1 source-video timestamp for assignment-audit comparison only."""
+    return float(log_times.get(frame_index + 1, frame_index / source_fps))
+
+
 class SequentialFaceReplay:
     """Decode and landmark frames only when their mapped EEG time is due."""
     def __init__(self, task: dict[str, Any], frozen_offset_s: float, crop: dict[str, int]):
@@ -175,15 +205,21 @@ class SequentialFaceReplay:
         model = ROOT / "processing/multimodal_image/models" / self.defaults["resources"]["face_landmarker_filename"]
         self.detector = _landmarker(cfg, model, vision.RunningMode.VIDEO)
         self.frame_index = 0
+        self.last_video_time_s: float | None = None
         # The bounded buffer is the only structure used for prediction
         # features.  Telemetry is retained separately for the requested audit.
         self.buffer: deque[dict[str, Any]] = deque()
         self.telemetry: list[dict[str, Any]] = []
 
-    def _next_times(self) -> tuple[float, float]:
+    def _next_times(self) -> tuple[float, float, float, str]:
         decode_time = self.frame_index / self.fps
-        video_time = self.log_times.get(self.frame_index + 1, decode_time)
-        return decode_time, video_time - self.offset
+        video_time, provenance = source_video_timestamp(
+            frame_index=self.frame_index,
+            source_fps=self.fps,
+            log_times=self.log_times,
+            previous_video_time_s=self.last_video_time_s,
+        )
+        return decode_time, video_time - self.offset, video_time, provenance
 
     def advance_to(self, eeg_end_s: float) -> dict[str, float]:
         """Process frames strictly before ``eeg_end_s`` and return new work."""
@@ -193,7 +229,9 @@ class SequentialFaceReplay:
         )}
         timing["new_video_frame_count"] = 0.0
         while True:
-            decode_time, eeg_time = self._next_times()
+            decode_time, eeg_time, video_time, timestamp_provenance = self._next_times()
+            legacy_video_time = historical_source_video_timestamp(self.frame_index, self.fps, self.log_times)
+            legacy_eeg_time = legacy_video_time - self.offset
             if eeg_time >= eeg_end_s - 1e-12:
                 break
             started = perf_counter_ns(); ok, frame = self.capture.read(); decode_ms = (perf_counter_ns() - started) / 1e6; timing["video_frame_access_decode_ms"] += decode_ms
@@ -210,12 +248,15 @@ class SequentialFaceReplay:
                 if points.shape == (478, 3):
                     started = perf_counter_ns(); values = _facial_measures(points, self.defaults["video"]["landmark_indices"], region.shape[1], region.shape[0]); geometry_ms = (perf_counter_ns() - started) / 1e6; timing["face_geometric_measure_ms"] += geometry_ms
             row = {"frame_index": self.frame_index, "source_fps": self.fps, "decode_time_s": decode_time,
-                   "eeg_time_s": eeg_time, "video_time_s": eeg_time + self.offset, "face_detected": bool(values),
+                   "eeg_time_s": eeg_time, "video_time_s": video_time,
+                   "legacy_eeg_time_s": legacy_eeg_time, "legacy_video_time_s": legacy_video_time,
+                   "timestamp_provenance": timestamp_provenance, "face_detected": bool(values),
                    "video_frame_access_decode_ms": decode_ms, "video_crop_ms": crop_ms,
                    "face_image_prepare_ms": image_prepare_ms, "face_landmark_ms": landmark_ms,
                    "face_geometric_measure_ms": geometry_ms,
                    "frame_total_compute_ms": decode_ms + crop_ms + image_prepare_ms + landmark_ms + geometry_ms, **values}
             self.buffer.append(row); self.telemetry.append(row)
+            self.last_video_time_s = video_time
             self.frame_index += 1
             timing["new_video_frame_count"] += 1.0
         return timing
@@ -459,35 +500,180 @@ def summarize_realtime_timings(frame: pd.DataFrame, fields: list[str], groups: l
     return summary
 
 
-def compare_reference_predictions(predictions: pd.DataFrame, consensus: pd.DataFrame,
+def timestamp_assignment_audit(frame_timing: pd.DataFrame, window_timing: pd.DataFrame) -> pd.DataFrame:
+    """Identify window memberships changed only by the corrected source clock."""
+    columns = ["participant", "task", "segment_id", "frame_index", "timestamp_provenance",
+               "legacy_video_time_s", "video_time_s", "legacy_eeg_time_s", "eeg_time_s",
+               "window_id", "window_start_s", "window_end_s", "legacy_member", "corrected_member"]
+    if frame_timing.empty or window_timing.empty or "legacy_eeg_time_s" not in frame_timing:
+        return pd.DataFrame(columns=columns)
+    changed = frame_timing.loc[~np.isclose(frame_timing.legacy_eeg_time_s, frame_timing.eeg_time_s,
+                                             rtol=0.0, atol=1e-12)].copy()
+    rows: list[dict[str, Any]] = []
+    window_keys = window_timing.loc[:, KEYS].drop_duplicates()
+    for frame in changed.itertuples(index=False):
+        windows = window_keys.loc[(window_keys.participant.eq(frame.participant)) &
+                                  (window_keys.task.eq(frame.task)) &
+                                  (window_keys.segment_id.eq(frame.segment_id))]
+        for window in windows.itertuples(index=False):
+            legacy_member = bool(window.window_start_s <= frame.legacy_eeg_time_s < window.window_end_s)
+            corrected_member = bool(window.window_start_s <= frame.eeg_time_s < window.window_end_s)
+            if legacy_member != corrected_member:
+                rows.append({"participant": frame.participant, "task": frame.task,
+                             "segment_id": frame.segment_id, "frame_index": int(frame.frame_index),
+                             "timestamp_provenance": frame.timestamp_provenance,
+                             "legacy_video_time_s": float(frame.legacy_video_time_s),
+                             "video_time_s": float(frame.video_time_s),
+                             "legacy_eeg_time_s": float(frame.legacy_eeg_time_s),
+                             "eeg_time_s": float(frame.eeg_time_s),
+                             "window_id": window.window_id, "window_start_s": float(window.window_start_s),
+                             "window_end_s": float(window.window_end_s), "legacy_member": legacy_member,
+                             "corrected_member": corrected_member})
+    return pd.DataFrame(rows, columns=columns).sort_values(
+        ["participant", "task", "segment_id", "frame_index", "window_start_s"], kind="stable"
+    ).reset_index(drop=True) if rows else pd.DataFrame(columns=columns)
+
+
+def validate_reference_invariants(models: list[dict[str, Any]], calibration: pd.DataFrame,
                                   reference_dir: Path | None) -> dict[str, Any]:
+    """Check frozen routes/features and fixed early-offset calibration against v1."""
+    if reference_dir is None:
+        return {"performed": False, "reason": "no --reference-causal-output supplied", "pass": True}
+    reference_dir = reference_dir.resolve()
+    manifest = json.loads((reference_dir / "run_manifest.json").read_text(encoding="utf-8"))
+    fields = ("target", "rank", "modality", "classifier", "candidate_features", "selected_features",
+              "model_path", "probability_source")
+    current_routes = [{"target": item["target"], "rank": item["model_rank"], "modality": item["modality"],
+                       "classifier": item["classifier"], "candidate_features": item["candidate_features"],
+                       "selected_features": item["selected_features"], "model_path": str(item["model_path"]),
+                       "probability_source": item["probability_source"]} for item in models]
+    reference_routes = [{field: item.get(field) for field in fields} for item in manifest.get("routes", [])]
+    routes_match = sorted(current_routes, key=lambda item: (item["target"], item["rank"])) == sorted(reference_routes, key=lambda item: (item["target"], item["rank"]))
+    reference_offsets = pd.read_csv(reference_dir / "calibration_offsets.csv")
+    calibration_keys = ["participant", "task", "segment_id"]
+    columns = calibration_keys + ["frozen_offset_s", "early_calibration_anchor_count", "calibration_vision_end_s", "calibration_eeg_end_s"]
+    observed = calibration.loc[:, columns].merge(reference_offsets.loc[:, columns], on=calibration_keys,
+                                                   suffixes=("_replay", "_reference"), validate="one_to_one")
+    coverage_match = len(observed) == len(calibration) == len(reference_offsets)
+    numeric_fields = ("frozen_offset_s", "calibration_vision_end_s", "calibration_eeg_end_s")
+    numeric_match = all(np.allclose(observed[f"{field}_replay"], observed[f"{field}_reference"], rtol=1e-12, atol=1e-12)
+                        for field in numeric_fields)
+    anchor_match = observed.early_calibration_anchor_count_replay.eq(observed.early_calibration_anchor_count_reference).all()
+    return {"performed": True, "pass": bool(routes_match and coverage_match and numeric_match and anchor_match),
+            "routes_match": bool(routes_match), "calibration_coverage_match": bool(coverage_match),
+            "calibration_numeric_match": bool(numeric_match), "calibration_anchor_count_match": bool(anchor_match),
+            "calibration_row_count": int(len(observed))}
+
+
+def compare_reference_predictions(predictions: pd.DataFrame, consensus: pd.DataFrame,
+                                  reference_dir: Path | None, validation_mode: str = "strict_historical",
+                                  affected_windows: pd.DataFrame | None = None) -> dict[str, Any]:
     """Reject a pilot if it changes saved frozen causal P(HIGH) outputs."""
+    if validation_mode not in VALIDATION_MODES:
+        raise ValueError(f"Unknown validation mode: {validation_mode}")
     if reference_dir is None:
         return {"performed": False, "reason": "no --reference-causal-output supplied"}
+
+    def coverage_diagnostics(replay: pd.DataFrame, reference: pd.DataFrame, keys: list[str]) -> dict[str, Any]:
+        coverage = replay.loc[:, keys].merge(reference.loc[:, keys], on=keys, how="outer", indicator=True)
+        replay_only = coverage.loc[coverage._merge.eq("left_only"), keys]
+        reference_only = coverage.loc[coverage._merge.eq("right_only"), keys]
+        ordered = lambda frame: frame.sort_values(keys, kind="stable").head(REFERENCE_DIAGNOSTIC_EXAMPLE_LIMIT).to_dict("records")
+        return {"replay_only_count": int(len(replay_only)), "reference_only_count": int(len(reference_only)),
+                "replay_only_examples": ordered(replay_only), "reference_only_examples": ordered(reference_only)}
+
+    def mismatch_examples(frame: pd.DataFrame, mask: np.ndarray, sort_keys: list[str], columns: list[str]) -> list[dict[str, Any]]:
+        examples = frame.loc[mask, columns].sort_values(sort_keys, kind="stable").head(REFERENCE_DIAGNOSTIC_EXAMPLE_LIMIT)
+        return examples.to_dict("records")
+
+    def maximum_absolute_difference(values: pd.Series) -> float:
+        finite = values.loc[np.isfinite(values)]
+        return float(finite.max()) if len(finite) else (float("nan") if len(values) else 0.0)
+
     reference_dir = reference_dir.resolve()
     reference_predictions = pd.read_csv(reference_dir / "causal_window_predictions.csv")
     probability_keys = KEYS + ["target", "model_rank", "modality", "classifier"]
-    left = predictions.loc[:, probability_keys + ["high_probability"]].merge(
-        reference_predictions.loc[:, probability_keys + ["high_probability"]], on=probability_keys,
+    replay_probabilities = predictions.loc[:, probability_keys + ["high_probability"]]
+    saved_probabilities = reference_predictions.loc[:, probability_keys + ["high_probability"]]
+    probability_coverage = coverage_diagnostics(replay_probabilities, saved_probabilities, probability_keys)
+    left = replay_probabilities.merge(
+        saved_probabilities, on=probability_keys,
         suffixes=("_replay", "_reference"), validate="one_to_one")
-    if len(left) != len(predictions):
-        raise RuntimeError("Frozen probability equivalence reference has unmatched replay rows")
     probability_difference = np.abs(left.high_probability_replay - left.high_probability_reference)
+    probability_close = np.isclose(left.high_probability_replay, left.high_probability_reference, rtol=1e-12, atol=1e-12)
+    probability_mismatch_columns = probability_keys + ["high_probability_reference", "high_probability_replay"]
+    left["absolute_probability_difference"] = probability_difference
+    probability_mismatch_columns.append("absolute_probability_difference")
+
     reference_consensus = pd.read_csv(reference_dir / "causal_window_consensus.csv")
     consensus_keys = KEYS + ["target"]
-    right = consensus.loc[:, consensus_keys + ["top3_consensus_probability", "top3_consensus_class"]].merge(
-        reference_consensus.loc[:, consensus_keys + ["top3_consensus_probability", "top3_consensus_class"]], on=consensus_keys,
+    replay_consensus = consensus.loc[:, consensus_keys + ["top3_consensus_probability", "top3_consensus_class"]]
+    saved_consensus = reference_consensus.loc[:, consensus_keys + ["top3_consensus_probability", "top3_consensus_class"]]
+    consensus_coverage = coverage_diagnostics(replay_consensus, saved_consensus, consensus_keys)
+    right = replay_consensus.merge(
+        saved_consensus, on=consensus_keys,
         suffixes=("_replay", "_reference"), validate="one_to_one")
-    if len(right) != len(consensus):
-        raise RuntimeError("Frozen consensus equivalence reference has unmatched replay rows")
     consensus_difference = np.abs(right.top3_consensus_probability_replay - right.top3_consensus_probability_reference)
-    passed = bool(np.allclose(left.high_probability_replay, left.high_probability_reference, rtol=1e-12, atol=1e-12)
-                  and np.allclose(right.top3_consensus_probability_replay, right.top3_consensus_probability_reference, rtol=1e-12, atol=1e-12)
-                  and right.top3_consensus_class_replay.eq(right.top3_consensus_class_reference).all())
+    consensus_close = np.isclose(right.top3_consensus_probability_replay, right.top3_consensus_probability_reference, rtol=1e-12, atol=1e-12)
+    class_equal = right.top3_consensus_class_replay.eq(right.top3_consensus_class_reference)
+    right["absolute_consensus_difference"] = consensus_difference
+    consensus_mismatch_columns = consensus_keys + ["top3_consensus_probability_reference", "top3_consensus_probability_replay", "absolute_consensus_difference"]
+    class_mismatch_columns = consensus_keys + ["top3_consensus_class_reference", "top3_consensus_class_replay"]
+    coverage_complete = all(value == 0 for value in (
+        probability_coverage["replay_only_count"], probability_coverage["reference_only_count"],
+        consensus_coverage["replay_only_count"], consensus_coverage["reference_only_count"],
+    ))
+    affected_keys = (affected_windows.loc[:, KEYS].drop_duplicates() if affected_windows is not None and not affected_windows.empty
+                     else pd.DataFrame(columns=KEYS))
+    affected_key_set = set(map(tuple, affected_keys.itertuples(index=False, name=None)))
+    model_timestamp_affected = pd.Series(
+        [tuple(row) in affected_key_set for row in left.loc[:, KEYS].itertuples(index=False, name=None)], index=left.index
+    ) & left.modality.isin(("face", "multimodal"))
+    consensus_timestamp_affected = pd.Series(
+        [tuple(row) in affected_key_set for row in right.loc[:, KEYS].itertuples(index=False, name=None)], index=right.index
+    )
+    unexpected_model_mismatch = ~probability_close & ~model_timestamp_affected.to_numpy()
+    unexpected_consensus_mismatch = ~consensus_close & ~consensus_timestamp_affected.to_numpy()
+    unexpected_class_mismatch = ~class_equal.to_numpy() & ~consensus_timestamp_affected.to_numpy()
+    strict_pass = bool(coverage_complete
+                       and np.allclose(left.high_probability_replay, left.high_probability_reference, rtol=1e-12, atol=1e-12)
+                       and np.allclose(right.top3_consensus_probability_replay, right.top3_consensus_probability_reference, rtol=1e-12, atol=1e-12)
+                       and class_equal.all())
+    corrected_timestamp_pass = bool(coverage_complete and not unexpected_model_mismatch.any()
+                                    and not unexpected_consensus_mismatch.any() and not unexpected_class_mismatch.any())
+    passed = strict_pass if validation_mode == "strict_historical" else corrected_timestamp_pass
     return {"performed": True, "probability_row_count": int(len(left)), "consensus_row_count": int(len(right)),
-            "probability_maximum_absolute_difference": float(probability_difference.max()) if len(left) else 0.0,
-            "consensus_maximum_absolute_difference": float(consensus_difference.max()) if len(right) else 0.0,
-            "rtol": 1e-12, "atol": 1e-12, "pass": passed}
+            "probability_maximum_absolute_difference": maximum_absolute_difference(probability_difference),
+            "consensus_maximum_absolute_difference": maximum_absolute_difference(consensus_difference),
+            "rtol": 1e-12, "atol": 1e-12, "pass": passed,
+            "coverage": {"model": probability_coverage, "consensus": consensus_coverage},
+            "validation_mode": validation_mode, "timestamp_affected_window_count": int(len(affected_keys)),
+            "timestamp_affected_model_difference_count": int((~probability_close & model_timestamp_affected.to_numpy()).sum()),
+            "timestamp_affected_consensus_difference_count": int((~consensus_close & consensus_timestamp_affected.to_numpy()).sum()),
+            "unexpected_model_difference_count": int(unexpected_model_mismatch.sum()),
+            "unexpected_consensus_difference_count": int(unexpected_consensus_mismatch.sum()),
+            "unexpected_consensus_class_difference_count": int(unexpected_class_mismatch.sum()),
+            "model_differing_probability_count": int((~probability_close).sum()),
+            "model_probability_mismatch_examples": mismatch_examples(left, ~probability_close, probability_keys, probability_mismatch_columns),
+            "consensus_differing_probability_count": int((~consensus_close).sum()),
+            "consensus_probability_mismatch_examples": mismatch_examples(right, ~consensus_close, consensus_keys, consensus_mismatch_columns),
+            "changed_consensus_class_count": int((~class_equal).sum()),
+            "consensus_class_mismatch_examples": mismatch_examples(right, ~class_equal, consensus_keys, class_mismatch_columns)}
+
+
+def reference_equivalence_failure_summary(result: dict[str, Any]) -> str:
+    """Render a bounded deterministic diagnostic for the failure log."""
+    details = {key: result[key] for key in (
+        "probability_row_count", "consensus_row_count", "model_differing_probability_count",
+        "probability_maximum_absolute_difference", "consensus_differing_probability_count",
+        "consensus_maximum_absolute_difference", "changed_consensus_class_count", "coverage", "validation_mode",
+        "timestamp_affected_window_count", "timestamp_affected_model_difference_count",
+        "timestamp_affected_consensus_difference_count", "unexpected_model_difference_count",
+        "unexpected_consensus_difference_count", "unexpected_consensus_class_difference_count",
+        "model_probability_mismatch_examples", "consensus_probability_mismatch_examples",
+        "consensus_class_mismatch_examples",
+    )}
+    return json.dumps(details, sort_keys=True, default=str)
 
 
 def make_figures(output: Path, comparison: pd.DataFrame, synchronization: pd.DataFrame, latency: pd.DataFrame) -> None:
@@ -626,6 +812,12 @@ def main() -> int:
     consensus_predictions = complete.merge(timed_complete.loc[:, consensus_keys + ["consensus_compute_ms"]], on=consensus_keys, validate="one_to_one")
     frame_timing = pd.concat(frame_tables, ignore_index=True) if frame_tables else pd.DataFrame()
     validate_frame_telemetry(frame_timing)
+    calibration = pd.DataFrame(calibration_rows)
+    timestamp_audit = timestamp_assignment_audit(frame_timing, latency)
+    reference_invariants = validate_reference_invariants(models, calibration, args.reference_causal_output)
+    if reference_invariants.get("performed") and not reference_invariants.get("pass"):
+        raise RuntimeError("Frozen route/feature or fixed-calibration validation failed against the historical reference. "
+                           + json.dumps(reference_invariants, sort_keys=True, default=str))
     chunk_timing_all = pd.concat(filter_rows, ignore_index=True) if filter_rows else pd.DataFrame()
     realtime_schedule = build_realtime_schedule(frame_timing, chunk_timing_all, latency)
     scheduled_predictions = realtime_schedule.loc[realtime_schedule.job_type.eq("prediction_update")].copy()
@@ -641,9 +833,12 @@ def main() -> int:
         "maximum_shared_worker_backlog_ms": float(realtime_schedule.waiting_ms.max()) if len(realtime_schedule) else np.nan,
     }])
     delivery_by_window, delivery_summary = delivery_accounting(latency, consensus_predictions, realtime_schedule)
-    reference_equivalence = compare_reference_predictions(predictions, complete, args.reference_causal_output)
+    reference_equivalence = compare_reference_predictions(
+        predictions, complete, args.reference_causal_output, args.validation_mode, timestamp_audit
+    )
     if reference_equivalence.get("performed") and not reference_equivalence.get("pass"):
-        raise RuntimeError("Frozen prediction equivalence failed; refusing to write real-time feasibility output")
+        raise RuntimeError("Frozen prediction equivalence failed; refusing to write real-time feasibility output. "
+                           + reference_equivalence_failure_summary(reference_equivalence))
     comparison_fields = KEYS + ["target", "model_rank", "modality", "classifier", "high_probability", "original_hard_prediction"]
     comparison = canonical_predictions.loc[canonical_predictions.task.isin(args.tasks), comparison_fields].merge(predictions[comparison_fields], on=KEYS + ["target", "model_rank", "modality", "classifier"], suffixes=("_canonical", "_causal"), validate="one_to_one")
     comparison = comparison.rename(columns={"high_probability_canonical":"canonical_p_high", "high_probability_causal":"causal_p_high", "original_hard_prediction_canonical":"canonical_hard_prediction", "original_hard_prediction_causal":"causal_hard_prediction"})
@@ -654,7 +849,6 @@ def main() -> int:
     paired_canonical_task = consensus_compare.groupby(["participant", "task", "target"], as_index=False).agg(canonical_paired_P_task=("top3_consensus_probability_canonical", "median")); paired_canonical_task["canonical_paired_verdict"] = np.where(paired_canonical_task.canonical_paired_P_task >= .5, "HIGH", "LOW")
     final_canonical = canonical_tasks.loc[canonical_tasks.task.isin(args.tasks), ["participant","task","target","median_top3_consensus_probability","descriptive_task_verdict"]].rename(columns={"median_top3_consensus_probability":"canonical_final_P_task","descriptive_task_verdict":"canonical_final_verdict"})
     task_compare = final_canonical.merge(paired_canonical_task, on=["participant","task","target"], validate="one_to_one").merge(causal_task, on=["participant","task","target"], validate="one_to_one"); task_compare["final_verdict_agree"] = task_compare.canonical_final_verdict.eq(task_compare.causal_verdict); task_compare["paired_verdict_agree"] = task_compare.canonical_paired_verdict.eq(task_compare.causal_verdict)
-    calibration = pd.DataFrame(calibration_rows)
     synchronization = pd.concat(sync_rows, ignore_index=True) if sync_rows else pd.DataFrame()
     anchors = pd.concat(anchor_rows, ignore_index=True) if anchor_rows else pd.DataFrame()
     exclusions = pd.DataFrame(excluded_rows)
@@ -678,6 +872,7 @@ def main() -> int:
     comparison.to_csv(output / "model_window_comparison.csv", index=False); predictions.to_csv(output / "causal_window_predictions.csv", index=False); complete.to_csv(output / "causal_window_consensus.csv", index=False); completeness.to_csv(output / "top3_window_completeness.csv", index=False); consensus_compare.to_csv(output / "window_consensus_comparison.csv", index=False); task_compare.to_csv(output / "task_consensus_comparison.csv", index=False)
     # Stable aliases make the real-time feasibility artifacts self-contained.
     frame_timing.to_csv(output / "frame_timing.csv", index=False)
+    timestamp_audit.to_csv(output / "timestamp_assignment_audit.csv", index=False)
     latency.to_csv(output / "window_timing.csv", index=False)
     predictions.to_csv(output / "model_probabilities.csv", index=False)
     consensus_predictions.to_csv(output / "consensus_predictions.csv", index=False)
@@ -696,6 +891,8 @@ def main() -> int:
         "filter":filter_design_metadata(causal_sos()), "chunk_ms":CHUNK_MS, "window_seconds":WINDOW_SECONDS,"window_step_seconds":WINDOW_STEP_SECONDS,"threshold":0.5,"definition_b":"median across complete rank-1/2/3 window probabilities, then median across complete windows; HIGH if >=0.5",
         "robot_ratings_used":False,"training_refitting_or_selection":False,"latency_scope":"OFFLINE REPLAY COMPUTATION; excludes camera/EEG hardware, Bluetooth, driver/OS transport, and physical synchronization hardware",
         "realtime_scheduler":{"worker":"single non-preemptive shared compute worker","data_arrival":"recorded frame/EEG chunk timestamps on the EEG clock","prediction_release":"window end","prediction_deadline":"release plus 1.0 s","backlog":"carried across all frame, EEG chunk, and prediction jobs","sensor_or_driver_latency_simulated":False},
+        "validation_mode":args.validation_mode, "reference_invariants":reference_invariants,
+        "timestamp_assignment_audit":{"changed_membership_rows":int(len(timestamp_audit)), "affected_windows":int(len(timestamp_audit.loc[:, KEYS].drop_duplicates()))},
         "frozen_prediction_equivalence":reference_equivalence,
         "delivery_reporting":"scheduled, computational deadline, target validity, paired validity, and paired-on-time fields are reported per window and per task",
         "inputs":{"participant_config":str(args.participant_config.resolve()),"canonical_root":str(args.canonical_root.resolve()),"image_reference_csv":str(args.image_reference_csv.resolve()),"alignment_metadata":str(args.alignment_metadata.resolve()),"raw_root":str(args.raw_root.resolve())},

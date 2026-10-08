@@ -1,0 +1,3 @@
+participant,task,target,canonical_final_P_task,canonical_final_verdict,canonical_paired_P_task,canonical_paired_verdict,causal_P_task,n_complete_causal_windows,causal_verdict,final_verdict_agree,paired_verdict_agree
+P27,pick_place,arousal,0.5195628228239189,HIGH,0.5353694562551234,HIGH,0.5020043068397484,19,HIGH,True,True
+P27,pick_place,valence,0.5847083619966491,HIGH,0.5442626699065924,HIGH,0.5571963667698071,19,HIGH,True,True

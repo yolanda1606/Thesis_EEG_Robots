@@ -1,0 +1,3 @@
+participant,task,target,canonical_final_P_task,canonical_final_verdict,canonical_paired_P_task,canonical_paired_verdict,causal_P_task,n_complete_causal_windows,causal_verdict,final_verdict_agree,paired_verdict_agree
+P15,sisyphus,arousal,0.8552878713620631,HIGH,0.8588231097139835,HIGH,0.8591848800652412,79,HIGH,True,True
+P15,sisyphus,valence,0.4228401084793776,LOW,0.4400294465101541,LOW,0.4445472234126968,79,LOW,True,True

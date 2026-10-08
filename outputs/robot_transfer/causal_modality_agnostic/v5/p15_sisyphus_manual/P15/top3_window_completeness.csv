@@ -1,0 +1,3 @@
+participant,target,task,n_candidate_windows,n_complete_top3_windows,n_incomplete_top3_windows,fraction_complete_top3_windows
+P15,arousal,sisyphus,79,79,0,1.0
+P15,valence,sisyphus,79,79,0,1.0

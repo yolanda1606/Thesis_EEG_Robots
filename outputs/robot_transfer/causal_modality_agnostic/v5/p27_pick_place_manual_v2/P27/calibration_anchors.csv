@@ -1,0 +1,7 @@
+participant,task,segment_id,event_identity,occurrence,eeg_time_s,vision_time_s,vision_minus_eeg_s,used_for_frozen_offset
+P27,pick_place,1,1,1,5.432,0.901,-4.531000000000001,True
+P27,pick_place,1,11,1,5.772,1.216,-4.556,True
+P27,pick_place,1,12,1,8.9,4.35,-4.550000000000001,True
+P27,pick_place,1,20,1,12.032,7.485,-4.547,True
+P27,pick_place,1,13,1,14.376,9.819,-4.556999999999999,True
+P27,pick_place,1,14,1,18.756,14.196,-4.5600000000000005,True

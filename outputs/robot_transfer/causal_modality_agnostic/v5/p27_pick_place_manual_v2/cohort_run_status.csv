@@ -1,0 +1,2 @@
+participant,status,eligible_task_cases,eligible_segments,excluded_segments,started_utc,ended_utc,elapsed_seconds,output_directory,reference_status,return_code,log_file,error_message
+P27,success,1,1,0,2026-10-08T15:23:02.350910+00:00,2026-10-08T15:23:22.514516+00:00,20.165,/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/causal_modality_agnostic/v5/p27_pick_place_manual_v2/P27,available,,/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/causal_modality_agnostic/v5/p27_pick_place_manual_v2/logs/P27.log,

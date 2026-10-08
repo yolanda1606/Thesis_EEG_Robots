@@ -187,6 +187,12 @@ class CausalModalityAgnosticCohortTests(unittest.TestCase):
             command = cohort.runner_command("P01", paths, ("pick_place",), "missing")
             self.assertNotIn("--reference-causal-output", command)
 
+    def test_corrected_timestamp_validation_mode_is_forwarded_to_replay(self) -> None:
+        paths = cohort.participant_paths("P01", Path("/tmp/out"), Path("/raw"), Path("/reference"))
+        command = cohort.runner_command("P01", paths, ("pick_place",), "available", "corrected_timestamp")
+        index = command.index("--validation-mode")
+        self.assertEqual(command[index + 1], "corrected_timestamp")
+
     def test_frozen_model_completeness_is_required(self) -> None:
         cohort.validate_frozen_models(frozen_models(), "P01")
         with self.assertRaisesRegex(ValueError, "exactly six"):
