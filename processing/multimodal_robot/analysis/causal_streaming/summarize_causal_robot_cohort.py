@@ -34,6 +34,20 @@ def participant_complete(directory: Path) -> bool:
     return directory.is_dir() and all((directory / name).is_file() for name in REQUIRED)
 
 
+def aggregation_participants(complete: pd.DataFrame) -> tuple[list[str], list[str]]:
+    """Return all successful usable outputs and the complete-six-task subset.
+
+    The primary descriptive cohort includes successful participants with any
+    canonically available task.  The six-task list remains available for
+    sensitivity reporting, rather than excluding valid partial participants.
+    """
+    usable = complete.loc[complete.status.eq("success") & complete.tasks_completed.gt(0), "participant"].tolist()
+    complete_six = complete.loc[complete.status.eq("success") & complete.tasks_completed.eq(len(TASKS)), "participant"].tolist()
+    if not usable:
+        raise ValueError("No successful participant outputs with available tasks")
+    return usable, complete_six
+
+
 def completion(status: pd.DataFrame, root: Path) -> pd.DataFrame:
     rows = []
     for record in status.itertuples(index=False):
@@ -149,14 +163,15 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__); parser.add_argument("--cohort-root", type=Path, default=ROOT / "outputs/robot_transfer/causal_filter_comparison/v1/cohort"); parser.add_argument("--output-dir", type=Path, default=ROOT / "outputs/robot_transfer/causal_filter_comparison/v1/cohort_summary"); args = parser.parse_args()
     root = args.cohort_root.resolve(); output = args.output_dir.resolve()
     if output.exists(): raise FileExistsError(f"Refusing to overwrite existing summary directory: {output}")
-    status = pd.read_csv(root / "cohort_run_status.csv"); complete = completion(status, root); participants = complete.loc[complete.tasks_completed.eq(len(TASKS)), "participant"].tolist()
+    status = pd.read_csv(root / "cohort_run_status.csv"); complete = completion(status, root)
+    participants, complete_six_participants = aggregation_participants(complete)
     timing, timing_overall, chunks, windows = timing_summary(participants, root); model, participant_model, prediction, consensus = stability(participants, root); window_summary = consensus_summary(consensus); verdicts, verdict_summary, shifts = task_verdicts(consensus); validation, validation_all = validation_summary(participants, root)
     output.mkdir(parents=True)
     complete.to_csv(output / "cohort_completion_summary.csv", index=False); timing.to_csv(output / "cohort_computational_feasibility.csv", index=False); timing_overall.to_csv(output / "cohort_computational_feasibility_overall.csv", index=False); model.to_csv(output / "cohort_model_prediction_stability.csv", index=False); participant_model.to_csv(output / "cohort_model_prediction_stability_by_participant.csv", index=False); window_summary.to_csv(output / "cohort_window_consensus_stability.csv", index=False); verdicts.to_csv(output / "cohort_task_verdict_comparison.csv", index=False); verdict_summary.to_csv(output / "cohort_task_verdict_summary.csv", index=False); shifts.to_csv(output / "cohort_task_probability_shift_summary.csv", index=False); validation.to_csv(output / "cohort_canonical_validation_summary.csv", index=False)
     figures(output, chunks, windows, verdicts)
-    overview = {"analysis": "descriptive aggregation of frozen canonical versus causal replay outputs", "robot_ratings_used": False, "participant_status_counts": complete.status.value_counts().to_dict(), "complete_participants": participants, "incomplete_participants": complete.loc[complete.tasks_completed.ne(len(TASKS)), "participant"].tolist(), "total_prediction_windows": int(len(prediction.drop_duplicates(["participant", "task", "segment_id", "window_id"]))), "total_model_probability_pairs": int(len(prediction)), "total_complete_top3_window_target_pairs": int(len(consensus)), "canonical_validation_failures": int((~validation_all["pass"]).sum()), "timing_scope": "offline replay computation only; excludes hardware acquisition, Bluetooth, camera, driver, and synchronization latency", "task_verdict_definition": "median of three frozen model probabilities per complete window, then median across complete windows; HIGH if >= 0.5", "files": {"completion": "cohort_completion_summary.csv", "computational": "cohort_computational_feasibility.csv", "model_stability": "cohort_model_prediction_stability.csv", "window_consensus": "cohort_window_consensus_stability.csv", "task_verdicts": "cohort_task_verdict_comparison.csv", "validation": "cohort_canonical_validation_summary.csv"}}
+    overview = {"analysis": "descriptive aggregation of frozen canonical versus causal replay outputs", "robot_ratings_used": False, "participant_status_counts": complete.status.value_counts().to_dict(), "successful_participants": participants, "fully_complete_participants": complete_six_participants, "partial_but_valid_participants": complete.loc[complete.status.eq("success") & complete.tasks_completed.gt(0) & complete.tasks_completed.lt(len(TASKS)), "participant"].tolist(), "valid_participant_task_cases": int(verdicts[["participant", "task"]].drop_duplicates().shape[0]), "total_prediction_windows": int(len(prediction.drop_duplicates(["participant", "task", "segment_id", "window_id"]))), "total_model_probability_pairs": int(len(prediction)), "total_complete_top3_window_target_pairs": int(len(consensus)), "canonical_validation_failures": int((~validation_all["pass"]).sum()), "timing_scope": "offline replay computation only; excludes hardware acquisition, Bluetooth, camera, driver, and synchronization latency", "task_prediction_definition": "median top-3 consensus P(HIGH) across complete paired windows; HIGH if >= 0.5", "files": {"completion": "cohort_completion_summary.csv", "computational": "cohort_computational_feasibility.csv", "model_stability": "cohort_model_prediction_stability.csv", "window_consensus": "cohort_window_consensus_stability.csv", "task_verdicts": "cohort_task_verdict_comparison.csv", "validation": "cohort_canonical_validation_summary.csv"}}
     (output / "cohort_summary.json").write_text(json.dumps(overview, indent=2) + "\n", encoding="utf-8")
-    print(f"Cohort summary complete for {len(participants)} complete participants: {output}"); return 0
+    print(f"Cohort summary complete for {len(participants)} successful participants ({len(complete_six_participants)} with all six tasks): {output}"); return 0
 
 
 if __name__ == "__main__": raise SystemExit(main())
