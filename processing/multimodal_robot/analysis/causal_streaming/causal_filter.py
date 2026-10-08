@@ -82,6 +82,38 @@ def filter_stream(data: np.ndarray, sos: np.ndarray, chunk_samples: int) -> tupl
     return filtered, timings
 
 
+def car_filter_stream(data: np.ndarray, sos: np.ndarray, chunk_samples: int) -> tuple[np.ndarray, list[dict[str, float]]]:
+    """Apply sample-wise CAR and causal filtering once per chronological chunk.
+
+    CAR is stateless across time, so applying it chunk-wise is numerically
+    equivalent to average-referencing the continuous EEG before calling
+    :func:`filter_stream`.  Keeping the operation here makes its measured
+    compute cost available to the virtual real-time scheduler without
+    changing the causal SOS state policy.
+    """
+    data = np.asarray(data, dtype=float)
+    if data.ndim != 2 or data.shape[1] < 1:
+        raise ValueError("data must have shape (channels, non-empty samples)")
+    if chunk_samples < 1:
+        raise ValueError("chunk_samples must be positive")
+    first = data[:, 0] - data[:, 0].mean()
+    state = initial_state(sos, first)
+    filtered = np.empty_like(data)
+    timings: list[dict[str, float]] = []
+    for start in range(0, data.shape[1], chunk_samples):
+        stop = min(start + chunk_samples, data.shape[1])
+        started = perf_counter_ns()
+        referenced = data[:, start:stop] - data[:, start:stop].mean(axis=0, keepdims=True)
+        car_ms = (perf_counter_ns() - started) / 1_000_000.0
+        started = perf_counter_ns()
+        filtered[:, start:stop], state = signal.sosfilt(sos, referenced, axis=-1, zi=state)
+        filter_ms = (perf_counter_ns() - started) / 1_000_000.0
+        timings.append({"chunk_start_sample": start, "chunk_end_sample": stop,
+                        "sample_count": stop - start, "chunk_duration_s": (stop - start) / SAMPLE_RATE_HZ,
+                        "causal_car_ms": car_ms, "causal_filter_ms": filter_ms})
+    return filtered, timings
+
+
 def causal_warmup_excluded(window_start_s: float, warmup_s: float = WARMUP_SECONDS) -> bool:
     """Keep canonical IDs/grid while flagging windows starting during warm-up."""
     return bool(window_start_s < warmup_s)

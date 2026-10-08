@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections import deque
 from pathlib import Path
 from time import perf_counter_ns
 from types import SimpleNamespace
@@ -34,7 +35,7 @@ from mediapipe.tasks.python import vision
 from processing.multimodal_image.src.eeg import _prepare_raw
 from processing.multimodal_image.src.video import _facial_measures, _landmarker
 from processing.multimodal_robot.analysis.causal_streaming.causal_filter import (
-    SAMPLE_RATE_HZ, causal_sos, filter_design_metadata, filter_stream,
+    SAMPLE_RATE_HZ, car_filter_stream, causal_sos, filter_design_metadata,
 )
 from processing.multimodal_robot.analysis.latency.replay_window import assemble_and_predict, summarize_timings
 from processing.multimodal_robot.prep.continuous import (
@@ -63,6 +64,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--canonical-root", type=Path)
     parser.add_argument("--image-reference-csv", type=Path)
     parser.add_argument("--alignment-metadata", type=Path)
+    parser.add_argument("--reference-causal-output", type=Path,
+                        help="Existing causal replay directory used only to validate frozen P(HIGH) and consensus equivalence.")
     return parser.parse_args()
 
 
@@ -171,7 +174,11 @@ class SequentialFaceReplay:
             "bottom": crop["y"] + crop["height"], "scale": 1.0, "approved": True}}}
         model = ROOT / "processing/multimodal_image/models" / self.defaults["resources"]["face_landmarker_filename"]
         self.detector = _landmarker(cfg, model, vision.RunningMode.VIDEO)
-        self.frame_index = 0; self.records: list[dict[str, Any]] = []
+        self.frame_index = 0
+        # The bounded buffer is the only structure used for prediction
+        # features.  Telemetry is retained separately for the requested audit.
+        self.buffer: deque[dict[str, Any]] = deque()
+        self.telemetry: list[dict[str, Any]] = []
 
     def _next_times(self) -> tuple[float, float]:
         decode_time = self.frame_index / self.fps
@@ -180,37 +187,71 @@ class SequentialFaceReplay:
 
     def advance_to(self, eeg_end_s: float) -> dict[str, float]:
         """Process frames strictly before ``eeg_end_s`` and return new work."""
-        timing = {name: 0.0 for name in ("video_frame_access_decode_ms", "face_landmark_ms", "face_geometric_measure_ms")}
+        timing = {name: 0.0 for name in (
+            "video_frame_access_decode_ms", "video_crop_ms", "face_image_prepare_ms",
+            "face_landmark_ms", "face_geometric_measure_ms",
+        )}
+        timing["new_video_frame_count"] = 0.0
         while True:
             decode_time, eeg_time = self._next_times()
             if eeg_time >= eeg_end_s - 1e-12:
                 break
-            started = perf_counter_ns(); ok, frame = self.capture.read(); timing["video_frame_access_decode_ms"] += (perf_counter_ns() - started) / 1e6
+            started = perf_counter_ns(); ok, frame = self.capture.read(); decode_ms = (perf_counter_ns() - started) / 1e6; timing["video_frame_access_decode_ms"] += decode_ms
             if not ok: break
-            region = frame[self.crop["y"]:self.crop["y"] + self.crop["height"], self.crop["x"]:self.crop["x"] + self.crop["width"]]
+            started = perf_counter_ns(); region = frame[self.crop["y"]:self.crop["y"] + self.crop["height"], self.crop["x"]:self.crop["x"] + self.crop["width"]]; crop_ms = (perf_counter_ns() - started) / 1e6; timing["video_crop_ms"] += crop_ms
+            started = perf_counter_ns(); rgb_region = cv2.cvtColor(region, cv2.COLOR_BGR2RGB); image_prepare_ms = (perf_counter_ns() - started) / 1e6; timing["face_image_prepare_ms"] += image_prepare_ms
             started = perf_counter_ns()
-            detection = self.detector.detect_for_video(mp.Image(image_format=mp.ImageFormat.SRGB, data=cv2.cvtColor(region, cv2.COLOR_BGR2RGB)), int(round(decode_time * 1000)))
-            timing["face_landmark_ms"] += (perf_counter_ns() - started) / 1e6
+            detection = self.detector.detect_for_video(mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_region), int(round(decode_time * 1000)))
+            landmark_ms = (perf_counter_ns() - started) / 1e6; timing["face_landmark_ms"] += landmark_ms
             values: dict[str, float] = {}
+            geometry_ms = 0.0
             if detection.face_landmarks:
                 points = np.asarray([[point.x, point.y, point.z] for point in detection.face_landmarks[0]], dtype=np.float32)
                 if points.shape == (478, 3):
-                    started = perf_counter_ns(); values = _facial_measures(points, self.defaults["video"]["landmark_indices"], region.shape[1], region.shape[0]); timing["face_geometric_measure_ms"] += (perf_counter_ns() - started) / 1e6
-            self.records.append({"eeg_time_s": eeg_time, "video_time_s": eeg_time + self.offset, "face_detected": bool(values), **values})
+                    started = perf_counter_ns(); values = _facial_measures(points, self.defaults["video"]["landmark_indices"], region.shape[1], region.shape[0]); geometry_ms = (perf_counter_ns() - started) / 1e6; timing["face_geometric_measure_ms"] += geometry_ms
+            row = {"frame_index": self.frame_index, "source_fps": self.fps, "decode_time_s": decode_time,
+                   "eeg_time_s": eeg_time, "video_time_s": eeg_time + self.offset, "face_detected": bool(values),
+                   "video_frame_access_decode_ms": decode_ms, "video_crop_ms": crop_ms,
+                   "face_image_prepare_ms": image_prepare_ms, "face_landmark_ms": landmark_ms,
+                   "face_geometric_measure_ms": geometry_ms,
+                   "frame_total_compute_ms": decode_ms + crop_ms + image_prepare_ms + landmark_ms + geometry_ms, **values}
+            self.buffer.append(row); self.telemetry.append(row)
             self.frame_index += 1
+            timing["new_video_frame_count"] += 1.0
         return timing
 
-    def frame_table(self) -> pd.DataFrame:
-        return pd.DataFrame(self.records)
+    def window_features(self, start_s: float, end_s: float) -> tuple[dict[str, float], dict[str, float]]:
+        """Return exact half-open window features from a bounded causal buffer."""
+        started = perf_counter_ns()
+        while self.buffer and self.buffer[0]["eeg_time_s"] < start_s:
+            self.buffer.popleft()
+        # ``advance_to`` has already stopped before ``end_s``.  This assertion
+        # is a guard against accidental future-frame access during refactors.
+        if self.buffer and self.buffer[-1]["eeg_time_s"] >= end_s - 1e-12:
+            raise AssertionError("Face buffer contains a future frame")
+        frame_table = pd.DataFrame(list(self.buffer))
+        if frame_table.empty:
+            # Preserve the established missing-face representation rather than
+            # filling values when a valid EEG window has no mapped frames.
+            frame_table = pd.DataFrame(columns=["eeg_time_s", "face_detected"])
+        buffer_ms = (perf_counter_ns() - started) / 1e6
+        started = perf_counter_ns()
+        values = face_window_features(frame_table, start_s, end_s)
+        aggregate_ms = (perf_counter_ns() - started) / 1e6
+        return values, {"face_buffer_prepare_ms": buffer_ms, "face_window_aggregation_ms": aggregate_ms,
+                        "face_buffer_frame_count": float(len(self.buffer))}
+
+    def frame_telemetry(self) -> pd.DataFrame:
+        return pd.DataFrame(self.telemetry)
 
     def close(self) -> None:
         self.capture.release(); self.detector.close()
 
 
-def route_source(modality: str, eeg: dict[str, Any], face: dict[str, Any]) -> dict[str, Any]:
+def route_source(modality: str, eeg: dict[str, Any], face: dict[str, Any], multimodal: dict[str, Any] | None = None) -> dict[str, Any]:
     if modality == "eeg": return eeg
     if modality == "face": return face
-    if modality == "multimodal": return eeg | face
+    if modality == "multimodal": return multimodal if multimodal is not None else eeg | face
     raise ValueError(f"Unsupported frozen modality: {modality}")
 
 
@@ -221,13 +262,15 @@ def validate_route_schema(record: dict[str, Any], source: dict[str, Any]) -> Non
     if ordered != record["candidate_features"]: raise ValueError("Frozen candidate-feature order changed")
 
 
-def causal_eeg(raw: Any, task: str) -> tuple[np.ndarray, list[str], pd.DataFrame]:
+def causal_eeg(raw: Any, task: str) -> tuple[np.ndarray, list[str], pd.DataFrame, dict[str, float]]:
+    """Chronologically CAR/filter raw EEG and retain per-chunk compute timing."""
     eeg_names = list(robot_eeg_config()["channels"]["eeg_mapping"].values())
     if not np.isclose(raw.info["sfreq"], SAMPLE_RATE_HZ): raise ValueError(f"{task}: expected 250 Hz EEG")
-    raw.set_eeg_reference(ref_channels="average", projection=False, verbose=False)
+    started = perf_counter_ns()
     data = raw.copy().pick(eeg_names).get_data()
-    filtered, chunks = filter_stream(data, causal_sos(), int(round(CHUNK_MS * SAMPLE_RATE_HZ / 1000)))
-    return filtered, eeg_names, pd.DataFrame(chunks)
+    raw_extract_ms = (perf_counter_ns() - started) / 1e6
+    filtered, chunks = car_filter_stream(data, causal_sos(), int(round(CHUNK_MS * SAMPLE_RATE_HZ / 1000)))
+    return filtered, eeg_names, pd.DataFrame(chunks), {"raw_eeg_extract_ms": raw_extract_ms}
 
 
 def eeg_features(filtered: np.ndarray, channels: list[str], start_s: float) -> tuple[dict[str, float], float]:
@@ -250,6 +293,18 @@ def canonical_alignments(task: str, path: Path) -> list[dict[str, Any]]:
 def configured_segments(task: dict[str, Any]) -> list[tuple[int, Path]]:
     """Preserve the canonical order of independent configured EEG recordings."""
     return [(index, Path(path)) for index, path in enumerate(_files(task["eeg"]), start=1)]
+
+
+def ambiguous_segment_mapping_reason(task: dict[str, Any]) -> str | None:
+    """Reject multi-BDF tasks without an explicit segment-to-video mapping.
+
+    The current participant schema supplies task-level video/log paths, not a
+    verified mapping for each independently restarted EEG recording.  Reusing
+    the first video/log would be scientifically unsafe.
+    """
+    if len(configured_segments(task)) > 1:
+        return "ambiguous_multi_segment_video_log_mapping"
+    return None
 
 
 def exclusion_reason(canonical: dict[str, Any] | None, has_canonical_windows: bool,
@@ -279,6 +334,161 @@ def sync_diagnostics(task: str, segment_id: int, duration_s: float, frozen_offse
     return frame, summary
 
 
+def timed_window_consensus(metadata_row: dict[str, Any], predictions: list[dict[str, Any]], target: str) -> dict[str, Any]:
+    """Time the existing Definition-B per-window median without changing it."""
+    rows = [row for row in predictions if row["target"] == target]
+    if {row["model_rank"] for row in rows} != {1, 2, 3}:
+        return metadata_row | {"target": target, "complete_top3": False, "consensus_compute_ms": np.nan,
+                               "top3_consensus_probability": np.nan, "top3_consensus_class": pd.NA}
+    started = perf_counter_ns()
+    ordered = sorted(rows, key=lambda row: row["model_rank"])
+    probability = float(np.median([row["high_probability"] for row in ordered]))
+    hard = [int(row["original_hard_prediction"]) for row in ordered]
+    elapsed = (perf_counter_ns() - started) / 1e6
+    return metadata_row | {"target": target, "complete_top3": True, "consensus_compute_ms": elapsed,
+                           "top3_consensus_probability": probability,
+                           "top3_consensus_class": "HIGH" if probability >= 0.5 else "LOW",
+                           "all_three_hard_agree": len(set(hard)) == 1}
+
+
+def single_worker_schedule(jobs: list[dict[str, Any]]) -> pd.DataFrame:
+    """Deterministically schedule chronological frame/chunk/prediction jobs.
+
+    Jobs use the EEG clock.  At the same timestamp, arriving data work is
+    available before a released prediction; all jobs then share one
+    non-preemptive worker and therefore propagate backlog exactly.
+    """
+    priority = {"eeg_chunk": 0, "video_frame": 0, "prediction_update": 1}
+    worker_free_s = 0.0; rows = []
+    for order, job in enumerate(sorted(jobs, key=lambda item: (float(item["arrival_s"]), priority[item["job_type"]], int(item["sequence"])))):
+        arrival = max(0.0, float(job["arrival_s"]))
+        start = max(worker_free_s, arrival)
+        service_s = float(job["service_ms"]) / 1000.0
+        completion = start + service_s
+        deadline = float(job["deadline_s"]) if pd.notna(job.get("deadline_s", np.nan)) else np.nan
+        lateness_ms = max(0.0, completion - deadline) * 1000.0 if np.isfinite(deadline) else np.nan
+        rows.append(job | {"schedule_order": order, "arrival_s": arrival, "start_s": start,
+                           "completion_s": completion, "waiting_ms": (start - arrival) * 1000.0,
+                           "deadline_s": deadline, "lateness_ms": lateness_ms,
+                           "deadline_met": bool(completion <= deadline + 1e-12) if np.isfinite(deadline) else pd.NA,
+                           "response_ms": (completion - arrival) * 1000.0,
+                           "backlog_after_ms": max(0.0, completion - arrival) * 1000.0})
+        worker_free_s = completion
+    return pd.DataFrame(rows)
+
+
+def build_realtime_schedule(frame_timing: pd.DataFrame, chunk_timing: pd.DataFrame,
+                            window_timing: pd.DataFrame) -> pd.DataFrame:
+    """Build one shared-worker schedule from recorded compute durations."""
+    jobs: list[dict[str, Any]] = []
+    for row in frame_timing.itertuples(index=False):
+        jobs.append({"job_type": "video_frame", "sequence": int(row.frame_index), "participant": row.participant,
+                     "task": row.task, "segment_id": row.segment_id, "window_id": pd.NA,
+                     "arrival_s": float(row.eeg_time_s), "service_ms": float(row.frame_total_compute_ms), "deadline_s": np.nan})
+    for row in chunk_timing.itertuples(index=False):
+        jobs.append({"job_type": "eeg_chunk", "sequence": int(row.chunk_start_sample), "participant": row.participant,
+                     "task": row.task, "segment_id": row.segment_id, "window_id": pd.NA,
+                     "arrival_s": float(row.chunk_end_sample) / SAMPLE_RATE_HZ,
+                     "service_ms": float(row.causal_car_ms + row.causal_filter_ms), "deadline_s": np.nan})
+    for row in window_timing.itertuples(index=False):
+        jobs.append({"job_type": "prediction_update", "sequence": int(round(float(row.window_start_s) * 1000)),
+                     "participant": row.participant, "task": row.task, "segment_id": row.segment_id,
+                     "window_id": row.window_id, "arrival_s": float(row.window_end_s),
+                     "service_ms": float(row.prediction_compute_ms), "deadline_s": float(row.window_end_s) + 1.0})
+    return single_worker_schedule(jobs)
+
+
+def delivery_accounting(window_timing: pd.DataFrame, consensus_predictions: pd.DataFrame,
+                        realtime_schedule: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Report validity and timing jointly without changing scheduler semantics."""
+    scheduled = realtime_schedule.loc[realtime_schedule.job_type.eq("prediction_update")].copy()
+    schedule_columns = KEYS + ["deadline_s", "completion_s", "waiting_ms", "response_ms", "lateness_ms", "deadline_met"]
+    scheduled = scheduled.loc[:, schedule_columns]
+    base = window_timing.loc[:, KEYS + ["valid_model_count"]].merge(scheduled, on=KEYS, how="left", validate="one_to_one")
+    present = consensus_predictions.loc[:, KEYS + ["target"]].drop_duplicates()
+    flags = present.assign(valid_consensus=True).pivot(index=KEYS, columns="target", values="valid_consensus").reset_index()
+    flags = flags.rename(columns={"valence": "valid_valence_consensus", "arousal": "valid_arousal_consensus"})
+    delivery = base.merge(flags, on=KEYS, how="left", validate="one_to_one")
+    for column in ("valid_valence_consensus", "valid_arousal_consensus"):
+        if column not in delivery:
+            delivery[column] = False
+        else:
+            delivery[column] = delivery[column].eq(True)
+    delivery["scheduled_update"] = True
+    delivery["computational_deadline_met"] = delivery["deadline_met"].fillna(False).astype(bool)
+    delivery["complete_paired_consensus"] = delivery.valid_valence_consensus & delivery.valid_arousal_consensus
+    delivery["complete_paired_delivered_on_time"] = delivery.complete_paired_consensus & delivery.computational_deadline_met
+    summary = delivery.groupby(["participant", "task"], as_index=False).agg(
+        scheduled_updates=("scheduled_update", "sum"),
+        computationally_on_time_updates=("computational_deadline_met", "sum"),
+        valid_valence_consensuses=("valid_valence_consensus", "sum"),
+        valid_arousal_consensuses=("valid_arousal_consensus", "sum"),
+        complete_paired_consensuses=("complete_paired_consensus", "sum"),
+        complete_paired_delivered_on_time=("complete_paired_delivered_on_time", "sum"),
+    )
+    for column in ("computationally_on_time_updates", "valid_valence_consensuses", "valid_arousal_consensuses",
+                   "complete_paired_consensuses", "complete_paired_delivered_on_time"):
+        summary[f"{column}_rate"] = summary[column] / summary.scheduled_updates
+    return delivery, summary
+
+
+def validate_frame_telemetry(frame_timing: pd.DataFrame) -> None:
+    """Ensure each chronological source frame is represented exactly once."""
+    if frame_timing.empty:
+        return
+    keys = ["participant", "task", "segment_id", "frame_index"]
+    if frame_timing.duplicated(keys).any():
+        raise RuntimeError("Frame telemetry contains a decoded frame more than once")
+    for _, part in frame_timing.groupby(["participant", "task", "segment_id"], sort=False):
+        if not part.frame_index.is_monotonic_increasing or not part.eeg_time_s.is_monotonic_increasing:
+            raise RuntimeError("Frame telemetry is not in chronological source order")
+
+
+def summarize_realtime_timings(frame: pd.DataFrame, fields: list[str], groups: list[str]) -> pd.DataFrame:
+    """Use the established summary schema and add the requested p99 column."""
+    summary = summarize_timings(frame, fields, groups)
+    p99: list[float] = []
+    for row in summary.itertuples(index=False):
+        mask = pd.Series(True, index=frame.index)
+        for group in groups:
+            mask &= frame[group].eq(getattr(row, group))
+        values = pd.to_numeric(frame.loc[mask, row.metric], errors="coerce").dropna()
+        p99.append(float(values.quantile(.99)) if len(values) else np.nan)
+    summary["p99"] = p99
+    return summary
+
+
+def compare_reference_predictions(predictions: pd.DataFrame, consensus: pd.DataFrame,
+                                  reference_dir: Path | None) -> dict[str, Any]:
+    """Reject a pilot if it changes saved frozen causal P(HIGH) outputs."""
+    if reference_dir is None:
+        return {"performed": False, "reason": "no --reference-causal-output supplied"}
+    reference_dir = reference_dir.resolve()
+    reference_predictions = pd.read_csv(reference_dir / "causal_window_predictions.csv")
+    probability_keys = KEYS + ["target", "model_rank", "modality", "classifier"]
+    left = predictions.loc[:, probability_keys + ["high_probability"]].merge(
+        reference_predictions.loc[:, probability_keys + ["high_probability"]], on=probability_keys,
+        suffixes=("_replay", "_reference"), validate="one_to_one")
+    if len(left) != len(predictions):
+        raise RuntimeError("Frozen probability equivalence reference has unmatched replay rows")
+    probability_difference = np.abs(left.high_probability_replay - left.high_probability_reference)
+    reference_consensus = pd.read_csv(reference_dir / "causal_window_consensus.csv")
+    consensus_keys = KEYS + ["target"]
+    right = consensus.loc[:, consensus_keys + ["top3_consensus_probability", "top3_consensus_class"]].merge(
+        reference_consensus.loc[:, consensus_keys + ["top3_consensus_probability", "top3_consensus_class"]], on=consensus_keys,
+        suffixes=("_replay", "_reference"), validate="one_to_one")
+    if len(right) != len(consensus):
+        raise RuntimeError("Frozen consensus equivalence reference has unmatched replay rows")
+    consensus_difference = np.abs(right.top3_consensus_probability_replay - right.top3_consensus_probability_reference)
+    passed = bool(np.allclose(left.high_probability_replay, left.high_probability_reference, rtol=1e-12, atol=1e-12)
+                  and np.allclose(right.top3_consensus_probability_replay, right.top3_consensus_probability_reference, rtol=1e-12, atol=1e-12)
+                  and right.top3_consensus_class_replay.eq(right.top3_consensus_class_reference).all())
+    return {"performed": True, "probability_row_count": int(len(left)), "consensus_row_count": int(len(right)),
+            "probability_maximum_absolute_difference": float(probability_difference.max()) if len(left) else 0.0,
+            "consensus_maximum_absolute_difference": float(consensus_difference.max()) if len(right) else 0.0,
+            "rtol": 1e-12, "atol": 1e-12, "pass": passed}
+
+
 def make_figures(output: Path, comparison: pd.DataFrame, synchronization: pd.DataFrame, latency: pd.DataFrame) -> None:
     fig, ax = plt.subplots(figsize=(6, 6))
     for modality, part in comparison.groupby("modality"): ax.scatter(part.canonical_p_high, part.causal_p_high, s=13, alpha=.55, label=modality.title())
@@ -303,6 +513,7 @@ def main() -> int:
     canonical_consensus = pd.read_csv(args.canonical_root / f"{prefix}_window_consensus.csv")
     canonical_tasks = pd.read_csv(args.canonical_root / f"{prefix}_task_consensus_analysis.csv")
     prediction_rows=[]; latency_rows=[]; calibration_rows=[]; anchor_rows=[]; sync_rows=[]; filter_rows=[]; excluded_rows=[]
+    frame_tables=[]; timed_consensus_rows=[]; eeg_setup_rows=[]
     for task_name in args.tasks:
         task = config["tasks"][task_name]
         alignments = {int(item.get("segment_id", 1)): item for item in canonical_alignments(task_name, args.alignment_metadata.resolve())}
@@ -311,9 +522,10 @@ def main() -> int:
         log_files = [Path(path) for path in _files(task.get("vision_log"))]
         video_path = video_files[0] if video_files else None; log_path = log_files[0] if log_files else None
         canonical_ids = set(pd.to_numeric(canonical_predictions.loc[canonical_predictions.task.eq(task_name), "segment_id"], errors="coerce").dropna().astype(int))
+        mapping_reason = ambiguous_segment_mapping_reason(task)
         for segment_id, eeg_path in segments:
             canonical = alignments.get(segment_id)
-            reason = exclusion_reason(canonical, segment_id in canonical_ids, eeg_path, video_path, log_path)
+            reason = mapping_reason or exclusion_reason(canonical, segment_id in canonical_ids, eeg_path, video_path, log_path)
             if reason:
                 excluded_rows.append({"participant": args.participant, "task": task_name, "segment_id": segment_id,
                                       "reason": reason, "canonical_alignment_type": None if canonical is None else canonical.get("method"),
@@ -335,7 +547,8 @@ def main() -> int:
                                                "calibration_vision_end_s": CALIBRATION_SECONDS, "calibration_eeg_end_s": calibration_eeg_end,
                                                "task_duration_s": raw.n_times / SAMPLE_RATE_HZ, "eeg_path": str(eeg_path),
                                                "video_path": str(video_path), "vision_log_path": str(log_path)})
-            filtered, channels, chunk_timing = causal_eeg(raw, task_name)
+            filtered, channels, chunk_timing, eeg_setup = causal_eeg(raw, task_name)
+            eeg_setup_rows.append({"participant": args.participant, "task": task_name, "segment_id": segment_id, **eeg_setup})
             chunk_timing.insert(0, "segment_id", segment_id); chunk_timing.insert(0, "task", task_name); chunk_timing.insert(0, "participant", args.participant); filter_rows.append(chunk_timing)
             starts = prediction_window_starts(filtered.shape[1] / SAMPLE_RATE_HZ, calibration_eeg_end)
             face = SequentialFaceReplay(task, frozen_offset, config["video_settings"]["crop"])
@@ -345,39 +558,91 @@ def main() -> int:
                 for start in starts:
                     end = start + WINDOW_SECONDS; meta = metadata(args.participant, task_name, segment_id, start)
                     new_face_timing = face.advance_to(end)
-                    frame_table = face.frame_table(); aggregate_started = perf_counter_ns(); face_values = face_window_features(frame_table, start, end); face_aggregation_ms = (perf_counter_ns() - aggregate_started) / 1e6
+                    face_values, face_window_timing = face.window_features(start, end)
                     eeg_values, eeg_feature_ms = eeg_features(filtered, channels, start); eeg_row = meta | eeg_values; face_row = meta | face_values
-                    combine_started = perf_counter_ns(); _ = eeg_row | face_values; multimodal_combine_ms = (perf_counter_ns() - combine_started) / 1e6
-                    model_assembly_ms = multimodal_assembly_ms = inference_ms = 0.0; valid_model_count = 0
+                    combine_started = perf_counter_ns(); multimodal_row = eeg_row | face_values; multimodal_combine_ms = (perf_counter_ns() - combine_started) / 1e6
+                    model_assembly_ms = multimodal_assembly_ms = inference_ms = routing_ms = schema_validation_ms = input_validation_ms = 0.0; valid_model_count = 0
+                    window_prediction_rows: list[dict[str, Any]] = []
                     for record in models:
-                        source = route_source(record["modality"], eeg_row, face_row)
+                        started = perf_counter_ns(); source = route_source(record["modality"], eeg_row, face_row, multimodal_row); routing_ms += (perf_counter_ns() - started) / 1e6
+                        started = perf_counter_ns()
                         validate_route_schema(record, source)
+                        schema_validation_ms += (perf_counter_ns() - started) / 1e6
+                        started = perf_counter_ns()
                         candidates = pd.Series([source[name] for name in record["candidate_features"]], dtype=float)
-                        if not np.isfinite(candidates).all(): continue
+                        finite = bool(np.isfinite(candidates).all())
+                        input_validation_ms += (perf_counter_ns() - started) / 1e6
+                        if not finite: continue
                         probability, hard, assembly_ms, transform_ms, hard_ms, probability_ms = assemble_and_predict(record, source)
                         transform_value = 0.0 if not np.isfinite(transform_ms) else transform_ms
                         model_inference_ms = transform_value + hard_ms + probability_ms
-                        prediction_rows.append(meta | {"target": record["target"], "model_rank": record["model_rank"], "modality": record["modality"],
+                        prediction = meta | {"target": record["target"], "model_rank": record["model_rank"], "modality": record["modality"],
                             "classifier": record["classifier"], "feature_family": record["feature_family"], "selected_feature_count": len(record["selected_features"]),
                             "frozen_image_balanced_accuracy": record["mean_outer_cv_balanced_accuracy"], "original_hard_prediction": hard, "high_probability": probability,
-                            "feature_assembly_ms": assembly_ms, "fitted_transform_and_inference_ms": model_inference_ms})
+                            "feature_assembly_ms": assembly_ms, "fitted_transform_and_inference_ms": model_inference_ms}
+                        prediction_rows.append(prediction); window_prediction_rows.append(prediction)
                         model_assembly_ms += assembly_ms; inference_ms += model_inference_ms; valid_model_count += 1
                         if record["modality"] == "multimodal": multimodal_assembly_ms += assembly_ms
                     chunk_start = max(previous_end, calibration_eeg_end) * SAMPLE_RATE_HZ; chunk_stop = end * SAMPLE_RATE_HZ
+                    car_ms = float(chunk_timing.loc[(chunk_timing.chunk_start_sample >= chunk_start - 1e-9) & (chunk_timing.chunk_start_sample < chunk_stop - 1e-9), "causal_car_ms"].sum())
                     filter_ms = float(chunk_timing.loc[(chunk_timing.chunk_start_sample >= chunk_start - 1e-9) & (chunk_timing.chunk_start_sample < chunk_stop - 1e-9), "causal_filter_ms"].sum())
-                    face_total = sum(new_face_timing.values()) + face_aggregation_ms
-                    total = filter_ms + eeg_feature_ms + face_total + multimodal_combine_ms + model_assembly_ms + inference_ms
-                    latency_rows.append(meta | {"valid_model_count": valid_model_count, "causal_eeg_filter_increment_ms": filter_ms, "eeg_feature_ms": eeg_feature_ms,
-                        **new_face_timing, "face_window_aggregation_ms": face_aggregation_ms, "face_processing_ms": face_total,
+                    consensus_rows = [timed_window_consensus(meta, window_prediction_rows, target) for target in ("valence", "arousal")]
+                    timed_consensus_rows.extend(consensus_rows)
+                    consensus_ms = float(np.nansum([row["consensus_compute_ms"] for row in consensus_rows]))
+                    face_new_frame_ms = sum(new_face_timing[name] for name in (
+                        "video_frame_access_decode_ms", "video_crop_ms", "face_image_prepare_ms",
+                        "face_landmark_ms", "face_geometric_measure_ms",
+                    ))
+                    face_total = face_new_frame_ms + face_window_timing["face_buffer_prepare_ms"] + face_window_timing["face_window_aggregation_ms"]
+                    prediction_compute = eeg_feature_ms + face_window_timing["face_buffer_prepare_ms"] + face_window_timing["face_window_aggregation_ms"] + multimodal_combine_ms + routing_ms + schema_validation_ms + input_validation_ms + model_assembly_ms + inference_ms + consensus_ms
+                    total = car_ms + filter_ms + prediction_compute + face_new_frame_ms
+                    latency_rows.append(meta | {"valid_model_count": valid_model_count, "causal_car_increment_ms": car_ms, "causal_eeg_filter_increment_ms": filter_ms, "eeg_feature_ms": eeg_feature_ms,
+                        **new_face_timing, **face_window_timing, "face_new_frame_processing_ms": face_new_frame_ms, "face_processing_ms": face_total,
                         "multimodal_feature_combine_ms": multimodal_combine_ms, "all_model_feature_assembly_ms": model_assembly_ms,
-                        "multimodal_model_assembly_ms": multimodal_assembly_ms, "frozen_inference_ms": inference_ms, "total_prediction_path_compute_ms": total})
+                        "multimodal_model_assembly_ms": multimodal_assembly_ms, "all_model_routing_ms": routing_ms,
+                        "all_model_schema_validation_ms": schema_validation_ms, "all_model_input_validation_ms": input_validation_ms,
+                        "valence_consensus_ms": consensus_rows[0]["consensus_compute_ms"], "arousal_consensus_ms": consensus_rows[1]["consensus_compute_ms"],
+                        "all_consensus_ms": consensus_ms, "frozen_inference_ms": inference_ms, "prediction_compute_ms": prediction_compute,
+                        "total_prediction_path_compute_ms": total})
                     previous_end = end
-                calibration_rows[-1].update({f"calibration_{name}": value for name, value in calibration_face_timing.items()})
+                telemetry = face.frame_telemetry()
+                if not telemetry.empty:
+                    telemetry.insert(0, "segment_id", segment_id); telemetry.insert(0, "task", task_name); telemetry.insert(0, "participant", args.participant); frame_tables.append(telemetry)
+                calibration_rows[-1].update({f"calibration_{name}": value for name, value in calibration_face_timing.items() if name.endswith("_ms")})
             finally: face.close()
     predictions = pd.DataFrame(prediction_rows); latency = pd.DataFrame(latency_rows)
     if predictions.empty:
         raise ValueError(f"{args.participant}: no eligible recording produced a frozen-model prediction")
     complete, completeness = transfer.consensus(predictions, models)
+    timed_consensus = pd.DataFrame(timed_consensus_rows)
+    timed_complete = timed_consensus.loc[timed_consensus.complete_top3].copy()
+    consensus_keys = KEYS + ["target"]
+    timed_check = complete.loc[:, consensus_keys + ["top3_consensus_probability", "top3_consensus_class"]].merge(
+        timed_complete.loc[:, consensus_keys + ["top3_consensus_probability", "top3_consensus_class"]], on=consensus_keys,
+        suffixes=("_transfer", "_timed"), validate="one_to_one")
+    if len(timed_check) != len(complete) or not np.allclose(timed_check.top3_consensus_probability_transfer, timed_check.top3_consensus_probability_timed, rtol=1e-15, atol=1e-15) or not timed_check.top3_consensus_class_transfer.eq(timed_check.top3_consensus_class_timed).all():
+        raise RuntimeError("Timed consensus diverged from the existing frozen Definition-B implementation")
+    consensus_predictions = complete.merge(timed_complete.loc[:, consensus_keys + ["consensus_compute_ms"]], on=consensus_keys, validate="one_to_one")
+    frame_timing = pd.concat(frame_tables, ignore_index=True) if frame_tables else pd.DataFrame()
+    validate_frame_telemetry(frame_timing)
+    chunk_timing_all = pd.concat(filter_rows, ignore_index=True) if filter_rows else pd.DataFrame()
+    realtime_schedule = build_realtime_schedule(frame_timing, chunk_timing_all, latency)
+    scheduled_predictions = realtime_schedule.loc[realtime_schedule.job_type.eq("prediction_update")].copy()
+    deadline_flags = scheduled_predictions.deadline_met.astype("boolean").fillna(False)
+    deadline_summary = pd.DataFrame([{
+        "participant": args.participant, "prediction_updates": int(len(scheduled_predictions)),
+        "deadline_s_after_release": 1.0,
+        "deadline_met_count": int(deadline_flags.sum()),
+        "deadline_missed_count": int((~deadline_flags).sum()),
+        "deadline_success_rate": float(deadline_flags.mean()) if len(scheduled_predictions) else np.nan,
+        "maximum_prediction_waiting_ms": float(scheduled_predictions.waiting_ms.max()) if len(scheduled_predictions) else np.nan,
+        "maximum_prediction_lateness_ms": float(scheduled_predictions.lateness_ms.max()) if len(scheduled_predictions) else np.nan,
+        "maximum_shared_worker_backlog_ms": float(realtime_schedule.waiting_ms.max()) if len(realtime_schedule) else np.nan,
+    }])
+    delivery_by_window, delivery_summary = delivery_accounting(latency, consensus_predictions, realtime_schedule)
+    reference_equivalence = compare_reference_predictions(predictions, complete, args.reference_causal_output)
+    if reference_equivalence.get("performed") and not reference_equivalence.get("pass"):
+        raise RuntimeError("Frozen prediction equivalence failed; refusing to write real-time feasibility output")
     comparison_fields = KEYS + ["target", "model_rank", "modality", "classifier", "high_probability", "original_hard_prediction"]
     comparison = canonical_predictions.loc[canonical_predictions.task.isin(args.tasks), comparison_fields].merge(predictions[comparison_fields], on=KEYS + ["target", "model_rank", "modality", "classifier"], suffixes=("_canonical", "_causal"), validate="one_to_one")
     comparison = comparison.rename(columns={"high_probability_canonical":"canonical_p_high", "high_probability_causal":"causal_p_high", "original_hard_prediction_canonical":"canonical_hard_prediction", "original_hard_prediction_causal":"causal_hard_prediction"})
@@ -393,8 +658,12 @@ def main() -> int:
     anchors = pd.concat(anchor_rows, ignore_index=True) if anchor_rows else pd.DataFrame()
     exclusions = pd.DataFrame(excluded_rows)
     timing_fields = [column for column in latency if column.endswith("_ms")]
-    latency_summary = summarize_timings(latency, timing_fields, ["task"])
-    overall_timing = summarize_timings(latency.assign(scope="overall"), timing_fields, ["scope"]); latency_summary = pd.concat([overall_timing, latency_summary], ignore_index=True)
+    window_summary = summarize_realtime_timings(latency.assign(scope="window"), timing_fields, ["scope", "task"])
+    frame_fields = [column for column in frame_timing if column.endswith("_ms")]
+    frame_summary = summarize_realtime_timings(frame_timing.assign(scope="frame"), frame_fields, ["scope", "task"]) if len(frame_timing) else pd.DataFrame()
+    chunk_fields = [column for column in chunk_timing_all if column.endswith("_ms")]
+    chunk_summary = summarize_realtime_timings(chunk_timing_all.assign(scope="eeg_chunk"), chunk_fields, ["scope", "task"]) if len(chunk_timing_all) else pd.DataFrame()
+    latency_summary = pd.concat([window_summary, frame_summary, chunk_summary], ignore_index=True, sort=False)
     budget_rows = []
     for scope, part in [("overall", latency), *[(str(task), group) for task, group in latency.groupby("task", sort=False)]]:
         values = pd.to_numeric(part["total_prediction_path_compute_ms"], errors="coerce").dropna()
@@ -406,7 +675,17 @@ def main() -> int:
     output.mkdir(parents=True)
     calibration.to_csv(output / "calibration_offsets.csv", index=False); anchors.to_csv(output / "calibration_anchors.csv", index=False); synchronization.to_csv(output / "synchronization_error.csv", index=False)
     comparison.to_csv(output / "model_window_comparison.csv", index=False); predictions.to_csv(output / "causal_window_predictions.csv", index=False); complete.to_csv(output / "causal_window_consensus.csv", index=False); completeness.to_csv(output / "top3_window_completeness.csv", index=False); consensus_compare.to_csv(output / "window_consensus_comparison.csv", index=False); task_compare.to_csv(output / "task_consensus_comparison.csv", index=False)
-    latency.to_csv(output / "latency_by_window.csv", index=False); latency_summary.to_csv(output / "latency_summary.csv", index=False); latency_budget.to_csv(output / "latency_budget_summary.csv", index=False); pd.concat(filter_rows, ignore_index=True).to_csv(output / "causal_filter_chunk_timing.csv", index=False)
+    # Stable aliases make the real-time feasibility artifacts self-contained.
+    frame_timing.to_csv(output / "frame_timing.csv", index=False)
+    latency.to_csv(output / "window_timing.csv", index=False)
+    predictions.to_csv(output / "model_probabilities.csv", index=False)
+    consensus_predictions.to_csv(output / "consensus_predictions.csv", index=False)
+    realtime_schedule.to_csv(output / "realtime_schedule.csv", index=False)
+    deadline_summary.to_csv(output / "deadline_summary.csv", index=False)
+    delivery_by_window.to_csv(output / "prediction_delivery_by_window.csv", index=False)
+    delivery_summary.to_csv(output / "prediction_delivery_summary.csv", index=False)
+    latency.to_csv(output / "latency_by_window.csv", index=False); latency_summary.to_csv(output / "latency_summary.csv", index=False); latency_budget.to_csv(output / "latency_budget_summary.csv", index=False); chunk_timing_all.to_csv(output / "causal_filter_chunk_timing.csv", index=False)
+    pd.DataFrame(eeg_setup_rows).to_csv(output / "eeg_setup_timing.csv", index=False)
     exclusions.to_csv(output / "excluded_cases.csv", index=False)
     make_figures(output, comparison, synchronization, latency)
     manifest = {"purpose":"Causal modality-agnostic offline replay under a fixed pre-deployment Status calibration offset", "participant":args.participant, "tasks_requested":args.tasks,
@@ -415,6 +694,9 @@ def main() -> int:
         "routes":[{"target":m["target"],"rank":m["model_rank"],"modality":m["modality"],"classifier":m["classifier"],"candidate_features":m["candidate_features"],"selected_features":m["selected_features"],"model_path":str(m["model_path"]),"probability_source":m["probability_source"]} for m in models],
         "filter":filter_design_metadata(causal_sos()), "chunk_ms":CHUNK_MS, "window_seconds":WINDOW_SECONDS,"window_step_seconds":WINDOW_STEP_SECONDS,"threshold":0.5,"definition_b":"median across complete rank-1/2/3 window probabilities, then median across complete windows; HIGH if >=0.5",
         "robot_ratings_used":False,"training_refitting_or_selection":False,"latency_scope":"OFFLINE REPLAY COMPUTATION; excludes camera/EEG hardware, Bluetooth, driver/OS transport, and physical synchronization hardware",
+        "realtime_scheduler":{"worker":"single non-preemptive shared compute worker","data_arrival":"recorded frame/EEG chunk timestamps on the EEG clock","prediction_release":"window end","prediction_deadline":"release plus 1.0 s","backlog":"carried across all frame, EEG chunk, and prediction jobs","sensor_or_driver_latency_simulated":False},
+        "frozen_prediction_equivalence":reference_equivalence,
+        "delivery_reporting":"scheduled, computational deadline, target validity, paired validity, and paired-on-time fields are reported per window and per task",
         "inputs":{"participant_config":str(args.participant_config.resolve()),"canonical_root":str(args.canonical_root.resolve()),"image_reference_csv":str(args.image_reference_csv.resolve()),"alignment_metadata":str(args.alignment_metadata.resolve()),"raw_root":str(args.raw_root.resolve())},
         "python_executable":sys.executable,"command":[sys.executable,*sys.argv],"calibration_records":calibration.to_dict("records")}
     (output / "run_manifest.json").write_text(json.dumps(manifest, indent=2, default=str) + "\n", encoding="utf-8")
