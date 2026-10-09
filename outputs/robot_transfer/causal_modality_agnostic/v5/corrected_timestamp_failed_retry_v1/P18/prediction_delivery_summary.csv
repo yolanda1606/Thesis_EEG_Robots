@@ -1,0 +1,6 @@
+participant,task,scheduled_updates,computationally_on_time_updates,valid_valence_consensuses,valid_arousal_consensuses,complete_paired_consensuses,complete_paired_delivered_on_time,computationally_on_time_updates_rate,valid_valence_consensuses_rate,valid_arousal_consensuses_rate,complete_paired_consensuses_rate,complete_paired_delivered_on_time_rate
+P18,pick_place,4,0,3,3,3,0,0.0,0.75,0.75,0.75,0.0
+P18,shape_sorter_interaction,69,0,68,68,68,0,0.0,0.9855072463768116,0.9855072463768116,0.9855072463768116,0.0
+P18,shape_sorter_observation,90,0,88,88,88,0,0.0,0.9777777777777777,0.9777777777777777,0.9777777777777777,0.0
+P18,sisyphus,45,0,43,43,43,0,0.0,0.9555555555555556,0.9555555555555556,0.9555555555555556,0.0
+P18,stack,48,0,46,46,46,0,0.0,0.9583333333333334,0.9583333333333334,0.9583333333333334,0.0

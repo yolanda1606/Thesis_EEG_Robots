@@ -1,0 +1,5 @@
+participant,task,segment_id,frame_index,timestamp_provenance,legacy_video_time_s,video_time_s,legacy_eeg_time_s,eeg_time_s,window_id,window_start_s,window_end_s,legacy_member,corrected_member
+P04,shape_sorter_interaction,1,2077,source_fps_continuation,69.23333333333333,70.41233333333334,88.84083333333334,90.01983333333334,shape_sorter_interaction_s1_87.000,87.0,89.0,True,False
+P04,shape_sorter_interaction,1,2077,source_fps_continuation,69.23333333333333,70.41233333333334,88.84083333333334,90.01983333333334,shape_sorter_interaction_s1_88.000,88.0,90.0,True,False
+P04,shape_sorter_interaction,1,2077,source_fps_continuation,69.23333333333333,70.41233333333334,88.84083333333334,90.01983333333334,shape_sorter_interaction_s1_89.000,89.0,91.0,False,True
+P04,shape_sorter_interaction,1,2077,source_fps_continuation,69.23333333333333,70.41233333333334,88.84083333333334,90.01983333333334,shape_sorter_interaction_s1_90.000,90.0,92.0,False,True

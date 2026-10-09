@@ -1,0 +1,3 @@
+participant,task,segment_id,frame_index,timestamp_provenance,legacy_video_time_s,video_time_s,legacy_eeg_time_s,eeg_time_s,window_id,window_start_s,window_end_s,legacy_member,corrected_member
+P30,shape_sorter_interaction,1,2613,source_fps_continuation,87.1,88.32033333333334,98.48599999999999,99.70633333333333,shape_sorter_interaction_s1_97.000,97.0,99.0,True,False
+P30,shape_sorter_interaction,1,2613,source_fps_continuation,87.1,88.32033333333334,98.48599999999999,99.70633333333333,shape_sorter_interaction_s1_99.000,99.0,101.0,False,True

@@ -1,0 +1,7 @@
+participant,target,task,n_candidate_windows,n_complete_top3_windows,n_incomplete_top3_windows,fraction_complete_top3_windows
+P03,arousal,pick_place,8,3,5,0.375
+P03,valence,pick_place,3,3,0,1.0
+P03,arousal,shape_sorter_observation,90,89,1,0.9888888888888889
+P03,valence,shape_sorter_observation,89,89,0,1.0
+P03,arousal,stack,47,46,1,0.9787234042553191
+P03,valence,stack,46,46,0,1.0

@@ -1,0 +1,1 @@
+participant,task,segment_id,frame_index,timestamp_provenance,legacy_video_time_s,video_time_s,legacy_eeg_time_s,eeg_time_s,window_id,window_start_s,window_end_s,legacy_member,corrected_member

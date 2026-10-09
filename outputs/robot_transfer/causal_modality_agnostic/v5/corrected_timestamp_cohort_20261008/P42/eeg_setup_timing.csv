@@ -1,0 +1,6 @@
+participant,task,segment_id,raw_eeg_extract_ms
+P42,pick_place,1,1.057608
+P42,shape_sorter_observation,1,1.48815
+P42,stack,1,1.8824
+P42,sisyphus,1,2.098977
+P42,shape_sorter_interaction,1,1.505421

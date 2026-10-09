@@ -1,0 +1,6 @@
+participant,task,scheduled_updates,computationally_on_time_updates,valid_valence_consensuses,valid_arousal_consensuses,complete_paired_consensuses,complete_paired_delivered_on_time,computationally_on_time_updates_rate,valid_valence_consensuses_rate,valid_arousal_consensuses_rate,complete_paired_consensuses_rate,complete_paired_delivered_on_time_rate
+P35,pick_place,2,0,2,2,2,0,0.0,1.0,1.0,1.0,0.0
+P35,shape_sorter_interaction,50,0,50,50,50,0,0.0,1.0,1.0,1.0,0.0
+P35,shape_sorter_observation,42,0,40,40,40,0,0.0,0.9523809523809523,0.9523809523809523,0.9523809523809523,0.0
+P35,sisyphus,6,0,3,3,3,0,0.0,0.5,0.5,0.5,0.0
+P35,stack,100,0,100,100,100,0,0.0,1.0,1.0,1.0,0.0

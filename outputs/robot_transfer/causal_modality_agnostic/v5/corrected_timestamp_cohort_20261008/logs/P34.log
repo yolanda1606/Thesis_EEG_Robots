@@ -1,0 +1,71 @@
+participant: P34
+started_utc: 2026-10-08T18:19:37.214701+00:00
+ended_utc: 2026-10-08T18:22:44.629787+00:00
+return_code: 1
+command: /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/bin/python /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/analysis/causal_streaming/run_causal_modality_agnostic_robot_replay.py --participant P34 --participant-config /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/configs/participants/P34.yaml --raw-root /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data --tasks pick_place shape_sorter_observation stack sisyphus shape_sorter_interaction shape_sorter_alone --output-dir /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/causal_modality_agnostic/v5/corrected_timestamp_cohort_20261008/P34 --canonical-root /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/modality_agnostic/P34 --image-reference-csv /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P34/Image_Experiment/runs/p34_no_ica/merged/p34_image_trial_dataset.csv --alignment-metadata /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P34/Robot_Experiment/runs/p34_robot_final_features/alignment/alignment_metadata.json --validation-mode corrected_timestamp --reference-causal-output /home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/causal_modality_agnostic/v1/cohort/P34
+
+exception:
+CalledProcessError(1, ['/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/eeg_venv/bin/python', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/analysis/causal_streaming/run_causal_modality_agnostic_robot_replay.py', '--participant', 'P34', '--participant-config', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/configs/participants/P34.yaml', '--raw-root', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/data', '--tasks', 'pick_place', 'shape_sorter_observation', 'stack', 'sisyphus', 'shape_sorter_interaction', 'shape_sorter_alone', '--output-dir', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/causal_modality_agnostic/v5/corrected_timestamp_cohort_20261008/P34', '--canonical-root', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/modality_agnostic/P34', '--image-reference-csv', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P34/Image_Experiment/runs/p34_no_ica/merged/p34_image_trial_dataset.csv', '--alignment-metadata', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/derived/P34/Robot_Experiment/runs/p34_robot_final_features/alignment/alignment_metadata.json', '--validation-mode', 'corrected_timestamp', '--reference-causal-output', '/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/causal_modality_agnostic/v1/cohort/P34'])
+
+stdout:
+
+
+stderr:
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) ACC X, ACC Y, ACC Z, CNT, DT, GYR X, GYR Y, GYR Z, VALID has changed from V to NA.
+  raw.set_channel_types(channel_types, verbose=False)
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) Status has changed from NA to V.
+  raw.set_channel_types(channel_types, verbose=False)
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+W0000 00:00:1791483578.876570   86883 face_landmarker_graph.cc:174] Sets FaceBlendshapesGraph acceleration to xnnpack by default.
+I0000 00:00:1791483578.907075   86883 gl_context_egl.cc:85] Successfully initialized EGL. Major : 1 Minor: 5
+I0000 00:00:1791483578.977859   86933 gl_context.cc:385] GL version: 3.2 (OpenGL ES 3.2 NVIDIA 550.90.07), renderer: NVIDIA RTX A5000/PCIe/SSE2
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+W0000 00:00:1791483579.009513   86898 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1791483579.037070   86902 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) ACC X, ACC Y, ACC Z, CNT, DT, GYR X, GYR Y, GYR Z, VALID has changed from V to NA.
+  raw.set_channel_types(channel_types, verbose=False)
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) Status has changed from NA to V.
+  raw.set_channel_types(channel_types, verbose=False)
+W0000 00:00:1791483596.595385   86997 face_landmarker_graph.cc:174] Sets FaceBlendshapesGraph acceleration to xnnpack by default.
+I0000 00:00:1791483596.603431   86997 gl_context_egl.cc:85] Successfully initialized EGL. Major : 1 Minor: 5
+I0000 00:00:1791483596.648725   87047 gl_context.cc:385] GL version: 3.2 (OpenGL ES 3.2 NVIDIA 550.90.07), renderer: NVIDIA RTX A5000/PCIe/SSE2
+W0000 00:00:1791483596.654607   87012 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1791483596.680643   87019 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) ACC X, ACC Y, ACC Z, CNT, DT, GYR X, GYR Y, GYR Z, VALID has changed from V to NA.
+  raw.set_channel_types(channel_types, verbose=False)
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) Status has changed from NA to V.
+  raw.set_channel_types(channel_types, verbose=False)
+W0000 00:00:1791483623.722152   87111 face_landmarker_graph.cc:174] Sets FaceBlendshapesGraph acceleration to xnnpack by default.
+I0000 00:00:1791483623.730101   87111 gl_context_egl.cc:85] Successfully initialized EGL. Major : 1 Minor: 5
+I0000 00:00:1791483623.766958   87161 gl_context.cc:385] GL version: 3.2 (OpenGL ES 3.2 NVIDIA 550.90.07), renderer: NVIDIA RTX A5000/PCIe/SSE2
+W0000 00:00:1791483623.772142   87117 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1791483623.795898   87137 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) ACC X, ACC Y, ACC Z, CNT, DT, GYR X, GYR Y, GYR Z, VALID has changed from V to NA.
+  raw.set_channel_types(channel_types, verbose=False)
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) Status has changed from NA to V.
+  raw.set_channel_types(channel_types, verbose=False)
+W0000 00:00:1791483656.732325   87225 face_landmarker_graph.cc:174] Sets FaceBlendshapesGraph acceleration to xnnpack by default.
+I0000 00:00:1791483656.740644   87225 gl_context_egl.cc:85] Successfully initialized EGL. Major : 1 Minor: 5
+I0000 00:00:1791483656.782185   87275 gl_context.cc:385] GL version: 3.2 (OpenGL ES 3.2 NVIDIA 550.90.07), renderer: NVIDIA RTX A5000/PCIe/SSE2
+W0000 00:00:1791483656.788380   87238 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1791483656.807776   87251 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+[mpeg4 @ 0x55ee575cfa80] ac-tex damaged at 18 11
+[mpeg4 @ 0x55ee575cfa80] Error at MB: 469
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) ACC X, ACC Y, ACC Z, CNT, DT, GYR X, GYR Y, GYR Z, VALID has changed from V to NA.
+  raw.set_channel_types(channel_types, verbose=False)
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_image/src/eeg.py:31: RuntimeWarning: The unit for channel(s) Status has changed from NA to V.
+  raw.set_channel_types(channel_types, verbose=False)
+W0000 00:00:1791483725.762013   87340 face_landmarker_graph.cc:174] Sets FaceBlendshapesGraph acceleration to xnnpack by default.
+I0000 00:00:1791483725.769705   87340 gl_context_egl.cc:85] Successfully initialized EGL. Major : 1 Minor: 5
+I0000 00:00:1791483725.803014   87390 gl_context.cc:385] GL version: 3.2 (OpenGL ES 3.2 NVIDIA 550.90.07), renderer: NVIDIA RTX A5000/PCIe/SSE2
+W0000 00:00:1791483725.808384   87348 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1791483725.831170   87362 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/analysis/causal_streaming/run_causal_modality_agnostic_robot_replay.py:460: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  delivery["computational_deadline_met"] = delivery["deadline_met"].fillna(False).astype(bool)
+Traceback (most recent call last):
+  File "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/analysis/causal_streaming/run_causal_modality_agnostic_robot_replay.py", line 905, in <module>
+    if __name__ == "__main__": raise SystemExit(main())
+  File "/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/processing/multimodal_robot/analysis/causal_streaming/run_causal_modality_agnostic_robot_replay.py", line 840, in main
+    raise RuntimeError("Frozen prediction equivalence failed; refusing to write real-time feasibility output. "
+RuntimeError: Frozen prediction equivalence failed; refusing to write real-time feasibility output. {"changed_consensus_class_count": 0, "consensus_class_mismatch_examples": [], "consensus_differing_probability_count": 1, "consensus_maximum_absolute_difference": 0.00025943107388395285, "consensus_probability_mismatch_examples": [{"absolute_consensus_difference": 0.00025943107388395285, "participant": "P34", "segment_id": 1, "target": "arousal", "task": "sisyphus", "top3_consensus_probability_reference": 0.0040973725140019, "top3_consensus_probability_replay": 0.004356803587885853, "window_end_s": 135.0, "window_id": "sisyphus_s1_133.000", "window_start_s": 133.0}], "consensus_row_count": 554, "coverage": {"consensus": {"reference_only_count": 0, "reference_only_examples": [], "replay_only_count": 2, "replay_only_examples": [{"participant": "P34", "segment_id": 1, "target": "arousal", "task": "sisyphus", "window_end_s": 136.0, "window_id": "sisyphus_s1_134.000", "window_start_s": 134.0}, {"participant": "P34", "segment_id": 1, "target": "arousal", "task": "sisyphus", "window_end_s": 137.0, "window_id": "sisyphus_s1_135.000", "window_start_s": 135.0}]}, "model": {"reference_only_count": 0, "reference_only_examples": [], "replay_only_count": 4, "replay_only_examples": [{"classifier": "logreg", "modality": "multimodal", "model_rank": 2, "participant": "P34", "segment_id": 1, "target": "arousal", "task": "sisyphus", "window_end_s": 136.0, "window_id": "sisyphus_s1_134.000", "window_start_s": 134.0}, {"classifier": "logreg", "modality": "multimodal", "model_rank": 3, "participant": "P34", "segment_id": 1, "target": "arousal", "task": "sisyphus", "window_end_s": 136.0, "window_id": "sisyphus_s1_134.000", "window_start_s": 134.0}, {"classifier": "logreg", "modality": "multimodal", "model_rank": 2, "participant": "P34", "segment_id": 1, "target": "arousal", "task": "sisyphus", "window_end_s": 137.0, "window_id": "sisyphus_s1_135.000", "window_start_s": 135.0}, {"classifier": "logreg", "modality": "multimodal", "model_rank": 3, "participant": "P34", "segment_id": 1, "target": "arousal", "task": "sisyphus", "window_end_s": 137.0, "window_id": "sisyphus_s1_135.000", "window_start_s": 135.0}]}}, "model_differing_probability_count": 2, "model_probability_mismatch_examples": [{"absolute_probability_difference": 1.7561943192935636e-05, "classifier": "logreg", "high_probability_reference": 5.79339610307442e-05, "high_probability_replay": 4.037201783780856e-05, "modality": "multimodal", "model_rank": 3, "participant": "P34", "segment_id": 1, "target": "arousal", "task": "sisyphus", "window_end_s": 134.0, "window_id": "sisyphus_s1_132.000", "window_start_s": 132.0}, {"absolute_probability_difference": 0.00025943107388395285, "classifier": "logreg", "high_probability_reference": 0.0040973725140019, "high_probability_replay": 0.004356803587885853, "modality": "multimodal", "model_rank": 3, "participant": "P34", "segment_id": 1, "target": "arousal", "task": "sisyphus", "window_end_s": 135.0, "window_id": "sisyphus_s1_133.000", "window_start_s": 133.0}], "probability_maximum_absolute_difference": 0.00025943107388395285, "probability_row_count": 1668, "timestamp_affected_consensus_difference_count": 1, "timestamp_affected_model_difference_count": 2, "timestamp_affected_window_count": 8, "unexpected_consensus_class_difference_count": 0, "unexpected_consensus_difference_count": 0, "unexpected_model_difference_count": 0, "validation_mode": "corrected_timestamp"}
+

@@ -1,0 +1,4 @@
+participant,task,segment_id,frame_index,timestamp_provenance,legacy_video_time_s,video_time_s,legacy_eeg_time_s,eeg_time_s,window_id,window_start_s,window_end_s,legacy_member,corrected_member
+P29,pick_place,1,483,source_fps_continuation,16.1,17.290333333333336,21.8535,23.043833333333335,pick_place_s1_21.000,21.0,23.0,True,False
+P29,pick_place,1,483,source_fps_continuation,16.1,17.290333333333336,21.8535,23.043833333333335,pick_place_s1_22.000,22.0,24.0,False,True
+P29,pick_place,1,483,source_fps_continuation,16.1,17.290333333333336,21.8535,23.043833333333335,pick_place_s1_23.000,23.0,25.0,False,True

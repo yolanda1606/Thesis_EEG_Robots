@@ -39,6 +39,17 @@ class CausalModalityAgnosticReplayTests(unittest.TestCase):
             reference_consensus.to_csv(reference_dir / "causal_window_consensus.csv", index=False)
             return compare_reference_predictions(predictions, consensus_rows, reference_dir, validation_mode, affected_windows)
 
+    def _complete_top3_rows(self, modality: str = "face") -> tuple[pd.DataFrame, pd.DataFrame]:
+        keys = {"participant": "P99", "task": "stack", "segment_id": 1, "window_id": "stack_s1_10.000",
+                "window_start_s": 10.0, "window_end_s": 12.0, "target": "valence"}
+        probabilities = (.2, .6, .8)
+        predictions = pd.DataFrame([{**keys, "model_rank": rank, "modality": modality, "classifier": f"model{rank}",
+                                     "high_probability": probability, "original_hard_prediction": int(probability >= .5)}
+                                    for rank, probability in enumerate(probabilities, start=1)])
+        consensus_rows = pd.DataFrame([{**keys, "top3_consensus_probability": .6,
+                                        "top3_consensus_class": "HIGH"}])
+        return predictions, consensus_rows
+
     def test_reference_equivalence_reports_fully_equivalent_predictions(self) -> None:
         predictions, consensus_rows = self._reference_comparison_rows()
         result = self._compare_with_reference(predictions, consensus_rows, predictions, consensus_rows)
@@ -99,6 +110,58 @@ class CausalModalityAgnosticReplayTests(unittest.TestCase):
                                                 validation_mode="corrected_timestamp", affected_windows=affected)
         self.assertFalse(rejected["pass"])
         self.assertEqual(rejected["unexpected_model_difference_count"], 1)
+
+    def test_corrected_timestamp_mode_permits_affected_face_and_multimodal_coverage(self) -> None:
+        for modality in ("face", "multimodal"):
+            predictions, consensus_rows = self._complete_top3_rows(modality)
+            empty_predictions = predictions.iloc[:0].copy()
+            empty_consensus = consensus_rows.iloc[:0].copy()
+            affected = predictions.loc[:, ["participant", "task", "segment_id", "window_id", "window_start_s", "window_end_s"]]
+            result = self._compare_with_reference(predictions, consensus_rows, empty_predictions, empty_consensus,
+                                                  validation_mode="corrected_timestamp", affected_windows=affected)
+            self.assertTrue(result["pass"])
+            self.assertEqual(result["allowed_replay_only_model_row_count"], 3)
+            self.assertEqual(result["allowed_replay_only_consensus_row_count"], 1)
+
+    def test_corrected_timestamp_mode_rejects_invalid_extra_model_coverage(self) -> None:
+        predictions, consensus_rows = self._complete_top3_rows("eeg")
+        empty_predictions = predictions.iloc[:0].copy()
+        empty_consensus = consensus_rows.iloc[:0].copy()
+        affected = predictions.loc[:, ["participant", "task", "segment_id", "window_id", "window_start_s", "window_end_s"]]
+        eeg_result = self._compare_with_reference(predictions, consensus_rows, empty_predictions, empty_consensus,
+                                                  validation_mode="corrected_timestamp", affected_windows=affected)
+        self.assertFalse(eeg_result["pass"])
+        self.assertEqual(eeg_result["unexpected_replay_only_model_row_count"], 3)
+        face_predictions, face_consensus = self._complete_top3_rows("face")
+        unaffected = self._compare_with_reference(face_predictions, face_consensus, face_predictions.iloc[:0], face_consensus.iloc[:0],
+                                                  validation_mode="corrected_timestamp")
+        self.assertFalse(unaffected["pass"])
+        self.assertEqual(unaffected["unexpected_replay_only_model_row_count"], 3)
+
+    def test_corrected_timestamp_mode_rejects_invalid_extra_consensus_coverage(self) -> None:
+        predictions, consensus_rows = self._complete_top3_rows("face")
+        affected = predictions.loc[:, ["participant", "task", "segment_id", "window_id", "window_start_s", "window_end_s"]]
+        incomplete = self._compare_with_reference(predictions.iloc[:2], consensus_rows,
+                                                  predictions.iloc[:0], consensus_rows.iloc[:0],
+                                                  validation_mode="corrected_timestamp", affected_windows=affected)
+        self.assertFalse(incomplete["pass"])
+        self.assertEqual(incomplete["unexpected_replay_only_consensus_row_count"], 1)
+        unaffected = self._compare_with_reference(predictions, consensus_rows, predictions.iloc[:0], consensus_rows.iloc[:0],
+                                                  validation_mode="corrected_timestamp")
+        self.assertFalse(unaffected["pass"])
+        self.assertEqual(unaffected["unexpected_replay_only_consensus_row_count"], 1)
+
+    def test_coverage_is_rejected_in_strict_mode_and_when_reference_only(self) -> None:
+        predictions, consensus_rows = self._complete_top3_rows("face")
+        affected = predictions.loc[:, ["participant", "task", "segment_id", "window_id", "window_start_s", "window_end_s"]]
+        strict = self._compare_with_reference(predictions, consensus_rows, predictions.iloc[:0], consensus_rows.iloc[:0],
+                                              affected_windows=affected)
+        self.assertFalse(strict["pass"])
+        reference_only = self._compare_with_reference(predictions.iloc[:0], consensus_rows.iloc[:0], predictions, consensus_rows,
+                                                      validation_mode="corrected_timestamp", affected_windows=affected)
+        self.assertFalse(reference_only["pass"])
+        self.assertEqual(reference_only["coverage"]["model"]["reference_only_count"], 3)
+        self.assertEqual(reference_only["coverage"]["consensus"]["reference_only_count"], 1)
 
     def test_timestamp_assignment_audit_uses_half_open_legacy_and_corrected_membership(self) -> None:
         base = {"participant": "P02", "task": "shape_sorter_interaction", "segment_id": 1}

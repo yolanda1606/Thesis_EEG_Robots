@@ -1,0 +1,2 @@
+participant,status,eligible_task_cases,eligible_segments,excluded_segments,started_utc,ended_utc,elapsed_seconds,output_directory,reference_status,return_code,log_file,error_message
+P02,success,5,5,1,2026-10-08T16:42:59.810275+00:00,2026-10-08T16:46:09.864620+00:00,190.055,/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/causal_modality_agnostic/v5/p02_corrected_validation_final/P02,available,,/home/sysgen/Projects/Yolanda/Thesis_EEG_Robots/outputs/robot_transfer/causal_modality_agnostic/v5/p02_corrected_validation_final/logs/P02.log,

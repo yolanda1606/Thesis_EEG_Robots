@@ -580,13 +580,21 @@ def compare_reference_predictions(predictions: pd.DataFrame, consensus: pd.DataF
         reference_only = coverage.loc[coverage._merge.eq("right_only"), keys]
         ordered = lambda frame: frame.sort_values(keys, kind="stable").head(REFERENCE_DIAGNOSTIC_EXAMPLE_LIMIT).to_dict("records")
         return {"replay_only_count": int(len(replay_only)), "reference_only_count": int(len(reference_only)),
-                "replay_only_examples": ordered(replay_only), "reference_only_examples": ordered(reference_only)}
+                "replay_only_examples": ordered(replay_only), "reference_only_examples": ordered(reference_only),
+                # Coverage changes are small but scientifically important.  Keep
+                # every key in the manifest rather than only bounded examples.
+                "replay_only_keys": replay_only.sort_values(keys, kind="stable").to_dict("records"),
+                "reference_only_keys": reference_only.sort_values(keys, kind="stable").to_dict("records")}
 
     def mismatch_examples(frame: pd.DataFrame, mask: np.ndarray, sort_keys: list[str], columns: list[str]) -> list[dict[str, Any]]:
         examples = frame.loc[mask, columns].sort_values(sort_keys, kind="stable").head(REFERENCE_DIAGNOSTIC_EXAMPLE_LIMIT)
         return examples.to_dict("records")
 
-    def maximum_absolute_difference(values: pd.Series) -> float:
+    def mismatch_records(frame: pd.DataFrame, mask: np.ndarray, sort_keys: list[str], columns: list[str]) -> list[dict[str, Any]]:
+        return frame.loc[mask, columns].sort_values(sort_keys, kind="stable").to_dict("records")
+
+    def maximum_absolute_difference(values: pd.Series | np.ndarray) -> float:
+        values = pd.Series(values)
         finite = values.loc[np.isfinite(values)]
         return float(finite.max()) if len(finite) else (float("nan") if len(values) else 0.0)
 
@@ -599,8 +607,10 @@ def compare_reference_predictions(predictions: pd.DataFrame, consensus: pd.DataF
     left = replay_probabilities.merge(
         saved_probabilities, on=probability_keys,
         suffixes=("_replay", "_reference"), validate="one_to_one")
-    probability_difference = np.abs(left.high_probability_replay - left.high_probability_reference)
-    probability_close = np.isclose(left.high_probability_replay, left.high_probability_reference, rtol=1e-12, atol=1e-12)
+    replay_probability = pd.to_numeric(left.high_probability_replay, errors="coerce").to_numpy(dtype=float)
+    reference_probability = pd.to_numeric(left.high_probability_reference, errors="coerce").to_numpy(dtype=float)
+    probability_difference = np.abs(replay_probability - reference_probability)
+    probability_close = np.isclose(replay_probability, reference_probability, rtol=1e-12, atol=1e-12)
     probability_mismatch_columns = probability_keys + ["high_probability_reference", "high_probability_replay"]
     left["absolute_probability_difference"] = probability_difference
     probability_mismatch_columns.append("absolute_probability_difference")
@@ -613,8 +623,10 @@ def compare_reference_predictions(predictions: pd.DataFrame, consensus: pd.DataF
     right = replay_consensus.merge(
         saved_consensus, on=consensus_keys,
         suffixes=("_replay", "_reference"), validate="one_to_one")
-    consensus_difference = np.abs(right.top3_consensus_probability_replay - right.top3_consensus_probability_reference)
-    consensus_close = np.isclose(right.top3_consensus_probability_replay, right.top3_consensus_probability_reference, rtol=1e-12, atol=1e-12)
+    replay_consensus_probability = pd.to_numeric(right.top3_consensus_probability_replay, errors="coerce").to_numpy(dtype=float)
+    reference_consensus_probability = pd.to_numeric(right.top3_consensus_probability_reference, errors="coerce").to_numpy(dtype=float)
+    consensus_difference = np.abs(replay_consensus_probability - reference_consensus_probability)
+    consensus_close = np.isclose(replay_consensus_probability, reference_consensus_probability, rtol=1e-12, atol=1e-12)
     class_equal = right.top3_consensus_class_replay.eq(right.top3_consensus_class_reference)
     right["absolute_consensus_difference"] = consensus_difference
     consensus_mismatch_columns = consensus_keys + ["top3_consensus_probability_reference", "top3_consensus_probability_replay", "absolute_consensus_difference"]
@@ -626,6 +638,37 @@ def compare_reference_predictions(predictions: pd.DataFrame, consensus: pd.DataF
     affected_keys = (affected_windows.loc[:, KEYS].drop_duplicates() if affected_windows is not None and not affected_windows.empty
                      else pd.DataFrame(columns=KEYS))
     affected_key_set = set(map(tuple, affected_keys.itertuples(index=False, name=None)))
+
+    def affected_window_mask(frame: pd.DataFrame) -> np.ndarray:
+        return np.array([tuple(row) in affected_key_set for row in frame.loc[:, KEYS].itertuples(index=False, name=None)], dtype=bool)
+
+    replay_only_model = replay_probabilities.merge(saved_probabilities.loc[:, probability_keys], on=probability_keys,
+                                                    how="left", indicator=True).loc[lambda frame: frame._merge.eq("left_only")].drop(columns="_merge")
+    replay_only_consensus = replay_consensus.merge(saved_consensus.loc[:, consensus_keys], on=consensus_keys,
+                                                    how="left", indicator=True).loc[lambda frame: frame._merge.eq("left_only")].drop(columns="_merge")
+    model_coverage_allowed = (affected_window_mask(replay_only_model)
+                              & replay_only_model.modality.isin(("face", "multimodal")).to_numpy(dtype=bool)
+                              & np.isfinite(pd.to_numeric(replay_only_model.high_probability, errors="coerce").to_numpy(dtype=float)))
+
+    def complete_definition_b_consensus(row: pd.Series) -> bool:
+        """Verify a newly complete consensus from its frozen prediction rows."""
+        matching = predictions.loc[(predictions[KEYS] == row[KEYS]).all(axis=1) & predictions.target.eq(row.target)]
+        if matching.model_rank.duplicated().any() or set(matching.model_rank) != {1, 2, 3}:
+            return False
+        probabilities = pd.to_numeric(matching.high_probability, errors="coerce")
+        hard = pd.to_numeric(matching.original_hard_prediction, errors="coerce")
+        if not np.isfinite(probabilities).all() or not np.isfinite(hard).all() or not hard.isin((0, 1)).all():
+            return False
+        expected_probability = float(np.median(probabilities.to_numpy()))
+        expected_class = "HIGH" if expected_probability >= 0.5 else "LOW"
+        return bool(np.isclose(float(row.top3_consensus_probability), expected_probability, rtol=1e-12, atol=1e-12)
+                    and row.top3_consensus_class == expected_class)
+
+    consensus_coverage_allowed = (affected_window_mask(replay_only_consensus)
+                                  & np.array([complete_definition_b_consensus(row)
+                                              for _, row in replay_only_consensus.iterrows()], dtype=bool))
+    unexpected_model_coverage = ~model_coverage_allowed
+    unexpected_consensus_coverage = ~consensus_coverage_allowed
     model_timestamp_affected = pd.Series(
         [tuple(row) in affected_key_set for row in left.loc[:, KEYS].itertuples(index=False, name=None)], index=left.index
     ) & left.modality.isin(("face", "multimodal"))
@@ -636,10 +679,14 @@ def compare_reference_predictions(predictions: pd.DataFrame, consensus: pd.DataF
     unexpected_consensus_mismatch = ~consensus_close & ~consensus_timestamp_affected.to_numpy()
     unexpected_class_mismatch = ~class_equal.to_numpy() & ~consensus_timestamp_affected.to_numpy()
     strict_pass = bool(coverage_complete
-                       and np.allclose(left.high_probability_replay, left.high_probability_reference, rtol=1e-12, atol=1e-12)
-                       and np.allclose(right.top3_consensus_probability_replay, right.top3_consensus_probability_reference, rtol=1e-12, atol=1e-12)
+                       and np.allclose(replay_probability, reference_probability, rtol=1e-12, atol=1e-12)
+                       and np.allclose(replay_consensus_probability, reference_consensus_probability, rtol=1e-12, atol=1e-12)
                        and class_equal.all())
-    corrected_timestamp_pass = bool(coverage_complete and not unexpected_model_mismatch.any()
+    corrected_timestamp_pass = bool(probability_coverage["reference_only_count"] == 0
+                                    and consensus_coverage["reference_only_count"] == 0
+                                    and not unexpected_model_coverage.any()
+                                    and not unexpected_consensus_coverage.any()
+                                    and not unexpected_model_mismatch.any()
                                     and not unexpected_consensus_mismatch.any() and not unexpected_class_mismatch.any())
     passed = strict_pass if validation_mode == "strict_historical" else corrected_timestamp_pass
     return {"performed": True, "probability_row_count": int(len(left)), "consensus_row_count": int(len(right)),
@@ -648,6 +695,10 @@ def compare_reference_predictions(predictions: pd.DataFrame, consensus: pd.DataF
             "rtol": 1e-12, "atol": 1e-12, "pass": passed,
             "coverage": {"model": probability_coverage, "consensus": consensus_coverage},
             "validation_mode": validation_mode, "timestamp_affected_window_count": int(len(affected_keys)),
+            "allowed_replay_only_model_row_count": int(model_coverage_allowed.sum()),
+            "unexpected_replay_only_model_row_count": int(unexpected_model_coverage.sum()),
+            "allowed_replay_only_consensus_row_count": int(consensus_coverage_allowed.sum()),
+            "unexpected_replay_only_consensus_row_count": int(unexpected_consensus_coverage.sum()),
             "timestamp_affected_model_difference_count": int((~probability_close & model_timestamp_affected.to_numpy()).sum()),
             "timestamp_affected_consensus_difference_count": int((~consensus_close & consensus_timestamp_affected.to_numpy()).sum()),
             "unexpected_model_difference_count": int(unexpected_model_mismatch.sum()),
@@ -655,10 +706,13 @@ def compare_reference_predictions(predictions: pd.DataFrame, consensus: pd.DataF
             "unexpected_consensus_class_difference_count": int(unexpected_class_mismatch.sum()),
             "model_differing_probability_count": int((~probability_close).sum()),
             "model_probability_mismatch_examples": mismatch_examples(left, ~probability_close, probability_keys, probability_mismatch_columns),
+            "model_probability_mismatches": mismatch_records(left, ~probability_close, probability_keys, probability_mismatch_columns),
             "consensus_differing_probability_count": int((~consensus_close).sum()),
             "consensus_probability_mismatch_examples": mismatch_examples(right, ~consensus_close, consensus_keys, consensus_mismatch_columns),
+            "consensus_probability_mismatches": mismatch_records(right, ~consensus_close, consensus_keys, consensus_mismatch_columns),
             "changed_consensus_class_count": int((~class_equal).sum()),
-            "consensus_class_mismatch_examples": mismatch_examples(right, ~class_equal, consensus_keys, class_mismatch_columns)}
+            "consensus_class_mismatch_examples": mismatch_examples(right, ~class_equal, consensus_keys, class_mismatch_columns),
+            "consensus_class_mismatches": mismatch_records(right, ~class_equal, consensus_keys, class_mismatch_columns)}
 
 
 def reference_equivalence_failure_summary(result: dict[str, Any]) -> str:
@@ -670,8 +724,11 @@ def reference_equivalence_failure_summary(result: dict[str, Any]) -> str:
         "timestamp_affected_window_count", "timestamp_affected_model_difference_count",
         "timestamp_affected_consensus_difference_count", "unexpected_model_difference_count",
         "unexpected_consensus_difference_count", "unexpected_consensus_class_difference_count",
+        "allowed_replay_only_model_row_count", "unexpected_replay_only_model_row_count",
+        "allowed_replay_only_consensus_row_count", "unexpected_replay_only_consensus_row_count",
         "model_probability_mismatch_examples", "consensus_probability_mismatch_examples",
-        "consensus_class_mismatch_examples",
+        "consensus_class_mismatch_examples", "model_probability_mismatches",
+        "consensus_probability_mismatches", "consensus_class_mismatches",
     )}
     return json.dumps(details, sort_keys=True, default=str)
 
