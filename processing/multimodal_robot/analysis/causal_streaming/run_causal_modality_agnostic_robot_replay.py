@@ -420,7 +420,7 @@ def single_worker_schedule(jobs: list[dict[str, Any]]) -> pd.DataFrame:
 
 def build_realtime_schedule(frame_timing: pd.DataFrame, chunk_timing: pd.DataFrame,
                             window_timing: pd.DataFrame) -> pd.DataFrame:
-    """Build one shared-worker schedule from recorded compute durations."""
+    """Build one fresh shared-worker schedule per independent task recording."""
     jobs: list[dict[str, Any]] = []
     for row in frame_timing.itertuples(index=False):
         jobs.append({"job_type": "video_frame", "sequence": int(row.frame_index), "participant": row.participant,
@@ -436,7 +436,15 @@ def build_realtime_schedule(frame_timing: pd.DataFrame, chunk_timing: pd.DataFra
                      "participant": row.participant, "task": row.task, "segment_id": row.segment_id,
                      "window_id": row.window_id, "arrival_s": float(row.window_end_s),
                      "service_ms": float(row.prediction_compute_ms), "deadline_s": float(row.window_end_s) + 1.0})
-    return single_worker_schedule(jobs)
+    if not jobs:
+        return pd.DataFrame()
+    timelines = []
+    for (participant, task, segment_id), group in pd.DataFrame(jobs).groupby(
+            ["participant", "task", "segment_id"], sort=True):
+        timeline = single_worker_schedule(group.to_dict("records"))
+        timeline["worker_timeline"] = f"{participant}/{task}/s{segment_id}"
+        timelines.append(timeline)
+    return pd.concat(timelines, ignore_index=True)
 
 
 def delivery_accounting(window_timing: pd.DataFrame, consensus_predictions: pd.DataFrame,
@@ -947,7 +955,7 @@ def main() -> int:
         "routes":[{"target":m["target"],"rank":m["model_rank"],"modality":m["modality"],"classifier":m["classifier"],"candidate_features":m["candidate_features"],"selected_features":m["selected_features"],"model_path":str(m["model_path"]),"probability_source":m["probability_source"]} for m in models],
         "filter":filter_design_metadata(causal_sos()), "chunk_ms":CHUNK_MS, "window_seconds":WINDOW_SECONDS,"window_step_seconds":WINDOW_STEP_SECONDS,"threshold":0.5,"definition_b":"median across complete rank-1/2/3 window probabilities, then median across complete windows; HIGH if >=0.5",
         "robot_ratings_used":False,"training_refitting_or_selection":False,"latency_scope":"OFFLINE REPLAY COMPUTATION; excludes camera/EEG hardware, Bluetooth, driver/OS transport, and physical synchronization hardware",
-        "realtime_scheduler":{"worker":"single non-preemptive shared compute worker","data_arrival":"recorded frame/EEG chunk timestamps on the EEG clock","prediction_release":"window end","prediction_deadline":"release plus 1.0 s","backlog":"carried across all frame, EEG chunk, and prediction jobs","sensor_or_driver_latency_simulated":False},
+        "realtime_scheduler":{"worker":"one non-preemptive shared compute worker per independent task recording","data_arrival":"recorded frame/EEG chunk timestamps on the EEG clock","prediction_release":"window end","prediction_deadline":"release plus 1.0 s","backlog":"carried only within each task recording across frame, EEG chunk, and prediction jobs","sensor_or_driver_latency_simulated":False},
         "validation_mode":args.validation_mode, "reference_invariants":reference_invariants,
         "timestamp_assignment_audit":{"changed_membership_rows":int(len(timestamp_audit)), "affected_windows":int(len(timestamp_audit.loc[:, KEYS].drop_duplicates()))},
         "frozen_prediction_equivalence":reference_equivalence,

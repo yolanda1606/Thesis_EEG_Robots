@@ -292,6 +292,48 @@ class CausalModalityAgnosticReplayTests(unittest.TestCase):
         self.assertAlmostEqual(result.iloc[2].start_s,1.6)
         self.assertTrue(result.iloc[2].deadline_met)
 
+    def test_independent_task_timelines_reset_worker_backlog_without_losing_jobs(self) -> None:
+        rows = []
+        for task in ("pick_place", "stack"):
+            base = {"participant": "P27", "task": task, "segment_id": 1}
+            frames = pd.DataFrame([{**base, "frame_index": 0, "eeg_time_s": 0.0,
+                                   "frame_total_compute_ms": 800.0}])
+            chunks = pd.DataFrame([{**base, "chunk_start_sample": 0, "chunk_end_sample": 25,
+                                   "causal_car_ms": 0.0, "causal_filter_ms": 0.0}])
+            windows = pd.DataFrame([{**base, "window_id": f"{task}_s1_0.000",
+                                    "window_start_s": 0.0, "window_end_s": 1.0,
+                                    "prediction_compute_ms": 400.0}])
+            rows.append((frames, chunks, windows))
+        schedule = build_realtime_schedule(pd.concat([row[0] for row in rows], ignore_index=True),
+                                           pd.concat([row[1] for row in rows], ignore_index=True),
+                                           pd.concat([row[2] for row in rows], ignore_index=True))
+        predictions = schedule.loc[schedule.job_type.eq("prediction_update")]
+        self.assertEqual(len(schedule), 6)
+        self.assertFalse(schedule.duplicated(["participant", "task", "segment_id", "job_type", "sequence"]).any())
+        self.assertEqual(len(predictions), 2)
+        self.assertTrue(predictions.deadline_met.all())
+        self.assertTrue((predictions.start_s == 1.0).all())
+        self.assertTrue((predictions.deadline_s == 2.0).all())
+        for _, timeline in schedule.groupby("worker_timeline"):
+            ordered = timeline.sort_values("schedule_order")
+            self.assertAlmostEqual(float(ordered.iloc[0].start_s), float(ordered.iloc[0].arrival_s))
+            self.assertTrue((ordered.iloc[1:].start_s.to_numpy() >=
+                             np.maximum(ordered.iloc[1:].arrival_s.to_numpy(), ordered.iloc[:-1].completion_s.to_numpy())).all())
+
+    def test_single_task_schedule_preserves_pilot_semantics(self) -> None:
+        base = {"participant": "P27", "task": "pick_place", "segment_id": 1}
+        frames = pd.DataFrame([{**base, "frame_index": 0, "eeg_time_s": 0.0, "frame_total_compute_ms": 400.0}])
+        chunks = pd.DataFrame([{**base, "chunk_start_sample": 0, "chunk_end_sample": 25,
+                                "causal_car_ms": 10.0, "causal_filter_ms": 10.0}])
+        windows = pd.DataFrame([{**base, "window_id": "pick_place_s1_0.000", "window_start_s": 0.0,
+                                 "window_end_s": 1.0, "prediction_compute_ms": 100.0}])
+        schedule = build_realtime_schedule(frames, chunks, windows)
+        prediction = schedule.loc[schedule.job_type.eq("prediction_update")].iloc[0]
+        self.assertAlmostEqual(prediction.arrival_s, 1.0)
+        self.assertAlmostEqual(prediction.deadline_s, 2.0)
+        self.assertAlmostEqual(prediction.start_s, 1.0)
+        self.assertTrue(prediction.deadline_met)
+
     def test_timed_consensus_matches_definition_b_and_missing_face_is_not_imputed(self) -> None:
         meta={"participant":"P27","task":"pick_place","segment_id":1,"window_id":"w","window_start_s":1.0,"window_end_s":3.0}
         rows=[meta|{"target":"valence","model_rank":rank,"high_probability":value,"original_hard_prediction":int(value>=.5)}
