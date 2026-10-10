@@ -55,3 +55,7 @@ outputs/archive/
 # Causal Robot replay participant-level generated outputs
 outputs/robot_transfer/causal_filter_comparison/v1/cohort/
 outputs/robot_transfer/causal_filter_comparison/v1/cohort_summary.archived_pre_overall/
+
+# Final causal multimodal computational benchmark outputs
+/outputs/robot_transfer/causal_modality_agnostic/v5/corrected_timestamp_failed_retry_v1/
+/outputs/robot_transfer/causal_modality_agnostic/v5/corrected_timestamp_independent_task_schedule_v1/
